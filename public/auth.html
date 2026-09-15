@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Connexion · DigiPlus AI</title>
+<link rel="icon" type="image/png" href="/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0B0F14;
+    --card: #12171F;
+    --field: #161D26;
+    --line: rgba(255, 255, 255, .09);
+    --line-strong: rgba(255, 255, 255, .16);
+    --orange: #F47B20;
+    --orange-2: #FF9A2E;
+    --orange-deep: #FF6400;
+    --cream: #FFF7EC;
+    --text: #D7DEE8;
+    --muted: #94A3B8;
+    --green: #34D399;
+    --red: #F87171;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh;
+    font: 16px/1.6 Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Arabic", Tahoma, sans-serif;
+    color: var(--text); background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+    display: grid; place-items: center; padding: 28px 20px;
+    position: relative; overflow-x: hidden;
+  }
+  body::before, body::after { content: ""; position: fixed; border-radius: 50%; pointer-events: none; z-index: 0; }
+  body::before {
+    width: 760px; height: 760px; right: -280px; top: -400px;
+    background: radial-gradient(circle, rgba(255, 100, 0, .26) 0%, rgba(244, 123, 32, .08) 45%, transparent 70%);
+  }
+  body::after {
+    width: 560px; height: 560px; left: -260px; bottom: -300px;
+    background: radial-gradient(circle, rgba(244, 123, 32, .14) 0%, transparent 65%);
+  }
+
+  .auth-box { position: relative; z-index: 1; width: 100%; max-width: 430px; }
+  .auth-brand {
+    display: flex; align-items: center; justify-content: center; gap: 11px;
+    margin-bottom: 22px; text-decoration: none;
+    color: var(--cream); font-weight: 800; font-size: 19px; letter-spacing: -.3px;
+  }
+  .logo-mark { width: 38px; height: 38px; display: block; filter: drop-shadow(0 6px 16px rgba(244, 123, 32, .38)); }
+
+  .auth-card {
+    background: linear-gradient(180deg, var(--card), rgba(18, 23, 31, .72));
+    border: 1px solid var(--line); border-radius: 22px; padding: 28px;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, .5);
+  }
+  .auth-tabs {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4px;
+    background: rgba(255, 255, 255, .05); border: 1px solid var(--line);
+    border-radius: 999px; padding: 5px; margin-bottom: 24px;
+  }
+  .auth-tabs button {
+    border: 0; background: transparent; padding: 10px; border-radius: 999px;
+    font: inherit; font-weight: 650; font-size: 14.5px; color: var(--muted); cursor: pointer;
+    transition: background .15s ease, color .15s ease;
+  }
+  .auth-tabs button:hover { color: var(--cream); }
+  .auth-tabs button.active { background: linear-gradient(135deg, var(--orange-2), var(--orange-deep)); color: #fff; }
+
+  h1 { font-size: 23px; margin: 0 0 6px; color: var(--cream); font-weight: 800; letter-spacing: -.6px; }
+  .sub { color: var(--muted); margin: 0 0 22px; font-size: 15px; }
+
+  .field { display: block; margin-bottom: 16px; }
+  .field > span { display: block; font-size: 13.5px; font-weight: 600; color: var(--cream); margin-bottom: 7px; }
+  .field input {
+    width: 100%; padding: 13px 15px; border-radius: 13px;
+    background: var(--field); border: 1px solid var(--line-strong); color: var(--cream);
+    font: inherit; font-size: 15px; transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  .field input::placeholder { color: #64748B; }
+  .field input:focus {
+    outline: none; border-color: var(--orange);
+    box-shadow: 0 0 0 3px rgba(244, 123, 32, .18);
+  }
+  .field input:-webkit-autofill {
+    -webkit-text-fill-color: var(--cream);
+    -webkit-box-shadow: 0 0 0 1000px var(--field) inset;
+  }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 14px 22px; border-radius: 999px; border: 1px solid transparent;
+    font: inherit; font-weight: 700; font-size: 15px; cursor: pointer;
+    background: linear-gradient(135deg, var(--orange-2), var(--orange-deep)); color: #fff;
+    box-shadow: 0 10px 30px rgba(244, 123, 32, .30);
+    transition: transform .15s ease, box-shadow .15s ease, opacity .15s ease;
+  }
+  .btn.wide { width: 100%; }
+  .btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 14px 38px rgba(244, 123, 32, .42); }
+  .btn:disabled { opacity: .6; cursor: default; }
+
+  .linkish {
+    border: 0; background: none; color: var(--muted); font: inherit; font-size: 14px;
+    cursor: pointer; padding: 6px 0 0; margin-top: 10px; width: 100%; text-align: center;
+  }
+  .linkish:hover { color: var(--orange-2); }
+
+  .auth-msg { font-size: 14px; margin-top: 14px; min-height: 20px; text-align: center; }
+  .auth-msg.error { color: var(--red); }
+  .auth-msg.ok { color: var(--green); }
+
+  .trust { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; margin-top: 18px; color: var(--muted); font-size: 13.5px; }
+  .trust span::before { content: "✓"; color: var(--orange); font-weight: 800; margin-right: 6px; }
+  .auth-foot { text-align: center; color: var(--muted); font-size: 13.5px; margin-top: 20px; }
+  .auth-foot a { color: var(--muted); text-decoration: none; }
+  .auth-foot a:hover { color: var(--orange-2); }
+
+  @media (max-width: 480px) {
+    .auth-card { padding: 22px; }
+    h1 { font-size: 21px; }
+    .auth-tabs button { font-size: 13.5px; padding: 10px 6px; white-space: nowrap; }
+  }
+</style>
+</head>
+<body>
+<main class="auth-wrap">
+  <div class="auth-box">
+    <a class="auth-brand" href="/"><img class="logo-mark" src="/logo.png" alt="" width="38" height="38"><span class="brand-name">DigiPlus AI</span></a>
+    <section class="auth-card">
+      <div class="auth-tabs" id="tabs">
+        <button type="button" data-mode="login">Se connecter</button>
+        <button type="button" data-mode="signup">Créer un compte</button>
+      </div>
+      <form id="form" novalidate>
+        <h1 id="title"></h1>
+        <p class="sub" id="subtitle"></p>
+        <label class="field" id="businessField"><span>Nom de votre business</span><input id="business" maxlength="120" autocomplete="organization" dir="auto" placeholder="ex. Salon Amira"></label>
+        <label class="field" id="emailField"><span>Email</span><input id="email" type="email" autocomplete="email" placeholder="vous@exemple.com"></label>
+        <label class="field" id="passwordField"><span id="passwordLabel">Mot de passe</span><input id="password" type="password" minlength="8" autocomplete="current-password" placeholder="8 caractères minimum"></label>
+        <button class="btn wide" id="submit" type="submit"></button>
+        <button type="button" class="linkish" id="switchLink"></button>
+        <div class="auth-msg" id="msg" role="alert"></div>
+      </form>
+    </section>
+    <div class="trust" id="trust" hidden><span>7 jours gratuits</span><span>Sans carte bancaire</span><span>Prêt en 5 minutes</span></div>
+    <p class="auth-foot"><a href="/">← Retour au site</a></p>
+  </div>
+</main>
+
+<script src="/vendor/supabase.js"></script>
+<script src="/common.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const params = new URLSearchParams(location.search);
+  const next = params.get('next') && params.get('next').startsWith('/') ? params.get('next') : '/app';
+  let mode = location.pathname === '/signup' ? 'signup' : location.pathname === '/reset-password' ? 'reset' : 'login';
+  let busy = false;
+
+  const TEXT = {
+    login: { title: 'Content de vous revoir', sub: 'Connectez-vous pour gérer vos assistants IA.', submit: 'Se connecter', link: 'Mot de passe oublié ?' },
+    signup: { title: 'Créez votre compte', sub: '7 jours gratuits, sans carte bancaire. Vous choisissez une offre à la fin des 7 jours.', submit: 'Créer mon compte', link: '' },
+    forgot: { title: 'Mot de passe oublié', sub: 'Entrez votre email et nous vous envoyons un lien pour en choisir un nouveau.', submit: 'Envoyer le lien', link: 'Retour à la connexion' },
+    reset: { title: 'Choisissez un nouveau mot de passe', sub: 'Au moins 8 caractères.', submit: 'Enregistrer le mot de passe', link: '' },
+  };
+
+  function render() {
+    const t = TEXT[mode];
+    $('title').textContent = t.title;
+    $('subtitle').textContent = t.sub;
+    $('submit').textContent = t.submit;
+    $('switchLink').textContent = t.link;
+    $('switchLink').hidden = !t.link;
+    $('tabs').hidden = mode === 'forgot' || mode === 'reset';
+    document.querySelectorAll('#tabs button').forEach((b) => b.classList.toggle('active', b.dataset.mode === mode));
+    $('businessField').hidden = mode !== 'signup';
+    $('emailField').hidden = mode === 'reset';
+    $('passwordField').hidden = mode === 'forgot';
+    $('passwordLabel').textContent = mode === 'reset' ? 'Nouveau mot de passe' : 'Mot de passe';
+    $('password').autocomplete = mode === 'login' ? 'current-password' : 'new-password';
+    $('trust').hidden = mode !== 'signup';
+    document.title = `${t.submit} · DigiPlus AI`;
+    say('');
+  }
+
+  function say(text, kind = 'error') {
+    $('msg').textContent = text;
+    $('msg').className = `auth-msg ${kind}`;
+  }
+
+  function friendly(error) {
+    const m = String(error?.message || error || '');
+    if (/invalid login credentials/i.test(m)) return 'Email ou mot de passe incorrect.';
+    if (/email not confirmed/i.test(m)) return "Confirmez d'abord votre email — regardez votre boîte mail (et les spams).";
+    if (/rate limit/i.test(m)) return 'Trop d’emails ont été envoyés. Attendez un peu et réessayez.';
+    if (/already registered/i.test(m)) return 'Un compte existe déjà avec cet email. Connectez-vous à la place.';
+    return m || 'Une erreur est survenue. Réessayez.';
+  }
+
+  document.querySelectorAll('#tabs button').forEach((b) =>
+    b.addEventListener('click', () => {
+      mode = b.dataset.mode;
+      history.replaceState(null, '', mode === 'signup' ? '/signup' : '/login');
+      render();
+    })
+  );
+  $('switchLink').addEventListener('click', () => {
+    mode = mode === 'login' ? 'forgot' : 'login';
+    render();
+  });
+
+  $('form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (busy) return;
+    const email = $('email').value.trim();
+    const password = $('password').value;
+    if (mode !== 'reset' && !/^\S+@\S+\.\S+$/.test(email)) return say('Entrez un email valide.');
+    if (mode !== 'forgot' && password.length < 8) return say('Le mot de passe doit faire au moins 8 caractères.');
+
+    busy = true;
+    $('submit').disabled = true;
+    try {
+      const sb = await DP.auth();
+      if (mode === 'login') {
+        const { error } = await sb.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        location.href = next;
+      } else if (mode === 'signup') {
+        const { data, error } = await sb.auth.signUp({
+          email,
+          password,
+          options: { emailRedirectTo: `${location.origin}/app`, data: { business_name: $('business').value.trim() } },
+        });
+        if (error) throw error;
+        if (data.session) location.href = '/app';
+        else say(`C'est presque fini ! Nous avons envoyé un lien de confirmation à ${email}. Ouvrez-le pour activer votre compte.`, 'ok');
+      } else if (mode === 'forgot') {
+        const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: `${location.origin}/reset-password` });
+        if (error) throw error;
+        say(`Si un compte existe pour ${email}, le lien est en route.`, 'ok');
+      } else if (mode === 'reset') {
+        const { error } = await sb.auth.updateUser({ password });
+        if (error) throw error;
+        say('Mot de passe enregistré. Ouverture de votre tableau de bord…', 'ok');
+        setTimeout(() => (location.href = '/app'), 800);
+      }
+    } catch (err) {
+      say(friendly(err));
+    } finally {
+      busy = false;
+      $('submit').disabled = false;
+    }
+  });
+
+  (async () => {
+    render();
+    try {
+      const sb = await DP.auth();
+      if (mode === 'reset') {
+        const { data } = await sb.auth.getSession();
+        if (!data.session) say('Ce lien est invalide ou expiré. Demandez-en un nouveau depuis la page de connexion.');
+        return;
+      }
+      const { data } = await sb.auth.getSession();
+      if (data.session) location.href = next;
+    } catch (err) {
+      say(friendly(err));
+    }
+  })();
+})();
+</script>
+</body>
+</html>

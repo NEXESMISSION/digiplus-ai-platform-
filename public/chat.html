@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chat</title>
+<link rel="icon" type="image/png" href="/logo.png">
+<style>
+  :root { --accent: #4f46e5; --bg: #f4f5f9; --panel: #fff; --text: #151823; --muted: #6b7185; --line: #e6e8ef; --bot: #f1f2f7; }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html, body { height: 100%; margin: 0; }
+  body { font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Arabic", Tahoma, sans-serif; background: var(--bg); color: var(--text); }
+  .app { height: 100dvh; max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; background: var(--panel); box-shadow: 0 0 0 1px var(--line); }
+  header { display: flex; align-items: center; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--line); }
+  .avatar { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; flex: none; background: var(--accent); color: #fff; font-weight: 700; font-size: 17px; }
+  .title { font-weight: 650; line-height: 1.2; }
+  .sub { font-size: 12.5px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+  .sub::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #22c55e; }
+  .spacer { flex: 1; }
+  .ghost { border: 1px solid var(--line); background: transparent; color: var(--muted); border-radius: 8px; padding: 6px 10px; font: inherit; font-size: 13px; cursor: pointer; }
+  .ghost:hover { color: var(--text); border-color: #cfd3de; }
+  #messages { flex: 1; overflow-y: auto; padding: 20px 16px 8px; display: flex; flex-direction: column; gap: 10px; }
+  .msg { display: flex; }
+  .msg.user { justify-content: flex-end; }
+  .bubble { max-width: min(82%, 560px); padding: 10px 14px; border-radius: 18px; white-space: pre-wrap; overflow-wrap: anywhere; unicode-bidi: plaintext; text-align: start; }
+  .msg.bot .bubble { background: var(--bot); border-bottom-left-radius: 6px; }
+  .msg.user .bubble { background: var(--accent); color: #fff; border-bottom-right-radius: 6px; }
+  .msg.user .bubble a { color: #fff; }
+  .msg.error .bubble { background: #fff1f1; color: #b42318; border: 1px solid #fecdca; font-size: 14px; }
+  .bubble a { color: var(--accent); }
+  .typing .bubble { display: flex; gap: 4px; padding: 14px 16px; }
+  .typing span { width: 7px; height: 7px; border-radius: 50%; background: #9aa0b4; animation: blink 1.2s infinite; }
+  .typing span:nth-child(2) { animation-delay: .15s; }
+  .typing span:nth-child(3) { animation-delay: .3s; }
+  @keyframes blink { 0%, 80%, 100% { opacity: .3; transform: translateY(0); } 40% { opacity: 1; transform: translateY(-3px); } }
+  #composer { display: flex; gap: 8px; align-items: flex-end; padding: 12px 14px calc(8px + env(safe-area-inset-bottom)); border-top: 1px solid var(--line); }
+  #input { flex: 1; resize: none; max-height: 140px; min-height: 44px; padding: 11px 14px; border-radius: 22px; border: 1px solid var(--line); background: #fafbfd; font: inherit; color: inherit; outline: none; overflow-y: hidden; }
+  #input:focus { border-color: var(--accent); background: #fff; }
+  #send { width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--accent); color: #fff; display: grid; place-items: center; cursor: pointer; flex: none; }
+  #send:disabled { opacity: .45; cursor: default; }
+  .badge { text-align: center; font-size: 11.5px; padding: 0 0 8px; }
+  .badge a { color: #9aa0b4; text-decoration: none; }
+  .badge a:hover { color: var(--muted); }
+  #intro { flex: 1; display: grid; place-items: center; padding: 24px; }
+  .intro-card { width: 100%; max-width: 380px; }
+  .intro-card h1 { font-size: 22px; margin: 0 0 6px; }
+  .intro-card p { color: var(--muted); margin: 0 0 20px; }
+  .field { display: block; margin-bottom: 12px; }
+  .field span { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; }
+  .field input { width: 100%; padding: 11px 12px; border-radius: 10px; border: 1px solid var(--line); font: inherit; outline: none; }
+  .field input:focus { border-color: var(--accent); }
+  .primary { width: 100%; padding: 12px; border: 0; border-radius: 10px; background: var(--accent); color: #fff; font: inherit; font-weight: 600; cursor: pointer; margin-top: 4px; }
+  .primary:disabled { opacity: .6; }
+  .form-error { color: #b42318; font-size: 13.5px; min-height: 20px; margin-top: 8px; }
+  .unavailable { flex: 1; display: grid; place-items: center; color: var(--muted); padding: 24px; text-align: center; }
+  body.embed .app { max-width: none; box-shadow: none; }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="avatar" id="avatar" aria-hidden="true">•</div>
+    <div><div class="title" id="botName">&nbsp;</div><div class="sub" id="bizName">Online</div></div>
+    <div class="spacer"></div>
+    <button class="ghost" id="newChat" hidden>New chat</button>
+  </header>
+
+  <div class="unavailable" id="unavailable" hidden><p id="unavailableText">This chat is not available right now.</p></div>
+
+  <section id="intro" hidden>
+    <form class="intro-card" id="introForm">
+      <h1 id="introTitle">Welcome 👋</h1>
+      <p id="introText"></p>
+      <label class="field"><span>Your name</span><input id="nameInput" autocomplete="name" maxlength="200" dir="auto"></label>
+      <label class="field"><span>Phone or email</span><input id="contactInput" autocomplete="email" maxlength="200" dir="auto"></label>
+      <button class="primary" id="startBtn" type="submit">Start chatting</button>
+      <div class="form-error" id="introError" role="alert"></div>
+    </form>
+  </section>
+
+  <main id="messages" aria-live="polite" hidden></main>
+
+  <form id="composer" hidden>
+    <textarea id="input" rows="1" placeholder="Type your message…" dir="auto" maxlength="1200" aria-label="Message"></textarea>
+    <button id="send" type="submit" aria-label="Send" disabled>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </button>
+  </form>
+  <div class="badge" id="badge" hidden><a href="/" target="_blank" rel="noopener">⚡ Powered by DigiPlus AI</a></div>
+</div>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const params = new URLSearchParams(location.search);
+  const publicId = (location.pathname.match(/^\/c\/([a-z0-9]+)/) || [])[1] || params.get('b') || '';
+  const STORE_KEY = `dp_chat_${publicId}`;
+  const POLL_MS = 4000;
+  if (params.get('embed') === '1') document.body.classList.add('embed');
+
+  let config = null;
+  let session = readSession();
+  let busy = false;
+  let lastId = 0; // highest message id shown (used to fetch replies typed by a human)
+  let pollTimer = null;
+
+  function readSession() {
+    try { return JSON.parse(localStorage.getItem(STORE_KEY)) || null; } catch { return null; }
+  }
+  function writeSession(value) {
+    try { value ? localStorage.setItem(STORE_KEY, JSON.stringify(value)) : localStorage.removeItem(STORE_KEY); } catch {}
+  }
+
+  async function api(url, { method = 'GET', body } = {}) {
+    const headers = {};
+    if (body) headers['Content-Type'] = 'application/json';
+    if (session?.token) headers['x-chat-token'] = session.token;
+    const res = await fetch(url, { method, headers, body: body ? JSON.stringify(body) : undefined });
+    let data = {};
+    try { data = await res.json(); } catch {}
+    if (!res.ok) { const err = new Error(data.error || 'Something went wrong'); err.status = res.status; throw err; }
+    return data;
+  }
+
+  // Escape everything, then allow **bold** and links.
+  function format(text) {
+    const escaped = text.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    return escaped
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/(https?:\/\/[^\s<]+[^\s<.,;:!?)\]])/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+  }
+
+  function addMessage(role, text) {
+    const row = document.createElement('div');
+    row.className = `msg ${role}`;
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble';
+    bubble.dir = 'auto';
+    bubble.innerHTML = format(text);
+    row.append(bubble);
+    $('messages').append(row);
+    scrollDown();
+    return row;
+  }
+
+  function showTyping() {
+    const row = document.createElement('div');
+    row.className = 'msg bot typing';
+    row.innerHTML = '<div class="bubble" aria-label="Typing"><span></span><span></span><span></span></div>';
+    $('messages').append(row);
+    scrollDown();
+    return row;
+  }
+
+  const scrollDown = () => { const m = $('messages'); m.scrollTop = m.scrollHeight; };
+  const seen = (id) => { if (id && id > lastId) lastId = id; };
+
+  function showChat() {
+    $('intro').hidden = true;
+    $('messages').hidden = false;
+    $('composer').hidden = false;
+    $('newChat').hidden = false;
+    $('input').focus();
+    startPolling();
+  }
+
+  function showIntro() {
+    stopPolling();
+    $('intro').hidden = false;
+    $('messages').hidden = true;
+    $('composer').hidden = true;
+    $('newChat').hidden = true;
+    const required = config.askClientInfo === 'required';
+    $('introText').textContent = required ? 'Please tell us who you are before we start.' : 'Tell us who you are so we can help you better (optional).';
+    $('nameInput').required = required;
+    $('contactInput').required = required;
+    $('nameInput').value = params.get('name') || '';
+    $('nameInput').focus();
+  }
+
+  function showUnavailable(text) {
+    stopPolling();
+    $('unavailableText').textContent = text;
+    $('unavailable').hidden = false;
+    ['intro', 'messages', 'composer', 'newChat'].forEach((id) => ($(id).hidden = true));
+  }
+
+  // A person from the business can answer from the dashboard: show their replies without reloading.
+  function startPolling() {
+    stopPolling();
+    pollTimer = setInterval(async () => {
+      if (!session || busy || document.visibilityState !== 'visible') return;
+      try {
+        const data = await api(`/api/chat/${session.id}?after=${lastId}`);
+        for (const m of data.messages) {
+          if (m.id <= lastId) continue;
+          if (m.role === 'assistant') addMessage('bot', m.content);
+          seen(m.id);
+        }
+      } catch (e) {
+        if (e.status === 404) stopPolling();
+      }
+    }, POLL_MS);
+  }
+  function stopPolling() {
+    clearInterval(pollTimer);
+    pollTimer = null;
+  }
+
+  async function startConversation(name = '', contact = '') {
+    const data = await api(`/api/chat/bot/${publicId}/start`, {
+      method: 'POST',
+      body: { name, contact, source: params.get('ref') || (document.referrer ? new URL(document.referrer).hostname : '') },
+    });
+    session = { id: data.id, token: data.token };
+    writeSession(session);
+    lastId = 0;
+    $('messages').replaceChildren();
+    addMessage('bot', config.welcomeMessage);
+    showChat();
+  }
+
+  async function init() {
+    if (!publicId) return showUnavailable('This chat link is incomplete.');
+    try {
+      config = await api(`/api/chat/bot/${publicId}`);
+    } catch (e) {
+      return showUnavailable(e.status === 404 ? 'This chat is not available right now.' : 'Chat is unavailable right now. Please try again later.');
+    }
+    document.documentElement.style.setProperty('--accent', config.accentColor);
+    document.title = `${config.botName} · ${config.businessName}`;
+    $('botName').textContent = config.botName;
+    $('bizName').textContent = config.businessName;
+    $('avatar').textContent = (config.botName || '?').trim().charAt(0).toUpperCase();
+    $('introTitle').textContent = `Welcome to ${config.businessName} 👋`;
+    $('badge').hidden = !config.showBadge;
+
+    if (session) {
+      try {
+        const data = await api(`/api/chat/${session.id}`);
+        addMessage('bot', config.welcomeMessage);
+        for (const m of data.messages) {
+          addMessage(m.role === 'user' ? 'user' : 'bot', m.content);
+          seen(m.id);
+        }
+        showChat();
+        return;
+      } catch {
+        session = null;
+        writeSession(null);
+      }
+    }
+    if (config.askClientInfo === 'off') {
+      try { await startConversation(params.get('name') || ''); } catch (e) { addError(e.message); }
+    } else {
+      showIntro();
+    }
+  }
+
+  function addError(text) {
+    $('messages').hidden = false;
+    addMessage('error', text);
+  }
+
+  $('introForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    $('introError').textContent = '';
+    $('startBtn').disabled = true;
+    try {
+      await startConversation($('nameInput').value.trim(), $('contactInput').value.trim());
+    } catch (err) {
+      $('introError').textContent = err.message;
+    } finally {
+      $('startBtn').disabled = false;
+    }
+  });
+
+  const input = $('input');
+  function autosize() {
+    input.style.height = 'auto';
+    input.style.height = `${Math.min(input.scrollHeight, 140)}px`;
+    input.style.overflowY = input.scrollHeight > 140 ? 'auto' : 'hidden';
+    $('send').disabled = busy || !input.value.trim();
+  }
+  input.addEventListener('input', autosize);
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) {
+      e.preventDefault();
+      $('composer').requestSubmit();
+    }
+  });
+
+  $('composer').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const text = input.value.trim();
+    if (!text || busy || !session) return;
+    busy = true;
+    input.value = '';
+    autosize();
+    addMessage('user', text);
+    const typing = showTyping();
+    try {
+      const data = await api(`/api/chat/${session.id}/message`, { method: 'POST', body: { content: text } });
+      typing.remove();
+      seen(data.messageId);
+      if (data.reply) addMessage('bot', data.reply);
+      seen(data.replyId);
+    } catch (err) {
+      typing.remove();
+      if (err.status === 404) {
+        writeSession(null);
+        session = null;
+        stopPolling();
+        addError('This conversation is no longer available. Tap "New chat" to start again.');
+      } else {
+        addError(err.message);
+      }
+    } finally {
+      busy = false;
+      autosize();
+      input.focus();
+    }
+  });
+
+  $('newChat').addEventListener('click', async () => {
+    if (!confirm('Start a new conversation?')) return;
+    const old = session;
+    if (old) api(`/api/chat/${old.id}/end`, { method: 'POST', body: {} }).catch(() => {});
+    session = null;
+    writeSession(null);
+    stopPolling();
+    $('messages').replaceChildren();
+    if (config.askClientInfo === 'off') {
+      try { await startConversation(); } catch (err) { addError(err.message); }
+    } else {
+      showIntro();
+    }
+  });
+
+  init();
+})();
+</script>
+</body>
+</html>

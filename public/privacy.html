@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy · DigiPlus AI</title>
+<link rel="icon" type="image/png" href="/logo.png">
+<link rel="stylesheet" href="/legal.css">
+</head>
+<body>
+<main class="legal">
+  <a class="back" href="/">← DigiPlus AI</a>
+  <h1>Privacy Policy</h1>
+  <p class="updated">Last updated: September 2026</p>
+
+  <p>DigiPlus AI ("we", "us") provides AI chat assistants that businesses ("customers") use to answer their own clients on their website, Facebook Messenger, Instagram and WhatsApp. This policy explains what data we process and why.</p>
+
+  <h2>1. Data we process</h2>
+  <ul>
+    <li><b>Account data</b>: the email address and business name our customers sign up with, and their billing records.</li>
+    <li><b>Business content</b>: the information customers add to train their assistant (services, prices, FAQ, rules).</li>
+    <li><b>Conversation data</b>: messages exchanged between a business's clients and its assistant, the client name and contact details the client shares, and technical identifiers provided by the messaging platform (for example a WhatsApp phone number, a Messenger page-scoped ID or an Instagram-scoped ID).</li>
+    <li><b>Channel credentials</b>: access tokens that let the assistant reply on a connected Facebook Page, Instagram account or WhatsApp number. They are stored encrypted.</li>
+    <li><b>Usage data</b>: number of AI replies and their technical cost, used for plan limits and billing.</li>
+  </ul>
+
+  <h2>2. How we use it</h2>
+  <ul>
+    <li>To generate replies to the business's clients and deliver them on the channel the client used.</li>
+    <li>To show conversations, summaries and lead information to the business that owns the assistant.</li>
+    <li>To enforce plan limits, bill customers and prevent abuse.</li>
+  </ul>
+  <p>We do not sell personal data and do not use conversation data to advertise.</p>
+
+  <h2>3. Service providers</h2>
+  <p>We use: Supabase (database and authentication), Vercel (hosting), OpenAI (generating replies — messages are sent to its API to produce an answer), Meta Platforms (Messenger, Instagram and WhatsApp delivery) and, for card payments, Dodo Payments. Each processes data only to provide its service.</p>
+
+  <h2>4. Data from Meta platforms</h2>
+  <p>When a business connects its Facebook Page, Instagram account or WhatsApp number, we receive the messages its clients send to that account and the basic public profile name when available. We use this data only to answer those clients on behalf of that business and to show the conversation to that business. We do not share it with other customers.</p>
+
+  <h2>5. Retention</h2>
+  <p>Conversation data is kept while the business's account is active or until the business deletes the conversation, the bot or its account. Disconnecting a channel deletes its stored access token immediately.</p>
+
+  <h2 id="deletion">6. Deleting your data</h2>
+  <ul>
+    <li><b>Businesses</b> can delete any conversation, bot or channel connection from the dashboard, or ask us to delete their whole account.</li>
+    <li><b>People who chatted with a business</b> can ask that business, or email us with the channel used (website, Messenger, Instagram or WhatsApp) and the name or number used, and we will delete those conversations within 30 days.</li>
+    <li>To remove DigiPlus AI's access to your Facebook data, go to Facebook Settings → Security and login → Business integrations, and remove the app.</li>
+  </ul>
+
+  <h2>7. Security</h2>
+  <p>Data is encrypted in transit (HTTPS). Database access is limited to our servers, and channel access tokens are encrypted at rest.</p>
+
+  <h2>8. Contact</h2>
+  <p>Questions or deletion requests: <a id="contact" href="mailto:support@digiplus.tn">support@digiplus.tn</a></p>
+</main>
+<script>
+  fetch('/api/public/config').then((r) => r.json()).then((c) => { if (c.brand) document.title = `Privacy Policy · ${c.brand}`; }).catch(() => {});
+</script>
+</body>
+</html>

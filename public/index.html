@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DigiPlus AI — l'assistant IA qui vend pour votre business</title>
+<meta name="description" content="Apprenez à un assistant IA vos services et vos prix en quelques minutes. Il répond à vos clients 24/7 en derja, français, arabe et anglais, explique vos offres et vous envoie des clients prêts à acheter.">
+<link rel="icon" type="image/png" href="/logo.png">
+<link rel="apple-touch-icon" href="/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0B0F14;
+    --card: #12171F;
+    --card-2: #1A212B;
+    --line: rgba(255, 255, 255, .09);
+    --line-strong: rgba(255, 255, 255, .16);
+    --orange: #F47B20;
+    --orange-2: #FF9A2E;
+    --orange-deep: #FF6400;
+    --cream: #FFF7EC;
+    --text: #D7DEE8;
+    --muted: #94A3B8;
+    --green: #34D399;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font: 16px/1.65 Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Arabic", Tahoma, sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  a { color: inherit; }
+  .wrap { max-width: 1160px; margin: 0 auto; padding: 0 22px; }
+
+  /* ---------- brand ---------- */
+  .logo-mark {
+    width: 38px; height: 38px; flex: none; display: block;
+    filter: drop-shadow(0 6px 16px rgba(244, 123, 32, .38));
+  }
+  .brand { display: flex; align-items: center; gap: 11px; font-weight: 800; text-decoration: none; font-size: 18px; color: var(--cream); letter-spacing: -.3px; white-space: nowrap; }
+  .lbl-short { display: none; }
+
+  /* ---------- buttons ---------- */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+    padding: 13px 22px; border-radius: 999px; font: inherit; font-weight: 650; font-size: 15px;
+    text-decoration: none; cursor: pointer; white-space: nowrap;
+    border: 1px solid var(--line-strong); background: transparent; color: var(--cream);
+    transition: transform .15s ease, background .15s ease, border-color .15s ease, box-shadow .15s ease;
+  }
+  .btn:hover { border-color: rgba(255,255,255,.34); background: rgba(255,255,255,.04); }
+  .btn.primary {
+    background: linear-gradient(135deg, var(--orange-2), var(--orange-deep));
+    border-color: transparent; color: #fff;
+    box-shadow: 0 10px 30px rgba(244, 123, 32, .30);
+  }
+  .btn.primary:hover { transform: translateY(-1px); box-shadow: 0 14px 38px rgba(244, 123, 32, .42); }
+
+  /* ---------- nav ---------- */
+  nav.top { position: sticky; top: 0; z-index: 20; background: rgba(11, 15, 20, .72); backdrop-filter: blur(14px); border-bottom: 1px solid transparent; transition: border-color .2s ease; }
+  nav.top.scrolled { border-bottom-color: var(--line); }
+  nav.top .wrap { display: flex; align-items: center; gap: 24px; height: 72px; }
+  .nav-links { display: flex; gap: 26px; margin-left: 20px; }
+  .nav-links a { text-decoration: none; color: var(--muted); font-size: 15px; font-weight: 500; }
+  .nav-links a:hover { color: var(--cream); }
+  .nav-cta { margin-left: auto; display: flex; gap: 10px; align-items: center; }
+  .nav-cta .btn { padding: 10px 18px; font-size: 14.5px; }
+
+  /* ---------- hero ---------- */
+  .hero { position: relative; padding: 76px 0 90px; overflow: hidden; }
+  .hero::before {
+    content: ""; position: absolute; z-index: 0; pointer-events: none;
+    width: 900px; height: 900px; right: -220px; top: -380px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 100, 0, .30) 0%, rgba(244, 123, 32, .10) 42%, transparent 68%);
+    filter: blur(20px);
+  }
+  .hero::after {
+    content: ""; position: absolute; z-index: 0; pointer-events: none;
+    width: 620px; height: 620px; left: -280px; bottom: -320px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(244, 123, 32, .16) 0%, transparent 65%);
+    filter: blur(18px);
+  }
+  .hero .wrap { position: relative; z-index: 1; display: grid; grid-template-columns: 1.02fr .98fr; gap: 54px; align-items: center; }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 9px; padding: 7px 15px; border-radius: 999px;
+    background: rgba(244, 123, 32, .10); border: 1px solid rgba(244, 123, 32, .28);
+    font-size: 13.5px; font-weight: 500; color: #F6C79B;
+  }
+  .eyebrow b { color: var(--orange-2); font-weight: 700; }
+  h1 {
+    font-size: clamp(36px, 5.2vw, 60px); line-height: 1.06; letter-spacing: -2px;
+    margin: 22px 0 18px; color: var(--cream); font-weight: 800;
+  }
+  h1 .grad { background: linear-gradient(100deg, var(--orange-2), var(--orange-deep)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .lead { font-size: 18.5px; color: var(--muted); max-width: 540px; margin: 0 0 30px; }
+  .hero-cta { display: flex; gap: 12px; flex-wrap: wrap; }
+  .trust { margin-top: 22px; color: var(--muted); font-size: 14px; display: flex; gap: 20px; flex-wrap: wrap; }
+  .trust span::before { content: "✓"; color: var(--orange); font-weight: 800; margin-right: 7px; }
+
+  /* ---------- hero chat mockup ---------- */
+  .mock { position: relative; }
+  .phone {
+    position: relative; background: linear-gradient(180deg, #161D26, #10151C);
+    border: 1px solid var(--line-strong); border-radius: 24px; overflow: hidden;
+    max-width: 410px; margin-left: auto;
+    box-shadow: 0 40px 90px rgba(0, 0, 0, .55), 0 0 60px rgba(244, 123, 32, .10);
+  }
+  .phone-head { display: flex; align-items: center; gap: 11px; padding: 16px 18px; border-bottom: 1px solid var(--line); background: rgba(255,255,255,.02); }
+  .ph-avatar { width: 38px; height: 38px; border-radius: 12px; background: linear-gradient(145deg, var(--orange-2), var(--orange-deep)); color: #fff; display: grid; place-items: center; font-weight: 800; }
+  .ph-name { font-weight: 700; font-size: 15px; line-height: 1.2; color: var(--cream); }
+  .ph-sub { font-size: 12px; color: var(--green); }
+  .ph-body { padding: 18px; display: flex; flex-direction: column; gap: 10px; font-size: 14.5px; }
+  .b { max-width: 84%; padding: 10px 14px; border-radius: 16px; }
+  .b.bot { background: var(--card-2); border: 1px solid var(--line); color: var(--text); border-bottom-left-radius: 5px; }
+  .b.me { background: linear-gradient(135deg, var(--orange-2), var(--orange-deep)); color: #fff; align-self: flex-end; border-bottom-right-radius: 5px; }
+  .ph-input { margin: 4px 18px 18px; display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-radius: 14px; background: rgba(255,255,255,.04); border: 1px solid var(--line); color: var(--muted); font-size: 14px; }
+  .ph-send { margin-left: auto; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: linear-gradient(135deg, var(--orange-2), var(--orange-deep)); color: #fff; font-size: 13px; }
+  .lead-card {
+    position: absolute; left: -14px; bottom: -34px; width: 280px; padding: 16px 18px;
+    background: linear-gradient(180deg, #1B222C, #141A22); border: 1px solid var(--line-strong);
+    border-radius: 18px; font-size: 13.5px; box-shadow: 0 26px 60px rgba(0,0,0,.55);
+  }
+  .lead-card .lc-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 7px; }
+  .lead-card b { color: var(--cream); }
+  .lead-card .score { font-weight: 800; color: var(--green); }
+  .lead-card .bar { height: 7px; background: rgba(255,255,255,.08); border-radius: 7px; overflow: hidden; margin: 9px 0; }
+  .lead-card .bar div { width: 82%; height: 100%; background: linear-gradient(90deg, var(--orange-2), var(--green)); }
+  .tag { display: inline-block; font-size: 11.5px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: rgba(52, 211, 153, .14); color: var(--green); }
+
+  /* ---------- sections ---------- */
+  section { padding: 92px 0; position: relative; }
+  .section-head { text-align: center; max-width: 700px; margin: 0 auto 50px; }
+  .section-head h2 { font-size: clamp(28px, 3.7vw, 42px); letter-spacing: -1.2px; margin: 10px 0; color: var(--cream); line-height: 1.14; font-weight: 800; }
+  .section-head p { color: var(--muted); margin: 0; font-size: 17px; }
+  .kicker { color: var(--orange); font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: .14em; }
+
+  .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .feature {
+    border: 1px solid var(--line); border-radius: 20px; padding: 28px;
+    background: linear-gradient(180deg, var(--card), rgba(18, 23, 31, .55));
+    transition: border-color .2s ease, transform .2s ease;
+  }
+  .feature:hover { border-color: rgba(244, 123, 32, .38); transform: translateY(-3px); }
+  .feature .ic {
+    width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center; font-size: 22px;
+    background: rgba(244, 123, 32, .12); border: 1px solid rgba(244, 123, 32, .22); margin-bottom: 16px;
+  }
+  .feature h3 { margin: 0 0 8px; font-size: 18px; color: var(--cream); font-weight: 700; }
+  .feature p { margin: 0; color: var(--muted); font-size: 15px; }
+
+  .steps-bg { background: linear-gradient(180deg, rgba(255,255,255,.022), transparent); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; counter-reset: step; }
+  .step { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 28px; }
+  .step::before {
+    counter-increment: step; content: counter(step);
+    width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center;
+    background: linear-gradient(135deg, var(--orange-2), var(--orange-deep)); color: #fff; font-weight: 800;
+    margin-bottom: 16px; box-shadow: 0 8px 22px rgba(244, 123, 32, .30);
+  }
+  .step h3 { margin: 0 0 8px; font-size: 18px; color: var(--cream); font-weight: 700; }
+  .step p { margin: 0; color: var(--muted); font-size: 15px; }
+
+  /* ---------- pricing ---------- */
+  .currency { display: inline-flex; background: rgba(255,255,255,.05); border-radius: 999px; padding: 5px; margin-top: 22px; border: 1px solid var(--line); }
+  .currency button { border: 0; background: transparent; padding: 9px 20px; border-radius: 999px; font: inherit; font-weight: 650; font-size: 14.5px; color: var(--muted); cursor: pointer; transition: all .15s ease; }
+  .currency button.active { background: linear-gradient(135deg, var(--orange-2), var(--orange-deep)); color: #fff; }
+  .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: stretch; }
+  .plan {
+    border: 1px solid var(--line); border-radius: 22px; padding: 30px; display: flex; flex-direction: column;
+    background: linear-gradient(180deg, var(--card), rgba(18, 23, 31, .5));
+  }
+  .plan.featured {
+    border-color: rgba(244, 123, 32, .55); position: relative;
+    background: linear-gradient(180deg, rgba(244, 123, 32, .10), var(--card) 42%);
+    box-shadow: 0 24px 70px rgba(244, 123, 32, .16);
+  }
+  .plan.featured::after {
+    content: "Le plus choisi"; position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
+    background: linear-gradient(135deg, var(--orange-2), var(--orange-deep)); color: #fff;
+    font-size: 12.5px; font-weight: 700; padding: 5px 14px; border-radius: 999px; white-space: nowrap;
+  }
+  .plan h3 { margin: 0; font-size: 20px; color: var(--cream); font-weight: 700; }
+  .plan .for { color: var(--muted); font-size: 14.5px; margin: 6px 0 18px; min-height: 44px; }
+  .price { font-size: 44px; font-weight: 800; letter-spacing: -2px; color: var(--cream); line-height: 1; }
+  .price small { font-size: 15px; font-weight: 500; color: var(--muted); letter-spacing: 0; }
+  .plan ul { list-style: none; padding: 0; margin: 24px 0 28px; display: flex; flex-direction: column; gap: 11px; flex: 1; font-size: 15px; }
+  .plan li { display: flex; gap: 10px; align-items: flex-start; }
+  .plan li::before { content: "✓"; color: var(--orange); font-weight: 800; flex: none; }
+  .plan .btn { width: 100%; }
+  .addons { text-align: center; color: var(--muted); margin-top: 26px; font-size: 15px; }
+
+  /* ---------- faq ---------- */
+  .faq { max-width: 780px; margin: 0 auto; }
+  details { border: 1px solid var(--line); border-radius: 16px; padding: 18px 22px; margin-bottom: 12px; background: var(--card); }
+  details[open] { border-color: rgba(244, 123, 32, .32); }
+  summary { font-weight: 650; cursor: pointer; font-size: 16.5px; color: var(--cream); list-style: none; display: flex; justify-content: space-between; gap: 18px; align-items: center; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; font-size: 24px; line-height: 1; color: var(--orange); font-weight: 400; }
+  details[open] summary::after { content: "–"; }
+  details p { color: var(--muted); margin: 12px 0 0; }
+
+  /* ---------- cta + footer ---------- */
+  .cta-band {
+    position: relative; overflow: hidden; text-align: center; border-radius: 28px; padding: 64px 30px;
+    background: linear-gradient(135deg, rgba(244, 123, 32, .16), rgba(255, 100, 0, .06)), var(--card);
+    border: 1px solid rgba(244, 123, 32, .30);
+  }
+  .cta-band::before {
+    content: ""; position: absolute; width: 520px; height: 520px; border-radius: 50%; top: -300px; left: 50%; transform: translateX(-50%);
+    background: radial-gradient(circle, rgba(244, 123, 32, .30), transparent 65%); pointer-events: none;
+  }
+  .cta-band h2 { position: relative; font-size: clamp(26px, 3.5vw, 40px); margin: 0 0 12px; letter-spacing: -1.2px; color: var(--cream); font-weight: 800; }
+  .cta-band p { position: relative; color: var(--muted); margin: 0 0 28px; font-size: 17px; }
+  .cta-band .btn { position: relative; }
+  footer { padding: 46px 0 56px; color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); }
+  footer .wrap { display: flex; justify-content: space-between; align-items: center; gap: 18px; flex-wrap: wrap; }
+  footer .tagline { color: var(--muted); }
+  footer .tagline b { color: var(--orange); font-weight: 650; }
+  footer a { text-decoration: none; }
+  footer a:hover { color: var(--cream); }
+
+  @media (max-width: 920px) {
+    .hero .wrap, .features, .steps, .plans { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .phone { margin: 40px auto 0; }
+    .lead-card { left: 50%; transform: translateX(-50%); bottom: -46px; }
+    .mock { margin-bottom: 60px; }
+    section { padding: 70px 0; }
+    .hero { padding: 48px 0 70px; }
+  }
+  @media (max-width: 560px) {
+    .nav-cta .btn:first-child { display: none; }
+    .nav-cta .btn { padding: 10px 16px; font-size: 14px; }
+    .lbl-full { display: none; }
+    .lbl-short { display: inline; }
+    nav.top .wrap { gap: 12px; }
+    .hero-cta .btn { width: 100%; }
+    .plan, .feature, .step { padding: 24px; }
+  }
+</style>
+</head>
+<body>
+<nav class="top" id="nav">
+  <div class="wrap">
+    <a class="brand" href="/"><img class="logo-mark" src="/logo.png" alt="" width="38" height="38">DigiPlus AI</a>
+    <div class="nav-links">
+      <a href="#features">Fonctionnalités</a><a href="#how">Comment ça marche</a><a href="#pricing">Tarifs</a><a href="#faq">FAQ</a>
+    </div>
+    <div class="nav-cta"><a class="btn" href="/login">Se connecter</a><a class="btn primary" href="/signup"><span class="lbl-full">Commencer gratuitement</span><span class="lbl-short">Commencer</span></a></div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">🇹🇳 Parle <b>derja</b>, français, arabe et anglais</span>
+      <h1>Un assistant IA qui <span class="grad">vend pour votre business</span>, 24/7.</h1>
+      <p class="lead">Apprenez-lui vos services et vos prix en quelques minutes. Il répond à chaque client, explique vos offres et vous envoie des clients prêts à acheter, avec un résumé de chaque conversation.</p>
+      <div class="hero-cta"><a class="btn primary" href="/signup">Essayer 7 jours gratuits →</a><a class="btn" href="#pricing">Voir les tarifs</a></div>
+      <div class="trust"><span>7 jours gratuits</span><span>Sans carte bancaire</span><span>Prêt en 5 minutes</span></div>
+    </div>
+    <div class="mock" aria-hidden="true">
+      <div class="phone">
+        <div class="phone-head">
+          <div class="ph-avatar">S</div>
+          <div><div class="ph-name">Sara · Salon Amira</div><div class="ph-sub">● En ligne</div></div>
+        </div>
+        <div class="ph-body">
+          <div class="b bot">Aslema, merhbe bik 😊 Chnowa t7eb ta3mel?</div>
+          <div class="b me">9adeh el coloration w famma rendez-vous ghodwa?</div>
+          <div class="b bot">Coloration men 60 DT 👌 Ghodwa famma blasa 10h walla 15h. Chnowa ysa3dek?</div>
+          <div class="b me">15h behi, esmi Ines</div>
+          <div class="b bot">Behi Ines! Ab3athli numéro mte3ek bech nconfirmiw 😊</div>
+        </div>
+        <div class="ph-input">Écrivez un message... <span class="ph-send">➤</span></div>
+      </div>
+      <div class="lead-card">
+        <div class="lc-top"><b>Nouveau client · Ines</b><span class="tag">Prête à acheter</span></div>
+        <div>Coloration demain 15h, a demandé le prix.</div>
+        <div class="bar"><div></div></div>
+        <div class="lc-top"><span>Chance de vente</span><span class="score">82%</span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="features">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Fonctionnalités</div>
+      <h2>Tout ce que fait un bon vendeur — sans le salaire</h2>
+      <p>Pour les boutiques, salons, cliniques, agences, coachs et tout business qui reçoit des messages.</p>
+    </div>
+    <div class="features">
+      <div class="feature"><div class="ic">🧠</div><h3>Formé sur votre business</h3><p>Ajoutez vos services, vos prix, vos questions fréquentes et vos règles. Il dit seulement ce que vous avez écrit — il n'invente jamais un prix.</p></div>
+      <div class="feature"><div class="ic">💬</div><h3>Parle comme vos clients</h3><p>Il répond en derja tunisienne, en arabizi, en français, en arabe ou en anglais — selon ce que le client écrit.</p></div>
+      <div class="feature"><div class="ic">🎯</div><h3>Les objectifs que vous choisissez</h3><p>Comprendre le besoin, expliquer l'offre, conclure la vente, prendre le numéro de téléphone. C'est vous qui décidez.</p></div>
+      <div class="feature"><div class="ic">📋</div><h3>Un résumé IA de chaque discussion</h3><p>Besoins, budget, objections, chance de vente, prochaine étape et un message de relance prêt à envoyer.</p></div>
+      <div class="feature"><div class="ic">⚡</div><h3>WhatsApp, Messenger et Instagram</h3><p>Connectez votre numéro WhatsApp, votre page Facebook et votre Instagram en quelques clics, plus une bulle de chat sur votre site.</p></div>
+      <div class="feature"><div class="ic">🏢</div><h3>Plusieurs business</h3><p>Un assistant par business ou par branche, chacun avec ses informations, son lien et ses conversations.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="how" class="steps-bg">
+  <div class="wrap">
+    <div class="section-head"><div class="kicker">Comment ça marche</div><h2>Trois étapes, aucune compétence technique</h2></div>
+    <div class="steps">
+      <div class="step"><h3>Créez votre assistant</h3><p>Commencez vos 7 jours gratuits, donnez un nom à votre assistant et décrivez votre business.</p></div>
+      <div class="step"><h3>Apprenez-lui et testez-le</h3><p>Ajoutez vos services et vos prix, puis discutez avec lui comme un client jusqu'à ce que les réponses soient parfaites.</p></div>
+      <div class="step"><h3>Partagez-le et vendez</h3><p>Envoyez le lien ou ajoutez-le à votre site. Lisez les résumés et relancez les clients chauds.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Tarifs</div>
+      <h2>Des offres simples qui grandissent avec vous</h2>
+      <p>Chaque offre commence par 7 jours gratuits, sans carte bancaire. Payez en dinars avec D17 ou virement bancaire, ou par carte.</p>
+      <div class="currency" role="tablist"><button data-cur="TND" class="active">Dinars (DT)</button><button data-cur="USD">Carte (USD)</button></div>
+    </div>
+    <div class="plans" id="plans"></div>
+    <p class="addons" id="addons"></p>
+  </div>
+</section>
+
+<section id="faq" class="steps-bg">
+  <div class="wrap">
+    <div class="section-head"><div class="kicker">FAQ</div><h2>Vos questions</h2></div>
+    <div class="faq">
+      <details><summary>C'est quoi une « réponse IA » ?</summary><p>Chaque réponse que l'assistant envoie à un client compte pour une réponse. Une conversation de vente normale utilise 5 à 10 réponses. Les résumés ne comptent pas.</p></details>
+      <details><summary>Est-ce qu'il peut inventer des prix ou des promesses ?</summary><p>Non. Il utilise seulement les prix, les services et les règles que vous écrivez. Quand il ne sait pas, il dit que l'équipe va répondre et il donne votre contact.</p></details>
+      <details><summary>Je peux payer en dinars tunisiens ?</summary><p>Oui — payez avec D17 ou virement bancaire et votre offre est activée après que nous confirmons le paiement. Les clients à l'étranger peuvent payer par carte en USD.</p></details>
+      <details><summary>Qu'est-ce qui se passe si j'atteins ma limite du mois ?</summary><p>Votre assistant arrête de répondre et affiche votre contact aux clients. Ajoutez un pack de réponses ou passez à une offre plus grande, et il continue tout de suite.</p></details>
+      <details><summary>Je peux avoir plusieurs business ?</summary><p>Oui. Chaque assistant est un business, avec ses propres informations, son lien et ses conversations. Pro inclut 3 assistants, Business en inclut 10, et vous pouvez en ajouter d'autres sur chaque offre.</p></details>
+      <details><summary>Comment marchent les 7 jours gratuits ?</summary><p>Vous avez 7 jours sans carte bancaire : créez votre assistant, apprenez-lui vos prix et laissez-le répondre à de vrais clients. À la fin des 7 jours, choisissez une offre pour qu'il continue à répondre. Votre compte, vos assistants et tout ce que vous avez écrit restent enregistrés.</p></details>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="cta-band">
+      <h2>Votre prochain client vous écrit en ce moment.</h2>
+      <p>Laissez un assistant répondre en quelques secondes — même à 2h du matin.</p>
+      <a class="btn primary" href="/signup">Commencer mes 7 jours gratuits →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <a class="brand" href="/"><img class="logo-mark" src="/logo.png" alt="" width="38" height="38">DigiPlus AI</a>
+    <span class="tagline">Moins de travail manuel. <b>Plus de croissance.</b></span>
+    <span>© <span id="year"></span> DigiPlus AI · <a href="/login">Se connecter</a> · <a href="/signup">S'inscrire</a></span>
+  </div>
+</footer>
+
+<script>
+(() => {
+  document.getElementById('year').textContent = new Date().getFullYear();
+  const nav = document.getElementById('nav');
+  addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 10), { passive: true });
+
+  const FOR = {
+    starter: 'Pour un business qui reçoit des messages tous les jours.',
+    pro: 'Pour les business chargés et plusieurs branches.',
+    business: 'Pour les chaînes, les agences et les grandes boutiques en ligne.',
+  };
+  const fmt = (n) => Number(n).toLocaleString('fr-FR');
+  let pricing = null;
+  let currency = 'TND';
+
+  function price(plan) {
+    return currency === 'TND' ? `${plan.priceTND} DT` : `$${plan.priceUSD}`;
+  }
+
+  function render() {
+    if (!pricing) return;
+    const box = document.getElementById('plans');
+    box.replaceChildren(...pricing.plans.map((plan) => {
+      const card = document.createElement('div');
+      card.className = `plan${plan.id === 'pro' ? ' featured' : ''}`;
+      const items = [
+        (plan.channels || ['web']).map((ch) => pricing.channelNames?.[ch] || ch).join(' · '),
+        `${plan.bots} assistant${plan.bots > 1 ? 's' : ''}`,
+        `${fmt(plan.replies)} réponses IA / mois`,
+        `${fmt(plan.dataChars)} caractères d'informations sur votre business`,
+        'Résumés IA, score de vente et reprise par un humain',
+        plan.badge ? 'Lien de chat et widget pour votre site' : 'Sans mention DigiPlus AI',
+      ];
+      card.innerHTML = `<h3></h3><div class="for"></div><div class="price"></div><ul></ul><a class="btn ${plan.id === 'pro' ? 'primary' : ''}" href="/signup"></a>`;
+      card.querySelector('h3').textContent = plan.name;
+      card.querySelector('.for').textContent = FOR[plan.id] || '';
+      const p = card.querySelector('.price');
+      p.textContent = price(plan);
+      const s = document.createElement('small'); s.textContent = ' / mois'; p.append(s);
+      const ul = card.querySelector('ul');
+      for (const text of items) { const li = document.createElement('li'); li.textContent = text; ul.append(li); }
+      card.querySelector('a').textContent = `Choisir ${plan.name}`;
+      return card;
+    }));
+    const a = pricing.addons;
+    document.getElementById('addons').textContent = currency === 'TND'
+      ? `Assistant supplémentaire : ${a.extraBot.priceTND} DT/mois · +${fmt(a.replyPack.replies)} réponses : ${a.replyPack.priceTND} DT`
+      : `Assistant supplémentaire : $${a.extraBot.priceUSD}/mois · +${fmt(a.replyPack.replies)} réponses : $${a.replyPack.priceUSD}`;
+  }
+
+  document.querySelectorAll('.currency button').forEach((b) => b.addEventListener('click', () => {
+    document.querySelectorAll('.currency button').forEach((x) => x.classList.toggle('active', x === b));
+    currency = b.dataset.cur;
+    render();
+  }));
+
+  fetch('/api/public/config').then((r) => r.json()).then((c) => { pricing = c.pricing; render(); }).catch(() => {});
+})();
+</script>
+</body>
+</html>

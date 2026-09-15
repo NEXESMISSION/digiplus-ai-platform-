@@ -1,0 +1,25 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "outputDirectory": "public",
+  "functions": {
+    "api/index.js": { "maxDuration": 60 }
+  },
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/index" },
+    { "source": "/login", "destination": "/auth.html" },
+    { "source": "/signup", "destination": "/auth.html" },
+    { "source": "/reset-password", "destination": "/auth.html" },
+    { "source": "/app", "destination": "/app.html" },
+    { "source": "/super", "destination": "/super.html" },
+    { "source": "/privacy", "destination": "/privacy.html" },
+    { "source": "/terms", "destination": "/terms.html" },
+    { "source": "/c/:publicId", "destination": "/chat.html" }
+  ],
+  "headers": [
+    { "source": "/(app|super|login|signup|reset-password)", "headers": [{ "key": "X-Frame-Options", "value": "DENY" }] }
+  ],
+  "crons": [
+    { "path": "/api/cron/summarize", "schedule": "0 7 * * *" }
+  ]
+}
