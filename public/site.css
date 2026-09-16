@@ -231,8 +231,6 @@
   /* ---------- the little product vignettes inside cards ----------
      Built in markup rather than generated art: they stay sharp, weigh nothing,
      and use the real brand colours. Decorative, so aria-hidden in the HTML. */
-  /* Generated panel art for the feature cards (see /img/v-*.jpg). */
-  .vig-img { position: absolute; right: -20px; top: -6px; width: 212px; height: auto; border-radius: 15px; pointer-events: none; }
   .vig { position: absolute; right: -16px; top: -2px; width: 198px; pointer-events: none; display: flex; flex-direction: column; gap: 6px; }
   .vig-card { background: var(--card-2); border: 1px solid var(--line); border-radius: 12px; padding: 9px 10px; box-shadow: 0 16px 34px rgba(0,0,0,.45); display: flex; flex-direction: column; gap: 6px; }
   .vig-line { height: 6px; border-radius: 6px; background: rgba(255,255,255,.1); }
@@ -270,8 +268,7 @@
     transition: border-color .2s ease, transform .2s ease;
   }
   .feature:hover { border-color: rgba(244, 123, 32, .38); transform: translateY(-3px); }
-  /* tall enough to clear the panel art, which is 216px wide at a 400x310 ratio */
-  .f-top { position: relative; height: 158px; margin-bottom: 14px; }
+  .f-top { position: relative; height: 126px; margin-bottom: 16px; }
   .feature .ic {
     width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center;
     background: rgba(244, 123, 32, .12); border: 1px solid rgba(244, 123, 32, .22);
