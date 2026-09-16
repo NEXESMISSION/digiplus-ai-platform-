@@ -1077,7 +1077,7 @@ function renderSummary(c) {
       Array.isArray(content) ? el('ul', {}, content.map((x) => el('li', { dir: 'auto', text: x }))) : el('div', { dir: 'auto', text: content }));
   };
   const likely = s.deal_likelihood;
-  const color = likely >= 70 ? 'var(--green)' : likely >= 40 ? 'var(--amber)' : '#9aa0b4';
+  const color = likely >= 70 ? 'var(--green)' : likely >= 40 ? 'var(--amber)' : 'var(--muted)';
   const outdated = c.summary_at && Date.parse(c.updated_at) > Date.parse(c.summary_at);
   return el('div', { class: 'summary' },
     el('div', { class: 'summary-top' },
