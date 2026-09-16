@@ -20,7 +20,8 @@
     --ink-3: #6B6862;
     --rule: rgba(11, 11, 10, .16);
     --rule-soft: rgba(11, 11, 10, .2);
-    --flame: #E33A08;
+    --flame: #F47B20;
+    --grad: linear-gradient(135deg, #FF9A2E, #FF6400);
     --font-display: "Archivo", system-ui, sans-serif;
     --font-body: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
     --font-mono: "JetBrains Mono", ui-monospace, monospace;
@@ -48,7 +49,7 @@
     margin-top: 4px; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase;
     color: var(--ink-3); display: flex; align-items: center; gap: 7px;
   }
-  .sub::before { content: ""; width: 8px; height: 8px; background: var(--flame); flex: none; }
+  .sub::before { content: ""; width: 8px; height: 8px; background-image: var(--grad); flex: none; }
   .spacer { flex: 1; }
   .ghost {
     border: 1px solid var(--ink); background: transparent; color: var(--ink);
@@ -84,9 +85,9 @@
   #input:focus { background: #fff; }
   #send {
     width: 74px; flex: none; border: 0; border-inline-start: 1px solid var(--ink);
-    background: var(--flame); color: var(--paper); display: grid; place-items: center; cursor: pointer;
+    background-image: var(--grad); color: var(--paper); display: grid; place-items: center; cursor: pointer;
   }
-  #send:hover:not(:disabled) { background: var(--ink); }
+  #send:hover:not(:disabled) { background-image: none; background-color: var(--ink); }
   #send:disabled { opacity: .4; cursor: default; }
   .badge {
     text-align: center; padding: 12px 0 calc(12px + env(safe-area-inset-bottom));
@@ -108,7 +109,7 @@
     width: 100%; min-height: 52px; border: 0; background: var(--ink); color: var(--paper);
     font: inherit; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 6px;
   }
-  .primary:hover:not(:disabled) { background: var(--flame); }
+  .primary:hover:not(:disabled) { background-image: var(--grad); }
   .primary:disabled { opacity: .6; }
   .form-error { color: #8A2B0B; font-size: 13.5px; min-height: 20px; margin-top: 10px; }
   .unavailable { flex: 1; display: grid; place-items: center; color: var(--ink-2); padding: 24px; text-align: center; background: var(--paper-2); }
