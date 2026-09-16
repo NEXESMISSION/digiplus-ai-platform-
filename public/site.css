@@ -97,13 +97,19 @@
     background: radial-gradient(circle, rgba(244, 123, 32, .16) 0%, transparent 65%);
     filter: blur(18px);
   }
-  .hero .wrap { position: relative; z-index: 1; display: grid; grid-template-columns: 1.02fr .98fr; gap: 54px; align-items: center; }
+  /* Wider than the rest of the page: the product mockup needs the room to stay legible. */
+  .hero .wrap { position: relative; z-index: 1; max-width: 1290px; display: grid; grid-template-columns: .92fr 1.08fr; gap: 48px; align-items: center; }
   .eyebrow {
-    display: inline-flex; align-items: center; gap: 9px; padding: 7px 15px; border-radius: 999px;
+    display: inline-flex; align-items: center; gap: 10px; padding: 6px 15px 6px 7px; border-radius: 999px;
     background: rgba(244, 123, 32, .10); border: 1px solid rgba(244, 123, 32, .28);
     font-size: 13.5px; font-weight: 500; color: #F6C79B;
   }
   .eyebrow b { color: var(--orange-2); font-weight: 700; }
+  .eyebrow .chip {
+    display: grid; place-items: center; padding: 2px 8px; border-radius: 999px;
+    background: linear-gradient(180deg, var(--orange-2), var(--orange-deep)); color: #fff;
+    font-size: 10.5px; font-weight: 800; letter-spacing: .04em;
+  }
   h1 {
     font-family: var(--font-display);
     font-size: clamp(36px, 5.2vw, 60px); line-height: 1.06; letter-spacing: -2px;
@@ -112,38 +118,85 @@
   h1 .grad { background: linear-gradient(100deg, var(--orange-2), var(--orange-deep)); -webkit-background-clip: text; background-clip: text; color: transparent; }
   .lead { font-size: 18.5px; color: var(--muted); max-width: 540px; margin: 0 0 30px; }
   .hero-cta { display: flex; gap: 12px; flex-wrap: wrap; }
-  .trust { margin-top: 22px; color: var(--muted); font-size: 14px; display: flex; gap: 20px; flex-wrap: wrap; }
-  .trust span::before { content: "✓"; color: var(--orange); font-weight: 800; margin-right: 7px; }
+  .trust { margin-top: 22px; color: var(--muted); font-size: 14px; display: flex; gap: 22px; flex-wrap: wrap; }
+  .trust span { display: inline-flex; align-items: center; gap: 7px; }
+  .trust .ico { width: 15px; height: 15px; color: var(--orange); stroke-width: 2.4; }
 
-  /* ---------- hero chat mockup ---------- */
+  /* ---------- hero product mockup ----------
+     The real interface, not an illustration of one: inbox, the AI answering a
+     client in Derja, and the lead summary that is the thing people buy. */
   .mock { position: relative; }
-  .phone {
-    position: relative; background: linear-gradient(180deg, #161D26, #10151C);
-    border: 1px solid var(--line-strong); border-radius: 24px; overflow: hidden;
-    max-width: 410px; margin-left: auto;
-    box-shadow: 0 40px 90px rgba(0, 0, 0, .55), 0 0 60px rgba(244, 123, 32, .10);
+  .app-mock {
+    position: relative; background: #0E141B;
+    border: 1px solid var(--line-strong); border-radius: 18px; overflow: hidden;
+    box-shadow: 0 40px 90px rgba(0, 0, 0, .6), 0 0 70px rgba(244, 123, 32, .08);
   }
-  .phone-head { display: flex; align-items: center; gap: 11px; padding: 16px 18px; border-bottom: 1px solid var(--line); background: rgba(255,255,255,.02); }
-  .ph-avatar { width: 38px; height: 38px; border-radius: 12px; background: linear-gradient(145deg, var(--orange-2), var(--orange-deep)); color: #fff; display: grid; place-items: center; font-weight: 800; }
-  .ph-name { font-weight: 700; font-size: 15px; line-height: 1.2; color: var(--cream); }
-  .ph-sub { font-size: 12px; color: var(--green); }
-  .ph-body { padding: 18px; display: flex; flex-direction: column; gap: 10px; font-size: 14.5px; }
-  .b { max-width: 84%; padding: 10px 14px; border-radius: 16px; }
-  .b.bot { background: var(--card-2); border: 1px solid var(--line); color: var(--text); border-bottom-left-radius: 5px; }
-  .b.me { background: linear-gradient(135deg, var(--orange-2), var(--orange-deep)); color: #fff; align-self: flex-end; border-bottom-right-radius: 5px; }
-  .ph-input { margin: 4px 18px 18px; display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-radius: 14px; background: rgba(255,255,255,.04); border: 1px solid var(--line); color: var(--muted); font-size: 14px; }
-  .ph-send { margin-left: auto; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: linear-gradient(135deg, var(--orange-2), var(--orange-deep)); color: #fff; font-size: 13px; }
+  .am-bar { display: flex; align-items: center; gap: 9px; padding: 11px 14px; border-bottom: 1px solid var(--line); background: rgba(255,255,255,.02); }
+  .am-bar .logo-mark { width: 22px; height: 22px; filter: none; }
+  .am-bar .nm { font-family: var(--font-display); font-weight: 700; font-size: 13px; color: var(--cream); }
+  .am-bar .right { margin-left: auto; display: flex; align-items: center; gap: 10px; font-size: 11px; color: var(--muted); }
+  .am-bar .av { width: 22px; height: 22px; border-radius: 7px; background: var(--card-2); border: 1px solid var(--line); display: grid; place-items: center; font-size: 10.5px; font-weight: 700; color: var(--text); }
+  .dot-live { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex: none; }
+
+  .am-body { display: grid; grid-template-columns: 140px minmax(0, 1fr) 196px; min-height: 366px; }
+  .am-side { border-right: 1px solid var(--line); padding: 10px 8px; display: flex; flex-direction: column; gap: 2px; }
+  .am-nav { display: flex; align-items: center; gap: 8px; padding: 7px 9px; border-radius: 9px; font-size: 11.5px; font-weight: 550; color: var(--muted); }
+  .am-nav .ico { width: 14px; height: 14px; stroke-width: 1.6; }
+  .am-nav.on { background: rgba(244,123,32,.12); color: var(--orange-2); box-shadow: inset 0 0 0 1px rgba(244,123,32,.2); }
+  .am-nav .count { margin-left: auto; background: linear-gradient(180deg, var(--orange-2), var(--orange-deep)); color: #fff; font-size: 9.5px; font-weight: 800; padding: 1px 6px; border-radius: 999px; }
+
+  .am-chat { display: flex; flex-direction: column; border-right: 1px solid var(--line); min-width: 0; }
+  .am-chat-head { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+  .am-av { width: 26px; height: 26px; border-radius: 8px; flex: none; display: grid; place-items: center; font-size: 11px; font-weight: 800; color: #fff; background: linear-gradient(145deg, var(--orange-2), var(--orange-deep)); }
+  .am-who { font-size: 11.5px; font-weight: 700; color: var(--cream); line-height: 1.25; }
+  .am-who span { display: flex; align-items: center; gap: 4px; font-size: 9.5px; font-weight: 500; color: var(--green); }
+  .am-msgs { flex: 1; padding: 12px; display: flex; flex-direction: column; gap: 9px; }
+  .am-msg { display: flex; gap: 7px; align-items: flex-end; }
+  .am-msg .who { width: 20px; height: 20px; border-radius: 6px; flex: none; display: grid; place-items: center; background: var(--card-2); border: 1px solid var(--line); color: var(--muted); }
+  .am-msg .who .ico { width: 11px; height: 11px; }
+  .am-msg .bub { max-width: 84%; padding: 7px 10px; border-radius: 11px; font-size: 10.5px; line-height: 1.45; }
+  .am-msg .time { font-size: 8.5px; color: var(--muted); display: block; margin-top: 3px; text-align: right; opacity: .8; }
+  .am-msg.in .bub { background: var(--card-2); border: 1px solid var(--line); color: var(--text); border-bottom-left-radius: 3px; }
+  .am-msg.out { flex-direction: row-reverse; }
+  .am-msg.out .who { background: rgba(244,123,32,.15); border-color: rgba(244,123,32,.3); color: var(--orange-2); }
+  .am-msg.out .bub { background: linear-gradient(170deg, var(--orange-2), var(--orange-deep)); color: #fff; border-bottom-right-radius: 3px; }
+  .am-msg.out .time { color: rgba(255,255,255,.75); }
+  .am-input { display: flex; align-items: center; gap: 8px; margin: 0 12px 12px; padding: 7px 8px 7px 10px; border-radius: 10px; background: rgba(255,255,255,.04); border: 1px solid var(--line); color: var(--muted); font-size: 10.5px; white-space: nowrap; overflow: hidden; }
+  .am-input .ico { width: 13px; height: 13px; }
+  .am-send { margin-left: auto; width: 24px; height: 24px; border-radius: 50%; flex: none; display: grid; place-items: center; background: linear-gradient(180deg, var(--orange-2), var(--orange-deep)); color: #fff; }
+  .am-send .ico { width: 12px; height: 12px; }
+
+  .am-sum { padding: 11px 12px; display: flex; flex-direction: column; gap: 9px; }
+  .am-sum-head { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+  .am-sum-head b { font-size: 11px; color: var(--cream); }
+  .am-row { display: flex; gap: 8px; align-items: flex-start; }
+  .am-row .ico { width: 13px; height: 13px; color: var(--muted); margin-top: 1px; }
+  .am-row .k { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+  .am-row .v { font-size: 10.5px; color: var(--cream); font-weight: 550; }
+  .am-sub { font-size: 9px; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); font-weight: 700; margin-top: 2px; padding-top: 9px; border-top: 1px solid var(--line); }
+  .am-act { display: flex; align-items: center; gap: 8px; padding: 7px 8px; border-radius: 9px; border: 1px solid var(--line); background: rgba(255,255,255,.02); font-size: 10px; color: var(--cream); font-weight: 550; }
+  .am-act .act-ic { width: 20px; height: 20px; border-radius: 6px; flex: none; display: grid; place-items: center; background: rgba(244,123,32,.14); border: 1px solid rgba(244,123,32,.26); color: var(--orange-2); }
+  .am-act .act-ic .ico { width: 11px; height: 11px; }
+  .am-act .go { margin-left: auto; color: var(--muted); }
+  .am-act .go .ico { width: 12px; height: 12px; }
+  .tag { display: inline-block; font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 999px; background: rgba(52, 211, 153, .16); color: var(--green); white-space: nowrap; }
+
+  /* the floating "new lead" card, overlapping the mock */
   .lead-card {
-    position: absolute; left: -14px; bottom: -34px; width: 280px; padding: 16px 18px;
+    position: absolute; right: -22px; bottom: -42px; width: 268px; padding: 13px 15px;
     background: linear-gradient(180deg, #1B222C, #141A22); border: 1px solid var(--line-strong);
-    border-radius: 18px; font-size: 13.5px; box-shadow: 0 26px 60px rgba(0,0,0,.55);
+    border-radius: 15px; font-size: 12px; box-shadow: 0 26px 60px rgba(0,0,0,.6);
   }
-  .lead-card .lc-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 7px; }
-  .lead-card b { color: var(--cream); }
-  .lead-card .score { font-weight: 800; color: var(--green); }
-  .lead-card .bar { height: 7px; background: rgba(255,255,255,.08); border-radius: 7px; overflow: hidden; margin: 9px 0; }
+  .lead-card .lc-top { display: flex; align-items: center; gap: 9px; margin-bottom: 9px; }
+  .lead-card .lc-ic { width: 26px; height: 26px; border-radius: 8px; flex: none; display: grid; place-items: center; background: rgba(52,211,153,.14); border: 1px solid rgba(52,211,153,.28); color: var(--green); }
+  .lead-card .lc-ic .ico { width: 14px; height: 14px; }
+  .lead-card b { color: var(--cream); font-size: 12.5px; display: block; line-height: 1.3; }
+  .lead-card .lc-sub { color: var(--muted); font-size: 10.5px; }
+  .lead-card .lc-when { margin-left: auto; font-size: 10px; color: var(--muted); white-space: nowrap; }
+  .lead-card .bar { height: 6px; background: rgba(255,255,255,.08); border-radius: 6px; overflow: hidden; margin: 0 0 8px; }
   .lead-card .bar div { width: 82%; height: 100%; background: linear-gradient(90deg, var(--orange-2), var(--green)); }
-  .tag { display: inline-block; font-size: 11.5px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: rgba(52, 211, 153, .14); color: var(--green); }
+  .lead-card .lc-foot { display: flex; justify-content: space-between; align-items: center; font-size: 11px; }
+  .lead-card .score { font-weight: 800; color: var(--green); font-variant-numeric: tabular-nums; }
 
   /* ---------- sections ---------- */
   section { padding: 92px 0; position: relative; }
@@ -240,12 +293,22 @@
   footer a { text-decoration: none; }
   footer a:hover { color: var(--cream); }
 
+  /* The summary column is the first thing to go when space runs out, then the sidebar.
+     It goes early (1240px): a three-pane mock squeezes the conversation to ~200px,
+     where every message wraps to five lines and the demo stops being readable. */
+  @media (max-width: 1240px) {
+    .am-body { grid-template-columns: 140px minmax(0, 1fr); }
+    .am-sum { display: none; }
+  }
   @media (max-width: 920px) {
     .hero .wrap, .features, .steps, .plans { grid-template-columns: 1fr; }
     .nav-links { display: none; }
-    .phone { margin: 40px auto 0; }
-    .lead-card { left: 50%; transform: translateX(-50%); bottom: -46px; }
-    .mock { margin-bottom: 60px; }
+    .app-mock { margin-top: 34px; }
+    .am-body { grid-template-columns: 1fr; min-height: 300px; }
+    .am-side { display: none; }
+    .am-msg .bub { font-size: 12px; }
+    /* stops floating and simply follows the mock, so it can never cover the text */
+    .lead-card { position: static; width: auto; right: auto; bottom: auto; margin-top: 14px; }
     section { padding: 70px 0; }
     .hero { padding: 48px 0 70px; }
   }

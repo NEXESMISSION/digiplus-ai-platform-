@@ -33,6 +33,13 @@
   <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
   <symbol id="i-send" viewBox="0 0 24 24"><path d="M4.5 12 20 5l-7 15-2.5-6.5L4.5 12Z"/></symbol>
   <symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 4 21 19.5H3L12 4Z"/><path d="M12 10v4M12 16.5h.01"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M8.5 4.5h-3A1.5 1.5 0 0 0 4 6.2c.4 5.6 5.2 10.4 10.8 10.8a1.5 1.5 0 0 0 1.7-1.5v-3l-3.2-1.2-1.4 1.8a12 12 0 0 1-3-3l1.8-1.4L8.5 4.5Z"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s6-5.4 6-10a6 6 0 1 0-12 0c0 4.6 6 10 6 10Z"/><circle cx="12" cy="10.5" r="2.4"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="4" y="5.5" width="16" height="14.5" rx="2.5"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></symbol>
+  <symbol id="i-clip" viewBox="0 0 24 24"><path d="M19 11.5l-7.1 7.1a4.5 4.5 0 0 1-6.4-6.4l7.6-7.6a3 3 0 0 1 4.3 4.3l-7.6 7.6a1.5 1.5 0 0 1-2.2-2.2l6.6-6.6"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M9.5 5.5l6.5 6.5-6.5 6.5"/></symbol>
+  <symbol id="i-box" viewBox="0 0 24 24"><path d="M12 3.5 20 7.5v9l-8 4-8-4v-9l8-4Z"/><path d="M4 7.5l8 4 8-4M12 11.5v9"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-9.2A4.3 4.3 0 0 1 12 8a4.3 4.3 0 0 1 7 2.8C19 15.6 12 20 12 20Z"/></symbol>
 </svg>`;
 
   function mount() {
