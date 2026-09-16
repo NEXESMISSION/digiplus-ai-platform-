@@ -12,18 +12,38 @@
     --text: #D7DEE8;
     --muted: #94A3B8;
     --green: #34D399;
+    /* Inter reads well and stays for body copy. Headlines get a face with a
+       personality, because Inter-for-everything is what generated sites look like. */
+    --font-body: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Arabic", Tahoma, sans-serif;
+    --font-display: "Bricolage Grotesque", var(--font-body);
   }
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
   body {
     margin: 0;
-    font: 16px/1.65 Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Arabic", Tahoma, sans-serif;
+    font: 16px/1.65 var(--font-body);
     color: var(--text);
     background: var(--bg);
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
   }
   a { color: inherit; }
+
+  /* Film grain over the whole page. The cheapest way to stop a dark layout
+     looking like flat template output — it gives the background material. */
+  .grain {
+    position: fixed; inset: 0; z-index: 99; pointer-events: none;
+    opacity: .045; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ---------- icons ---------- */
+  /* Hand-drawn set in /icons.js. Inherits colour and font-size context. */
+  .ico {
+    width: 22px; height: 22px; flex: none; display: block;
+    fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round;
+  }
+  .ico-sm { width: 17px; height: 17px; }
   .wrap { max-width: 1160px; margin: 0 auto; padding: 0 22px; }
 
   /* ---------- brand ---------- */
@@ -58,7 +78,7 @@
   .nav-links a { text-decoration: none; color: var(--muted); font-size: 15px; font-weight: 500; }
   .nav-links a:hover { color: var(--cream); }
   .nav-cta { margin-left: auto; display: flex; gap: 10px; align-items: center; }
-  .lang { display: inline-flex; gap: 2px; align-items: center; font-size: 13.5px; font-weight: 650; color: var(--muted); text-decoration: none; padding: 7px 11px; border-radius: 999px; border: 1px solid var(--line); }
+  .lang { display: inline-flex; gap: 2px; align-items: center; white-space: nowrap; font-size: 13.5px; font-weight: 650; color: var(--muted); text-decoration: none; padding: 7px 11px; border-radius: 999px; border: 1px solid var(--line); }
   .lang:hover { color: var(--cream); border-color: var(--line-strong); }
   .lang b { color: var(--orange); font-weight: 700; }
   .nav-cta .btn { padding: 10px 18px; font-size: 14.5px; }
@@ -85,6 +105,7 @@
   }
   .eyebrow b { color: var(--orange-2); font-weight: 700; }
   h1 {
+    font-family: var(--font-display);
     font-size: clamp(36px, 5.2vw, 60px); line-height: 1.06; letter-spacing: -2px;
     margin: 22px 0 18px; color: var(--cream); font-weight: 800;
   }
@@ -127,7 +148,7 @@
   /* ---------- sections ---------- */
   section { padding: 92px 0; position: relative; }
   .section-head { text-align: center; max-width: 700px; margin: 0 auto 50px; }
-  .section-head h2 { font-size: clamp(28px, 3.7vw, 42px); letter-spacing: -1.2px; margin: 10px 0; color: var(--cream); line-height: 1.14; font-weight: 800; }
+  .section-head h2 { font-family: var(--font-display); font-size: clamp(28px, 3.7vw, 42px); letter-spacing: -1.2px; margin: 10px 0; color: var(--cream); line-height: 1.14; font-weight: 800; }
   .section-head p { color: var(--muted); margin: 0; font-size: 17px; }
   .kicker { color: var(--orange); font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: .14em; }
 
@@ -139,10 +160,11 @@
   }
   .feature:hover { border-color: rgba(244, 123, 32, .38); transform: translateY(-3px); }
   .feature .ic {
-    width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center; font-size: 22px;
+    width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center;
     background: rgba(244, 123, 32, .12); border: 1px solid rgba(244, 123, 32, .22); margin-bottom: 16px;
+    color: var(--orange-2);
   }
-  .feature h3 { margin: 0 0 8px; font-size: 18px; color: var(--cream); font-weight: 700; }
+  .feature h3 { font-family: var(--font-display); margin: 0 0 8px; font-size: 18px; color: var(--cream); font-weight: 700; }
   .feature p { margin: 0; color: var(--muted); font-size: 15px; }
 
   .steps-bg { background: linear-gradient(180deg, rgba(255,255,255,.022), transparent); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
@@ -154,7 +176,8 @@
     background: linear-gradient(135deg, var(--orange-2), var(--orange-deep)); color: #fff; font-weight: 800;
     margin-bottom: 16px; box-shadow: 0 8px 22px rgba(244, 123, 32, .30);
   }
-  .step h3 { margin: 0 0 8px; font-size: 18px; color: var(--cream); font-weight: 700; }
+  .step h3 { font-family: var(--font-display); margin: 0 0 8px; font-size: 18px; color: var(--cream); font-weight: 700; }
+  .step::before { font-family: var(--font-display); }
   .step p { margin: 0; color: var(--muted); font-size: 15px; }
 
   /* ---------- pricing ---------- */
@@ -176,13 +199,14 @@
     background: linear-gradient(135deg, var(--orange-2), var(--orange-deep)); color: #fff;
     font-size: 12.5px; font-weight: 700; padding: 5px 14px; border-radius: 999px; white-space: nowrap;
   }
-  .plan h3 { margin: 0; font-size: 20px; color: var(--cream); font-weight: 700; }
+  .plan h3 { font-family: var(--font-display); margin: 0; font-size: 20px; color: var(--cream); font-weight: 700; }
   .plan .for { color: var(--muted); font-size: 14.5px; margin: 6px 0 18px; min-height: 44px; }
-  .price { font-size: 44px; font-weight: 800; letter-spacing: -2px; color: var(--cream); line-height: 1; }
-  .price small { font-size: 15px; font-weight: 500; color: var(--muted); letter-spacing: 0; }
+  .price { font-family: var(--font-display); font-size: 44px; font-weight: 800; letter-spacing: -2px; color: var(--cream); line-height: 1; font-variant-numeric: tabular-nums; }
+  .price small { font-family: var(--font-body); font-size: 15px; font-weight: 500; color: var(--muted); letter-spacing: 0; }
   .plan ul { list-style: none; padding: 0; margin: 24px 0 28px; display: flex; flex-direction: column; gap: 11px; flex: 1; font-size: 15px; }
   .plan li { display: flex; gap: 10px; align-items: flex-start; }
   .plan li::before { content: "✓"; color: var(--orange); font-weight: 800; flex: none; }
+  .brand { font-family: var(--font-display); }
   .plan .btn { width: 100%; }
   .addons { text-align: center; color: var(--muted); margin-top: 26px; font-size: 15px; }
 
@@ -206,7 +230,7 @@
     content: ""; position: absolute; width: 520px; height: 520px; border-radius: 50%; top: -300px; left: 50%; transform: translateX(-50%);
     background: radial-gradient(circle, rgba(244, 123, 32, .30), transparent 65%); pointer-events: none;
   }
-  .cta-band h2 { position: relative; font-size: clamp(26px, 3.5vw, 40px); margin: 0 0 12px; letter-spacing: -1.2px; color: var(--cream); font-weight: 800; }
+  .cta-band h2 { position: relative; font-family: var(--font-display); font-size: clamp(26px, 3.5vw, 40px); margin: 0 0 12px; letter-spacing: -1.2px; color: var(--cream); font-weight: 800; }
   .cta-band p { position: relative; color: var(--muted); margin: 0 0 28px; font-size: 17px; }
   .cta-band .btn { position: relative; }
   footer { padding: 46px 0 56px; color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); }
@@ -226,7 +250,9 @@
     .hero { padding: 48px 0 70px; }
   }
   @media (max-width: 560px) {
-    .nav-cta .btn:first-child { display: none; }
+    /* Keep only the primary call to action. Matching on :not(.primary) instead of
+       :first-child, because the language switch is the first child now. */
+    .nav-cta .btn:not(.primary) { display: none; }
     .nav-cta .btn { padding: 10px 16px; font-size: 14px; }
     .lbl-full { display: none; }
     .lbl-short { display: inline; }

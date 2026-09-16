@@ -30,10 +30,12 @@
 <link rel="apple-touch-icon" href="/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/site.css">
 </head>
 <body>
+<script src="/icons.js"></script>
+<div class="grain"></div>
 <nav class="top" id="nav">
   <div class="wrap">
     <a class="brand" href="/"><img class="logo-mark" src="/logo.png" alt="" width="38" height="38">DigiPlus AI</a>
@@ -50,7 +52,7 @@
       <span class="eyebrow">🇹🇳 Parle <b>derja</b>, français, arabe et anglais</span>
       <h1>Un assistant IA qui <span class="grad">vend pour votre business</span>, 24/7.</h1>
       <p class="lead">Apprenez-lui vos services et vos prix en quelques minutes. Il répond à chaque client, explique vos offres et vous envoie des clients prêts à acheter, avec un résumé de chaque conversation.</p>
-      <div class="hero-cta"><a class="btn primary" href="/signup">Essayer 7 jours gratuits →</a><a class="btn" href="#pricing">Voir les tarifs</a></div>
+      <div class="hero-cta"><a class="btn primary" href="/signup">Essayer 7 jours gratuits<svg class="ico ico-sm"><use href="#i-arrow"/></svg></a><a class="btn" href="#pricing">Voir les tarifs</a></div>
       <div class="trust"><span>7 jours gratuits</span><span>Sans carte bancaire</span><span>Prêt en 5 minutes</span></div>
     </div>
     <div class="mock" aria-hidden="true">
@@ -66,7 +68,7 @@
           <div class="b me">15h behi, esmi Ines</div>
           <div class="b bot">Behi Ines! Ab3athli numéro mte3ek bech nconfirmiw 😊</div>
         </div>
-        <div class="ph-input">Écrivez un message... <span class="ph-send">➤</span></div>
+        <div class="ph-input">Écrivez un message... <span class="ph-send"><svg class="ico ico-sm"><use href="#i-send"/></svg></span></div>
       </div>
       <div class="lead-card">
         <div class="lc-top"><b>Nouveau client · Ines</b><span class="tag">Prête à acheter</span></div>
@@ -86,12 +88,12 @@
       <p>Pour les boutiques, salons, cliniques, agences, coachs et tout business qui reçoit des messages.</p>
     </div>
     <div class="features">
-      <div class="feature"><div class="ic">🧠</div><h3>Formé sur votre business</h3><p>Ajoutez vos services, vos prix, vos questions fréquentes et vos règles. Il dit seulement ce que vous avez écrit — il n'invente jamais un prix.</p></div>
-      <div class="feature"><div class="ic">💬</div><h3>Parle comme vos clients</h3><p>Il répond en derja tunisienne, en arabizi, en français, en arabe ou en anglais — selon ce que le client écrit.</p></div>
-      <div class="feature"><div class="ic">🎯</div><h3>Les objectifs que vous choisissez</h3><p>Comprendre le besoin, expliquer l'offre, conclure la vente, prendre le numéro de téléphone. C'est vous qui décidez.</p></div>
-      <div class="feature"><div class="ic">📋</div><h3>Un résumé IA de chaque discussion</h3><p>Besoins, budget, objections, chance de vente, prochaine étape et un message de relance prêt à envoyer.</p></div>
-      <div class="feature"><div class="ic">⚡</div><h3>WhatsApp, Messenger et Instagram</h3><p>Connectez votre numéro WhatsApp, votre page Facebook et votre Instagram en quelques clics, plus une bulle de chat sur votre site.</p></div>
-      <div class="feature"><div class="ic">🏢</div><h3>Plusieurs business</h3><p>Un assistant par business ou par branche, chacun avec ses informations, son lien et ses conversations.</p></div>
+      <div class="feature"><div class="ic"><svg class="ico"><use href="#i-knowledge"/></svg></div><h3>Formé sur votre business</h3><p>Ajoutez vos services, vos prix, vos questions fréquentes et vos règles. Il dit seulement ce que vous avez écrit — il n'invente jamais un prix.</p></div>
+      <div class="feature"><div class="ic"><svg class="ico"><use href="#i-globe"/></svg></div><h3>Parle comme vos clients</h3><p>Il répond en derja tunisienne, en arabizi, en français, en arabe ou en anglais — selon ce que le client écrit.</p></div>
+      <div class="feature"><div class="ic"><svg class="ico"><use href="#i-target"/></svg></div><h3>Les objectifs que vous choisissez</h3><p>Comprendre le besoin, expliquer l'offre, conclure la vente, prendre le numéro de téléphone. C'est vous qui décidez.</p></div>
+      <div class="feature"><div class="ic"><svg class="ico"><use href="#i-summary"/></svg></div><h3>Un résumé IA de chaque discussion</h3><p>Besoins, budget, objections, chance de vente, prochaine étape et un message de relance prêt à envoyer.</p></div>
+      <div class="feature"><div class="ic"><svg class="ico"><use href="#i-whatsapp"/></svg></div><h3>WhatsApp, Messenger et Instagram</h3><p>Connectez votre numéro WhatsApp, votre page Facebook et votre Instagram en quelques clics, plus une bulle de chat sur votre site.</p></div>
+      <div class="feature"><div class="ic"><svg class="ico"><use href="#i-branches"/></svg></div><h3>Plusieurs business</h3><p>Un assistant par business ou par branche, chacun avec ses informations, son lien et ses conversations.</p></div>
     </div>
   </div>
 </section>
@@ -139,7 +141,7 @@
     <div class="cta-band">
       <h2>Votre prochain client vous écrit en ce moment.</h2>
       <p>Laissez un assistant répondre en quelques secondes — même à 2h du matin.</p>
-      <a class="btn primary" href="/signup">Commencer mes 7 jours gratuits →</a>
+      <a class="btn primary" href="/signup">Commencer mes 7 jours gratuits<svg class="ico ico-sm"><use href="#i-arrow"/></svg></a>
     </div>
   </div>
 </section>
