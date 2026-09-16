@@ -134,7 +134,7 @@
 
       <div class="feature">
         <div class="f-top">
-          <div class="ic solid"><svg class="ico"><use href="#i-knowledge"/></svg></div>
+          <img class="ic-img" src="/img/f-knowledge.png" alt="" width="60" height="60" loading="lazy">
           <div class="vig" aria-hidden="true">
             <div class="vig-card">
               <div class="vig-head"><span class="vig-av"><svg class="ico"><use href="#i-spark"/></svg></span><span class="vig-t">Your services</span></div>
@@ -151,7 +151,7 @@
 
       <div class="feature">
         <div class="f-top">
-          <div class="ic"><svg class="ico"><use href="#i-globe"/></svg></div>
+          <img class="ic-img" src="/img/f-languages.png" alt="" width="60" height="60" loading="lazy">
           <div class="vig" aria-hidden="true">
             <div class="vig-bub">Aslema 👋</div>
             <div class="vig-bub o">Chnowa t7eb ta3mel ?</div>
@@ -165,7 +165,7 @@
 
       <div class="feature">
         <div class="f-top">
-          <div class="ic"><svg class="ico"><use href="#i-target"/></svg></div>
+          <img class="ic-img" src="/img/f-goals.png" alt="" width="60" height="60" loading="lazy">
           <div class="vig" aria-hidden="true">
             <div class="vig-card">
               <div class="vig-check"><span class="vig-bx"><svg class="ico"><use href="#i-check"/></svg></span>Answer the questions</div>
@@ -181,7 +181,7 @@
 
       <div class="feature">
         <div class="f-top">
-          <div class="ic solid"><svg class="ico"><use href="#i-summary"/></svg></div>
+          <img class="ic-img" src="/img/f-summary.png" alt="" width="60" height="60" loading="lazy">
           <div class="vig" aria-hidden="true">
             <div class="vig-card">
               <div class="vig-t">Conversation summary</div>
@@ -199,7 +199,7 @@
 
       <div class="feature">
         <div class="f-top">
-          <div class="ic"><svg class="ico"><use href="#i-whatsapp"/></svg></div>
+          <img class="ic-img" src="/img/f-channels.png" alt="" width="60" height="60" loading="lazy">
           <div class="vig" aria-hidden="true">
             <div class="vig-chips">
               <span class="vig-chip"><svg class="ico"><use href="#i-whatsapp"/></svg>WhatsApp</span>
@@ -219,7 +219,7 @@
 
       <div class="feature">
         <div class="f-top">
-          <div class="ic"><svg class="ico"><use href="#i-branches"/></svg></div>
+          <img class="ic-img" src="/img/f-business.png" alt="" width="60" height="60" loading="lazy">
           <div class="vig" aria-hidden="true">
             <div class="vig-chips">
               <span class="vig-chip"><svg class="ico"><use href="#i-box"/></svg>Shop</span>
@@ -389,9 +389,9 @@
   };
   // icon and accent per plan; the middle one wears the brand orange on purpose
   const LOOK = {
-    starter: { icon: 'i-rocket', tone: 'blue' },
-    pro: { icon: 'i-crown', tone: 'orange' },
-    business: { icon: 'i-diamond', tone: 'violet' },
+    starter: { icon: 'i-rocket', tone: 'blue', img: 'p-starter.png' },
+    pro: { icon: 'i-crown', tone: 'orange', img: 'p-pro.png' },
+    business: { icon: 'i-diamond', tone: 'violet', img: 'p-business.png' },
   };
   const fmt = (n) => Number(n).toLocaleString('en-US');
   let pricing = null;
@@ -420,7 +420,7 @@
       card.innerHTML = `
         ${featured ? '<span class="plan-badge">Most chosen</span>' : ''}
         <div class="plan-top">
-          <div class="plan-ic ${look.tone}"><svg class="ico"><use href="#${look.icon}"/></svg></div>
+          <img class="plan-ic-img" src="/img/${look.img}" alt="" width="62" height="62" loading="lazy">
           <div class="plan-vig ${look.tone}" aria-hidden="true"><i></i><i></i><i><svg class="ico"><use href="#${look.icon}"/></svg></i></div>
         </div>
         <h3></h3><div class="for"></div><div class="price"></div><ul></ul>

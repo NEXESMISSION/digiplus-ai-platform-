@@ -275,6 +275,10 @@
     color: var(--orange-2); position: relative; z-index: 2;
   }
   .feature .ic.solid { background: linear-gradient(180deg, var(--orange-2), var(--orange-deep)); border-color: transparent; color: #fff; box-shadow: 0 10px 24px rgba(244,123,32,.32); }
+  /* Generated 3D tiles (see /img). They carry their own gloss and glow, so they
+     get no background or border of ours — just the rounding to hide the corners. */
+  .ic-img { width: 60px; height: 60px; border-radius: 17px; display: block; position: relative; z-index: 2; }
+  .plan-ic-img { width: 62px; height: 62px; border-radius: 18px; display: block; position: relative; z-index: 2; }
   .feature h3 { font-family: var(--font-display); margin: 0 0 8px; font-size: 18px; color: var(--cream); font-weight: 700; }
   .feature p { margin: 0; color: var(--muted); font-size: 15px; }
 
