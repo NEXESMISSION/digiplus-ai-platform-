@@ -82,10 +82,21 @@ async function ensureAccountForUser(user) {
   }
 
   if (!account) {
-    const name = String(user.user_metadata?.business_name || email.split('@')[0] || 'My business').slice(0, 120);
+    const meta = user.user_metadata || {};
+    const text = (v, max) => (typeof v === 'string' && v.trim() ? v.trim().slice(0, max) : null);
+    const name = String(meta.business_name || email.split('@')[0] || 'My business').slice(0, 120);
     const { data, error } = await sb()
       .from('accounts')
-      .insert({ name, owner_id: user.id, owner_email: email, plan: 'trial', plan_expires_at: trialEndsAt() })
+      .insert({
+        name,
+        owner_id: user.id,
+        owner_email: email,
+        phone: text(meta.phone, 40),
+        country: text(meta.country, 80),
+        city: text(meta.city, 120),
+        plan: 'trial',
+        plan_expires_at: trialEndsAt(),
+      })
       .select()
       .single();
     if (isDuplicate(error)) {

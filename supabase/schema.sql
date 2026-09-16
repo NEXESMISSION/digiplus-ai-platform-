@@ -12,6 +12,9 @@ create table if not exists public.accounts (
   owner_id             uuid references auth.users (id) on delete set null,
   owner_email          text,
   claim_email          text,          -- account prepared for someone who has not signed up yet
+  phone                text,          -- collected at sign-up, so you can call the customer
+  country              text,
+  city                 text,
   plan                 text not null default 'trial' check (plan in ('trial', 'starter', 'pro', 'business')),
   plan_expires_at      timestamptz,   -- paid plan ends here; null on a paid plan = no expiry (complimentary)
   billing_provider     text not null default 'none' check (billing_provider in ('none', 'manual', 'dodo')),
@@ -354,13 +357,15 @@ end $$;
 
 create or replace function public.super_accounts(p_period text)
 returns table (
-  id uuid, name text, owner_email text, claim_email text, plan text, plan_expires_at timestamptz,
+  id uuid, name text, owner_email text, claim_email text, phone text, country text, city text,
+  plan text, plan_expires_at timestamptz,
   billing_provider text, extra_bots int, created_at timestamptz,
   bots bigint, conversations bigint,
   replies int, bonus_replies int, summaries int, cost_usd numeric, limit_hit_at timestamptz
 )
 language sql stable set search_path = public as $$
-  select a.id, a.name, a.owner_email, a.claim_email, a.plan, a.plan_expires_at,
+  select a.id, a.name, a.owner_email, a.claim_email, a.phone, a.country, a.city,
+         a.plan, a.plan_expires_at,
          a.billing_provider, a.extra_bots, a.created_at,
          (select count(*) from public.bots b where b.account_id = a.id),
          (select count(*) from public.conversations c join public.bots b on b.id = c.bot_id

@@ -80,6 +80,17 @@
     font: inherit; font-size: 15px; transition: border-color .15s ease, box-shadow .15s ease;
   }
   .field input::placeholder { color: #64748B; }
+  .field select {
+    width: 100%; padding: 13px 15px; border-radius: 13px;
+    background: var(--field); border: 1px solid var(--line-strong); color: var(--cream);
+    font: inherit; font-size: 15px; cursor: pointer;
+    appearance: none; -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath fill='%2394A3B8' d='M1 1.5 6 6.5l5-5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 15px center; background-size: 12px; padding-right: 38px;
+  }
+  .field select:focus { outline: none; border-color: var(--orange); box-shadow: 0 0 0 3px rgba(244, 123, 32, .18); }
+  .field select option { background: #161D26; color: var(--cream); }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .field input:focus {
     outline: none; border-color: var(--orange);
     box-shadow: 0 0 0 3px rgba(244, 123, 32, .18);
@@ -121,6 +132,7 @@
     .auth-card { padding: 22px; }
     h1 { font-size: 21px; }
     .auth-tabs button { font-size: 13.5px; padding: 10px 6px; white-space: nowrap; }
+    .grid-2 { grid-template-columns: 1fr; gap: 0; }
   }
 </style>
 </head>
@@ -137,6 +149,29 @@
         <h1 id="title"></h1>
         <p class="sub" id="subtitle"></p>
         <label class="field" id="businessField"><span>Nom de votre business</span><input id="business" maxlength="120" autocomplete="organization" dir="auto" placeholder="ex. Salon Amira"></label>
+        <label class="field" id="phoneField"><span>Numéro de téléphone</span><input id="phone" type="tel" maxlength="40" autocomplete="tel" placeholder="ex. 20 123 456"></label>
+        <div class="grid-2" id="placeFields">
+          <label class="field"><span>Pays</span>
+            <select id="country">
+              <option value="Tunisie" selected>Tunisie</option>
+              <option value="Algérie">Algérie</option>
+              <option value="Maroc">Maroc</option>
+              <option value="Libye">Libye</option>
+              <option value="Égypte">Égypte</option>
+              <option value="France">France</option>
+              <option value="Belgique">Belgique</option>
+              <option value="Suisse">Suisse</option>
+              <option value="Canada">Canada</option>
+              <option value="Italie">Italie</option>
+              <option value="Allemagne">Allemagne</option>
+              <option value="Émirats arabes unis">Émirats arabes unis</option>
+              <option value="Arabie saoudite">Arabie saoudite</option>
+              <option value="Qatar">Qatar</option>
+              <option value="Koweït">Koweït</option>
+              <option value="Autre">Autre</option>
+            </select></label>
+          <label class="field"><span>Ville</span><input id="city" maxlength="120" autocomplete="address-level2" dir="auto" placeholder="ex. Sfax"></label>
+        </div>
         <label class="field" id="emailField"><span>Email</span><input id="email" type="email" autocomplete="email" placeholder="vous@exemple.com"></label>
         <label class="field" id="passwordField"><span id="passwordLabel">Mot de passe</span><input id="password" type="password" minlength="8" autocomplete="current-password" placeholder="8 caractères minimum"></label>
         <button class="btn wide" id="submit" type="submit"></button>
@@ -176,6 +211,8 @@
     $('tabs').hidden = mode === 'forgot' || mode === 'reset';
     document.querySelectorAll('#tabs button').forEach((b) => b.classList.toggle('active', b.dataset.mode === mode));
     $('businessField').hidden = mode !== 'signup';
+    $('phoneField').hidden = mode !== 'signup';
+    $('placeFields').hidden = mode !== 'signup';
     $('emailField').hidden = mode === 'reset';
     $('passwordField').hidden = mode === 'forgot';
     $('passwordLabel').textContent = mode === 'reset' ? 'Nouveau mot de passe' : 'Mot de passe';
@@ -218,6 +255,11 @@
     const password = $('password').value;
     if (mode !== 'reset' && !/^\S+@\S+\.\S+$/.test(email)) return say('Entrez un email valide.');
     if (mode !== 'forgot' && password.length < 8) return say('Le mot de passe doit faire au moins 8 caractères.');
+    if (mode === 'signup') {
+      if (!$('business').value.trim()) return say('Écrivez le nom de votre business.');
+      if ($('phone').value.replace(/\D/g, '').length < 8) return say('Entrez un numéro de téléphone valide.');
+      if (!$('city').value.trim()) return say('Écrivez la ville de votre business.');
+    }
 
     busy = true;
     $('submit').disabled = true;
@@ -231,7 +273,15 @@
         const { data, error } = await sb.auth.signUp({
           email,
           password,
-          options: { emailRedirectTo: `${location.origin}/app`, data: { business_name: $('business').value.trim() } },
+          options: {
+            emailRedirectTo: `${location.origin}/app`,
+            data: {
+              business_name: $('business').value.trim(),
+              phone: $('phone').value.trim(),
+              country: $('country').value,
+              city: $('city').value.trim(),
+            },
+          },
         });
         if (error) throw error;
         if (data.session) location.href = '/app';

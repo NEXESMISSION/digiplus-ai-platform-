@@ -86,7 +86,9 @@ function renderOverview() {
 
 function renderAccounts() {
   const q = $('#accountSearch').value.trim().toLowerCase();
-  const rows = overview.accounts.filter((a) => !q || `${a.name} ${a.owner_email || ''} ${a.claim_email || ''}`.toLowerCase().includes(q));
+  const rows = overview.accounts.filter(
+    (a) => !q || `${a.name} ${a.owner_email || ''} ${a.claim_email || ''} ${a.phone || ''} ${a.city || ''} ${a.country || ''}`.toLowerCase().includes(q)
+  );
   const rate = overview.usdToTnd;
   $('#accountsTable').replaceChildren(
     el('table', { class: 'data' },
@@ -95,7 +97,12 @@ function renderAccounts() {
         const limit = a.limits.replies + a.bonus_replies;
         const revenue = a.monthlyTND + a.monthlyUSD * rate;
         return el('tr', {},
-          el('td', {}, el('b', { dir: 'auto', text: a.name }), el('div', { class: 'hint', text: a.owner_email || (a.claim_email ? `waiting for ${a.claim_email}` : '—') }), el('div', { class: 'hint', text: `since ${date(a.created_at)}` })),
+          el('td', {},
+            el('b', { dir: 'auto', text: a.name }),
+            el('div', { class: 'hint', text: a.owner_email || (a.claim_email ? `waiting for ${a.claim_email}` : '—') }),
+            a.phone && el('div', { class: 'hint' }, el('a', { href: `tel:${a.phone}`, text: a.phone })),
+            (a.city || a.country) && el('div', { class: 'hint', dir: 'auto', text: [a.city, a.country].filter(Boolean).join(', ') }),
+            el('div', { class: 'hint', text: `since ${date(a.created_at)}` })),
           el('td', {}, el('span', { class: `pill ${a.paid ? 'green' : 'gray'}`, text: a.limits.planName }), a.plan !== a.limits.plan && el('div', { class: 'hint', text: `${PLAN_NAMES[a.plan]} expired` }), a.billing_provider !== 'none' && el('div', { class: 'hint', text: a.billing_provider })),
           el('td', { text: a.paid ? (a.plan_expires_at ? date(a.plan_expires_at) : 'no expiry') : '—' }),
           el('td', { class: 'num', text: `${a.bots} / ${a.limits.bots}` }),
