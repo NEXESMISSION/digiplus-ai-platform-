@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Connexion · DigiPlus AI</title>
+<meta name="robots" content="noindex, follow">
+<meta name="theme-color" content="#0B0F14">
 <link rel="icon" type="image/png" href="/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -148,10 +150,10 @@
       <form id="form" novalidate>
         <h1 id="title"></h1>
         <p class="sub" id="subtitle"></p>
-        <label class="field" id="businessField"><span>Nom de votre business</span><input id="business" maxlength="120" autocomplete="organization" dir="auto" placeholder="ex. Salon Amira"></label>
-        <label class="field" id="phoneField"><span>Numéro de téléphone</span><input id="phone" type="tel" maxlength="40" autocomplete="tel" placeholder="ex. 20 123 456"></label>
+        <label class="field" id="businessField"><span id="lblBusiness">Nom de votre business</span><input id="business" maxlength="120" autocomplete="organization" dir="auto" placeholder="ex. Salon Amira"></label>
+        <label class="field" id="phoneField"><span id="lblPhone">Numéro de téléphone</span><input id="phone" type="tel" maxlength="40" autocomplete="tel" placeholder="ex. 20 123 456"></label>
         <div class="grid-2" id="placeFields">
-          <label class="field"><span>Pays</span>
+          <label class="field"><span id="lblCountry">Pays</span>
             <select id="country">
               <option value="Tunisie" selected>Tunisie</option>
               <option value="Algérie">Algérie</option>
@@ -170,9 +172,9 @@
               <option value="Koweït">Koweït</option>
               <option value="Autre">Autre</option>
             </select></label>
-          <label class="field"><span>Ville</span><input id="city" maxlength="120" autocomplete="address-level2" dir="auto" placeholder="ex. Sfax"></label>
+          <label class="field"><span id="lblCity">Ville</span><input id="city" maxlength="120" autocomplete="address-level2" dir="auto" placeholder="ex. Sfax"></label>
         </div>
-        <label class="field" id="emailField"><span>Email</span><input id="email" type="email" autocomplete="email" placeholder="vous@exemple.com"></label>
+        <label class="field" id="emailField"><span id="lblEmail">Email</span><input id="email" type="email" autocomplete="email" placeholder="vous@exemple.com"></label>
         <label class="field" id="passwordField"><span id="passwordLabel">Mot de passe</span><input id="password" type="password" minlength="8" autocomplete="current-password" placeholder="8 caractères minimum"></label>
         <button class="btn wide" id="submit" type="submit"></button>
         <button type="button" class="linkish" id="switchLink"></button>
@@ -180,7 +182,7 @@
       </form>
     </section>
     <div class="trust" id="trust" hidden><span>7 jours gratuits</span><span>Sans carte bancaire</span><span>Prêt en 5 minutes</span></div>
-    <p class="auth-foot"><a href="/">← Retour au site</a></p>
+    <p class="auth-foot"><a href="/" id="backLink">← Retour au site</a></p>
   </div>
 </main>
 
@@ -194,12 +196,78 @@
   let mode = location.pathname === '/signup' ? 'signup' : location.pathname === '/reset-password' ? 'reset' : 'login';
   let busy = false;
 
-  const TEXT = {
-    login: { title: 'Content de vous revoir', sub: 'Connectez-vous pour gérer vos assistants IA.', submit: 'Se connecter', link: 'Mot de passe oublié ?' },
-    signup: { title: 'Créez votre compte', sub: '7 jours gratuits, sans carte bancaire. Vous choisissez une offre à la fin des 7 jours.', submit: 'Créer mon compte', link: '' },
-    forgot: { title: 'Mot de passe oublié', sub: 'Entrez votre email et nous vous envoyons un lien pour en choisir un nouveau.', submit: 'Envoyer le lien', link: 'Retour à la connexion' },
-    reset: { title: 'Choisissez un nouveau mot de passe', sub: 'Au moins 8 caractères.', submit: 'Enregistrer le mot de passe', link: '' },
+  const DICT = {
+    fr: {
+      home: '/',
+      tabs: ['Se connecter', 'Créer un compte'],
+      labels: { business: 'Nom de votre business', phone: 'Numéro de téléphone', country: 'Pays', city: 'Ville', email: 'Email', password: 'Mot de passe', newPassword: 'Nouveau mot de passe' },
+      ph: { business: 'ex. Salon Amira', phone: 'ex. 20 123 456', city: 'ex. Sfax', email: 'vous@exemple.com', password: '8 caractères minimum' },
+      trust: ['7 jours gratuits', 'Sans carte bancaire', 'Prêt en 5 minutes'],
+      back: '← Retour au site',
+      modes: {
+        login: { title: 'Content de vous revoir', sub: 'Connectez-vous pour gérer vos assistants IA.', submit: 'Se connecter', link: 'Mot de passe oublié ?' },
+        signup: { title: 'Créez votre compte', sub: '7 jours gratuits, sans carte bancaire. Vous choisissez une offre à la fin des 7 jours.', submit: 'Créer mon compte', link: '' },
+        forgot: { title: 'Mot de passe oublié', sub: 'Entrez votre email et nous vous envoyons un lien pour en choisir un nouveau.', submit: 'Envoyer le lien', link: 'Retour à la connexion' },
+        reset: { title: 'Choisissez un nouveau mot de passe', sub: 'Au moins 8 caractères.', submit: 'Enregistrer le mot de passe', link: '' },
+      },
+      err: {
+        email: 'Entrez un email valide.',
+        password: 'Le mot de passe doit faire au moins 8 caractères.',
+        business: 'Écrivez le nom de votre business.',
+        phone: 'Entrez un numéro de téléphone valide.',
+        city: 'Écrivez la ville de votre business.',
+        creds: 'Email ou mot de passe incorrect.',
+        notConfirmed: "Confirmez d'abord votre email — regardez votre boîte mail (et les spams).",
+        rate: 'Trop d’emails ont été envoyés. Attendez un peu et réessayez.',
+        already: 'Un compte existe déjà avec cet email. Connectez-vous à la place.',
+        generic: 'Une erreur est survenue. Réessayez.',
+        badLink: 'Ce lien est invalide ou expiré. Demandez-en un nouveau depuis la page de connexion.',
+      },
+      msg: {
+        confirm: (email) => `C'est presque fini ! Nous avons envoyé un lien de confirmation à ${email}. Ouvrez-le pour activer votre compte.`,
+        sent: (email) => `Si un compte existe pour ${email}, le lien est en route.`,
+        saved: 'Mot de passe enregistré. Ouverture de votre tableau de bord…',
+      },
+    },
+    en: {
+      home: '/en',
+      tabs: ['Log in', 'Create account'],
+      labels: { business: 'Your business name', phone: 'Phone number', country: 'Country', city: 'City', email: 'Email', password: 'Password', newPassword: 'New password' },
+      ph: { business: 'e.g. Amira Salon', phone: 'e.g. +216 20 123 456', city: 'e.g. Sfax', email: 'you@example.com', password: '8 characters minimum' },
+      trust: ['7 days free', 'No card needed', 'Ready in 5 minutes'],
+      back: '← Back to the site',
+      modes: {
+        login: { title: 'Welcome back', sub: 'Log in to manage your AI assistants.', submit: 'Log in', link: 'Forgot your password?' },
+        signup: { title: 'Create your account', sub: '7 days free, no bank card. You choose a plan when the 7 days end.', submit: 'Create my account', link: '' },
+        forgot: { title: 'Forgot your password', sub: 'Enter your email and we will send you a link to choose a new one.', submit: 'Send the link', link: 'Back to log in' },
+        reset: { title: 'Choose a new password', sub: 'At least 8 characters.', submit: 'Save the password', link: '' },
+      },
+      err: {
+        email: 'Enter a valid email.',
+        password: 'The password must be at least 8 characters.',
+        business: 'Write your business name.',
+        phone: 'Enter a valid phone number.',
+        city: 'Write the city of your business.',
+        creds: 'Wrong email or password.',
+        notConfirmed: 'Confirm your email first — check your inbox (and the spam folder).',
+        rate: 'Too many emails were sent. Wait a little and try again.',
+        already: 'An account already exists with this email. Log in instead.',
+        generic: 'Something went wrong. Please try again.',
+        badLink: 'This link is invalid or expired. Ask for a new one from the log in page.',
+      },
+      msg: {
+        confirm: (email) => `Almost done! We sent a confirmation link to ${email}. Open it to activate your account.`,
+        sent: (email) => `If an account exists for ${email}, the link is on its way.`,
+        saved: 'Password saved. Opening your dashboard…',
+      },
+    },
   };
+
+  const lang = (params.get('lang') || '').toLowerCase() === 'en' ? 'en' : 'fr';
+  const T = DICT[lang];
+  const TEXT = T.modes;
+  document.documentElement.lang = lang;
+  const keepLang = (path) => (lang === 'en' ? `${path}?lang=en` : path);
 
   function render() {
     const t = TEXT[mode];
@@ -215,11 +283,36 @@
     $('placeFields').hidden = mode !== 'signup';
     $('emailField').hidden = mode === 'reset';
     $('passwordField').hidden = mode === 'forgot';
-    $('passwordLabel').textContent = mode === 'reset' ? 'Nouveau mot de passe' : 'Mot de passe';
+    $('passwordLabel').textContent = mode === 'reset' ? T.labels.newPassword : T.labels.password;
     $('password').autocomplete = mode === 'login' ? 'current-password' : 'new-password';
     $('trust').hidden = mode !== 'signup';
     document.title = `${t.submit} · DigiPlus AI`;
     say('');
+  }
+
+  // The static labels are written in French in the HTML; swap them for English
+  // when the page is opened as /signup?lang=en from the English site.
+  function applyLang() {
+    const tabs = document.querySelectorAll('#tabs button');
+    tabs[0].textContent = T.tabs[0];
+    tabs[1].textContent = T.tabs[1];
+    $('lblBusiness').textContent = T.labels.business;
+    $('lblPhone').textContent = T.labels.phone;
+    $('lblCountry').textContent = T.labels.country;
+    $('lblCity').textContent = T.labels.city;
+    $('lblEmail').textContent = T.labels.email;
+    $('business').placeholder = T.ph.business;
+    $('phone').placeholder = T.ph.phone;
+    $('city').placeholder = T.ph.city;
+    $('email').placeholder = T.ph.email;
+    $('password').placeholder = T.ph.password;
+    $('trust').replaceChildren(...T.trust.map((label) => {
+      const span = document.createElement('span');
+      span.textContent = label;
+      return span;
+    }));
+    $('backLink').textContent = T.back;
+    $('backLink').href = T.home;
   }
 
   function say(text, kind = 'error') {
@@ -229,17 +322,17 @@
 
   function friendly(error) {
     const m = String(error?.message || error || '');
-    if (/invalid login credentials/i.test(m)) return 'Email ou mot de passe incorrect.';
-    if (/email not confirmed/i.test(m)) return "Confirmez d'abord votre email — regardez votre boîte mail (et les spams).";
-    if (/rate limit/i.test(m)) return 'Trop d’emails ont été envoyés. Attendez un peu et réessayez.';
-    if (/already registered/i.test(m)) return 'Un compte existe déjà avec cet email. Connectez-vous à la place.';
-    return m || 'Une erreur est survenue. Réessayez.';
+    if (/invalid login credentials/i.test(m)) return T.err.creds;
+    if (/email not confirmed/i.test(m)) return T.err.notConfirmed;
+    if (/rate limit/i.test(m)) return T.err.rate;
+    if (/already registered/i.test(m)) return T.err.already;
+    return m || T.err.generic;
   }
 
   document.querySelectorAll('#tabs button').forEach((b) =>
     b.addEventListener('click', () => {
       mode = b.dataset.mode;
-      history.replaceState(null, '', mode === 'signup' ? '/signup' : '/login');
+      history.replaceState(null, '', keepLang(mode === 'signup' ? '/signup' : '/login'));
       render();
     })
   );
@@ -253,12 +346,12 @@
     if (busy) return;
     const email = $('email').value.trim();
     const password = $('password').value;
-    if (mode !== 'reset' && !/^\S+@\S+\.\S+$/.test(email)) return say('Entrez un email valide.');
-    if (mode !== 'forgot' && password.length < 8) return say('Le mot de passe doit faire au moins 8 caractères.');
+    if (mode !== 'reset' && !/^\S+@\S+\.\S+$/.test(email)) return say(T.err.email);
+    if (mode !== 'forgot' && password.length < 8) return say(T.err.password);
     if (mode === 'signup') {
-      if (!$('business').value.trim()) return say('Écrivez le nom de votre business.');
-      if ($('phone').value.replace(/\D/g, '').length < 8) return say('Entrez un numéro de téléphone valide.');
-      if (!$('city').value.trim()) return say('Écrivez la ville de votre business.');
+      if (!$('business').value.trim()) return say(T.err.business);
+      if ($('phone').value.replace(/\D/g, '').length < 8) return say(T.err.phone);
+      if (!$('city').value.trim()) return say(T.err.city);
     }
 
     busy = true;
@@ -285,15 +378,15 @@
         });
         if (error) throw error;
         if (data.session) location.href = '/app';
-        else say(`C'est presque fini ! Nous avons envoyé un lien de confirmation à ${email}. Ouvrez-le pour activer votre compte.`, 'ok');
+        else say(T.msg.confirm(email), 'ok');
       } else if (mode === 'forgot') {
         const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: `${location.origin}/reset-password` });
         if (error) throw error;
-        say(`Si un compte existe pour ${email}, le lien est en route.`, 'ok');
+        say(T.msg.sent(email), 'ok');
       } else if (mode === 'reset') {
         const { error } = await sb.auth.updateUser({ password });
         if (error) throw error;
-        say('Mot de passe enregistré. Ouverture de votre tableau de bord…', 'ok');
+        say(T.msg.saved, 'ok');
         setTimeout(() => (location.href = '/app'), 800);
       }
     } catch (err) {
@@ -305,12 +398,13 @@
   });
 
   (async () => {
+    applyLang();
     render();
     try {
       const sb = await DP.auth();
       if (mode === 'reset') {
         const { data } = await sb.auth.getSession();
-        if (!data.session) say('Ce lien est invalide ou expiré. Demandez-en un nouveau depuis la page de connexion.');
+        if (!data.session) say(T.err.badLink);
         return;
       }
       const { data } = await sb.auth.getSession();

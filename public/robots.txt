@@ -1,0 +1,83 @@
+# DigiPlus AI — https://digiplus.lol
+# Search engines and AI answer engines are welcome. Private areas are closed.
+
+# /login and /signup are crawlable on purpose: they carry <meta robots="noindex">,
+# which a crawler can only obey if it is allowed to fetch the page.
+User-agent: *
+Allow: /
+Disallow: /app
+Disallow: /super
+Disallow: /c/
+Disallow: /api/
+
+# ---------------------------------------------------------------- AI answer engines
+# Explicitly allowed so DigiPlus AI can be found, read and cited when someone asks
+# an assistant for an AI chatbot for their business.
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: GoogleOther
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: MistralAI-User
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: cohere-training-data-crawler
+Allow: /
+
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: Meta-ExternalFetcher
+Allow: /
+
+User-agent: DuckAssistBot
+Allow: /
+
+User-agent: YouBot
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+Sitemap: https://digiplus.lol/sitemap.xml

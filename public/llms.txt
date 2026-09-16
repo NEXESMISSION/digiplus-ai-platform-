@@ -1,0 +1,50 @@
+# DigiPlus AI
+
+> DigiPlus AI is a SaaS platform that gives any business its own AI sales assistant. The owner teaches the assistant their services, prices and rules in a few minutes; the assistant then answers clients 24/7 on a website chat, WhatsApp, Facebook Messenger and Instagram, and hands back a written summary and a deal-likelihood score for every conversation. It is built in Tunisia and speaks Tunisian Derja and Arabizi as well as French, Arabic and English.
+
+Website: https://digiplus.lol · Français: https://digiplus.lol/ · English: https://digiplus.lol/en
+
+## What it does
+
+- Answers every client message in seconds, 24 hours a day, in the language and alphabet the client writes in (Tunisian Derja in Arabic letters or Arabizi/Latin letters, French, Arabic, English).
+- Uses only the services, prices, FAQ and rules the business owner wrote. It never invents a price, a discount, a deadline or a guarantee; when it does not know, it says the team will follow up and shares the owner's contact details.
+- Writes an AI summary of every conversation: the client's needs, budget, objections, deal likelihood as a percentage, next steps, and a ready-to-send follow-up message.
+- Lets a human take over any conversation at any moment, pausing the AI for that client only.
+- Runs several assistants, one per business or per branch, each with its own knowledge, public chat link and conversations.
+
+## Who it is for
+
+Shops, salons, clinics, restaurants, coffee shops, real-estate agencies, online stores, agencies, trainers, and any business that receives client messages and loses sales by answering late.
+
+## Channels
+
+Website chat (a public chat link plus an embeddable widget), Facebook Messenger, Instagram direct messages, and WhatsApp.
+
+## Pricing
+
+Prices are per month. Every plan starts with a 7-day free trial, no bank card required. Payment in Tunisian dinars by D17 or bank transfer, or by card in USD.
+
+- Free trial — 7 days, 1 assistant, 300 AI replies, 30,000 characters of business data, website chat + Messenger + Instagram.
+- Starter — 39 TND or 15 USD per month. 1 assistant, 2,000 AI replies per month, 30,000 characters of business data, website chat + Messenger + Instagram.
+- Pro — 99 TND or 35 USD per month. 3 assistants, 5,000 AI replies per month, 100,000 characters of business data, all channels including WhatsApp, no DigiPlus AI branding.
+- Business — 199 TND or 69 USD per month. 10 assistants, 15,000 AI replies per month, 300,000 characters of business data, all channels including WhatsApp, no DigiPlus AI branding.
+- Add-ons — extra assistant 19 TND or 7 USD per month; 1,000 extra AI replies 15 TND or 5 USD.
+
+An "AI reply" is one answer sent to a client. A typical sales conversation uses 5 to 10 replies. Summaries do not count against the allowance.
+
+## How it works
+
+1. Create an account and name your assistant (free trial, no card).
+2. Write your services, prices, FAQ and rules, then chat with the assistant yourself until the answers are right.
+3. Share the chat link, add the widget to your website, or connect WhatsApp, Messenger and Instagram. Read the summaries and follow up with the clients most likely to buy.
+
+## Company
+
+DigiPlus is based in Sfax, Tunisia, and works online with businesses across Tunisia and abroad.
+
+## Pages
+
+- [Home (Français)](https://digiplus.lol/): what the assistant does, features, pricing, FAQ.
+- [Home (English)](https://digiplus.lol/en): the same in English.
+- [Terms](https://digiplus.lol/terms): plans, limits, payments, responsibilities.
+- [Privacy](https://digiplus.lol/privacy): what data is collected and how it is used.
