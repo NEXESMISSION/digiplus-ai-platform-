@@ -26,7 +26,13 @@ Every new account starts on the 7-day trial (`plan = 'trial'`, `plan_expires_at`
 
 ### 1. Supabase
 1. SQL Editor → run [`supabase/schema.sql`](supabase/schema.sql).
-   Database created before the Free plan was removed: also run [`supabase/migrate-plans.sql`](supabase/migrate-plans.sql) (adds Business, turns old free accounts into 7-day trials).
+   Database created before the Free plan was removed: also run [`supabase/migrate-plans.sql`](supabase/migrate-plans.sql) (adds Business, turns old free accounts into 7-day trials, adds the phone/country/city columns).
+
+   Instead of pasting into the SQL Editor, a migration can be run from this machine when
+   `SUPABASE_PROJECT_REF` and `SUPABASE_ACCESS_TOKEN` (a Supabase personal access token) are in `.env`:
+   ```bash
+   node tools/run-sql.js supabase/migrate-plans.sql
+   ```
 2. Upgrading from the single-bot version only: run [`supabase/migrate-legacy.sql`](supabase/migrate-legacy.sql) (moves the old bot into an account claimed by the owner email written at the top of the file).
 3. **Authentication → URL configuration**: Site URL = your app URL; add `https://YOUR-APP/**` (and `http://localhost:3000/**`) to Redirect URLs.
 4. **Authentication → Emails → SMTP**: add your own SMTP (Resend, Brevo…). Supabase's built-in mailer only sends a few emails per hour — not enough for real sign-ups.
