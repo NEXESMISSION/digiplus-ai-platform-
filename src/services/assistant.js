@@ -18,14 +18,14 @@ async function recordAi(accountId, result, isSummary) {
   await db.recordUsage(accountId, currentPeriod(), result.usage, result.costUsd, isSummary).catch((e) => console.error(`[usage] ${e.message}`));
 }
 
-// Counts one AI reply against the account's monthly allowance, then calls the model.
+// Counts one AI call against the account's monthly allowance, then calls the model.
 // Returns { ok: true, result } or { ok: false, reason: 'limit' }. A failed call gives the reply back.
-async function replyWithAllowance({ account, system, messages }) {
+async function runWithAllowance({ account, system, messages, json = false, maxOutputTokens = REPLY_MAX_TOKENS, effort }) {
   const period = currentPeriod();
   const { replies } = limitsFor(account);
   if (!(await db.consumeReply(account.id, period, replies))) return { ok: false, reason: 'limit' };
   try {
-    const result = await ai.generate({ system, messages, maxOutputTokens: REPLY_MAX_TOKENS });
+    const result = await ai.generate({ system, messages, json, maxOutputTokens, ...(effort ? { effort } : {}) });
     await recordAi(account.id, result, false);
     return { ok: true, result };
   } catch (e) {
@@ -34,6 +34,8 @@ async function replyWithAllowance({ account, system, messages }) {
     throw e;
   }
 }
+
+const replyWithAllowance = ({ account, system, messages }) => runWithAllowance({ account, system, messages });
 
 // Keeps the newest messages inside a character budget, so neither one very long
 // message nor twenty of them can multiply the cost of every following reply.
@@ -121,4 +123,13 @@ async function autoSummarizeIdle(limit = 3) {
   return done;
 }
 
-module.exports = { MAX_HISTORY, MAX_HISTORY_CHARS, trimHistory, replyWithAllowance, replyToConversation, summarizeConversation, autoSummarizeIdle };
+module.exports = {
+  MAX_HISTORY,
+  MAX_HISTORY_CHARS,
+  trimHistory,
+  runWithAllowance,
+  replyWithAllowance,
+  replyToConversation,
+  summarizeConversation,
+  autoSummarizeIdle,
+};

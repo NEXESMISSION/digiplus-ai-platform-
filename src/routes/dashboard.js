@@ -3,12 +3,13 @@ const express = require('express');
 const db = require('../db');
 const store = require('../meta/store');
 const assistant = require('../services/assistant');
+const setup = require('../services/setup');
 const dodo = require('../billing/dodo');
 const { requireUser, requireAccount, isSuperAdmin } = require('../auth');
-const { DEFAULTS, sanitizeSettings, dataSize } = require('../settings');
+const { DEFAULTS, sanitizeSettings, dataSize, readiness } = require('../settings');
 const { buildSystemPrompt } = require('../prompts');
 const { limitsFor, currentPeriod } = require('../plans');
-const { HttpError, route, clean, background } = require('../lib/http');
+const { HttpError, route, clean, background, rateLimit } = require('../lib/http');
 
 const router = express.Router();
 router.use(['/api/me', '/api/account', '/api/bots'], requireUser, requireAccount);
@@ -93,7 +94,13 @@ async function ownBot(req) {
 router.get('/api/bots/:botId', route(async (req, res) => {
   const bot = await ownBot(req);
   const settings = sanitizeSettings(bot.settings);
-  res.json({ bot: pickBot(bot), settings, dataSize: dataSize(settings), dataLimit: limitsFor(req.account).dataChars });
+  res.json({
+    bot: pickBot(bot),
+    settings,
+    dataSize: dataSize(settings),
+    dataLimit: limitsFor(req.account).dataChars,
+    readiness: readiness(settings),
+  });
 }));
 
 router.patch('/api/bots/:botId', route(async (req, res) => {
@@ -131,8 +138,46 @@ router.put('/api/bots/:botId/settings', route(async (req, res) => {
   const settings = sanitizeSettings(req.body);
   const { size, limit } = checkDataLimit(settings, req.account);
   const updated = await db.updateBot(bot.id, { settings });
-  res.json({ settings: sanitizeSettings(updated.settings), dataSize: size, dataLimit: limit });
+  const saved = sanitizeSettings(updated.settings);
+  res.json({ settings: saved, dataSize: size, dataLimit: limit, readiness: readiness(saved) });
 }));
+
+// AI Setup — writes a whole draft brain from a few sentences, a pasted price
+// list or a website link. Nothing is saved: the owner reviews it and saves.
+router.post(
+  '/api/bots/:botId/autofill',
+  rateLimit('autofill', 12, 10 * 60_000, (req) => req.user.id),
+  route(async (req, res) => {
+    const bot = await ownBot(req);
+    const current = sanitizeSettings(bot.settings);
+    const limits = limitsFor(req.account);
+
+    let outcome;
+    try {
+      outcome = await setup.draftSettings({
+        account: req.account,
+        current,
+        businessName: clean(req.body?.businessName, 200) || current.businessName,
+        text: typeof req.body?.text === 'string' ? req.body.text : '',
+        url: clean(req.body?.url, 500),
+        dataLimit: limits.dataChars,
+      });
+    } catch (e) {
+      throw e instanceof HttpError ? e : new HttpError(502, e.message);
+    }
+    if (!outcome.ok) {
+      throw new HttpError(402, 'You used all AI replies of this month. Buy a reply pack or upgrade to keep going.', { code: 'reply_limit' });
+    }
+
+    res.json({
+      settings: outcome.settings,
+      missing: outcome.missing,
+      readFrom: outcome.readFrom,
+      dataSize: outcome.dataSize,
+      dataLimit: limits.dataChars,
+    });
+  })
+);
 
 router.post('/api/bots/:botId/prompt-preview', route(async (req, res) => {
   const bot = await ownBot(req);

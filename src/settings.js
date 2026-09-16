@@ -114,6 +114,22 @@ function sanitizeSettings(input) {
   };
 }
 
+// What the bot still needs before it can sell properly. Drives the "ready" meter
+// in the dashboard, so the owner always knows what to do next instead of guessing.
+const READINESS_STEPS = [
+  { key: 'about', label: 'Describe the business', done: (s) => s.businessDescription.trim().length >= 60 },
+  { key: 'packages', label: 'Add your services and prices', done: (s) => s.packages.length > 0 },
+  { key: 'knowledge', label: 'Add what the bot should know', done: (s) => s.knowledge.length > 0 },
+  { key: 'faqs', label: 'Answer the questions clients ask', done: (s) => s.faqs.length > 0 },
+  { key: 'handoff', label: 'Say how clients reach a human', done: (s) => s.handoff.trim().length > 0 },
+];
+
+function readiness(s) {
+  const steps = READINESS_STEPS.map(({ key, label, done }) => ({ key, label, done: done(s) }));
+  const complete = steps.filter((x) => x.done).length;
+  return { percent: Math.round((complete / steps.length) * 100), complete, total: steps.length, steps };
+}
+
 // Characters of business data the bot sends to the AI with every reply (limited per plan).
 function dataSize(s) {
   const parts = [
@@ -126,4 +142,4 @@ function dataSize(s) {
   return parts.reduce((n, x) => n + (x ? x.length : 0), 0);
 }
 
-module.exports = { DEFAULTS, DEFAULT_GOALS, sanitizeSettings, dataSize };
+module.exports = { DEFAULTS, DEFAULT_GOALS, sanitizeSettings, dataSize, readiness };
