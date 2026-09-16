@@ -1,81 +1,140 @@
 <!doctype html>
-<html lang="en">
+<html lang="fr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Chat</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" type="image/png" href="/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..900&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root { --accent: #4f46e5; --bg: #f4f5f9; --panel: #fff; --text: #151823; --muted: #6b7185; --line: #e6e8ef; --bot: #f1f2f7; }
+  /* Same editorial system as the landing pages: paper ground, hairline rules,
+     one flame accent, square corners. The visitor's own messages are ink. */
+  :root {
+    --paper: #ECEAE3;
+    --paper-2: #E6E3DB;
+    --ink: #0B0B0A;
+    --ink-2: #35332E;
+    --ink-3: #6B6862;
+    --rule: rgba(11, 11, 10, .16);
+    --rule-soft: rgba(11, 11, 10, .2);
+    --flame: #E33A08;
+    --font-display: "Archivo", system-ui, sans-serif;
+    --font-body: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  }
   * { box-sizing: border-box; }
   [hidden] { display: none !important; }
   html, body { height: 100%; margin: 0; }
-  body { font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Arabic", Tahoma, sans-serif; background: var(--bg); color: var(--text); }
-  .app { height: 100dvh; max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; background: var(--panel); box-shadow: 0 0 0 1px var(--line); }
-  header { display: flex; align-items: center; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--line); }
-  .avatar { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; flex: none; background: var(--accent); color: #fff; font-weight: 700; font-size: 17px; }
-  .title { font-weight: 650; line-height: 1.2; }
-  .sub { font-size: 12.5px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
-  .sub::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #22c55e; }
+  body {
+    font: 15px/1.5 var(--font-body), "Noto Sans Arabic", Tahoma, sans-serif;
+    background: var(--paper-2); color: var(--ink); -webkit-font-smoothing: antialiased;
+  }
+  .app {
+    height: 100dvh; max-width: 760px; margin: 0 auto; display: flex; flex-direction: column;
+    background: var(--paper); border-inline: 1px solid var(--rule);
+  }
+
+  header { display: flex; align-items: center; gap: 13px; padding: 14px 18px; border-bottom: 1px solid var(--ink); }
+  .avatar {
+    width: 44px; height: 44px; flex: none; display: grid; place-items: center;
+    background: var(--ink); color: var(--paper); border: 1px solid var(--ink);
+    font-family: var(--font-display); font-weight: 700; font-size: 18px;
+  }
+  .title { font-family: var(--font-display); font-weight: 700; font-size: 18px; letter-spacing: -.03em; line-height: 1.15; }
+  .sub {
+    margin-top: 4px; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--ink-3); display: flex; align-items: center; gap: 7px;
+  }
+  .sub::before { content: ""; width: 8px; height: 8px; background: var(--flame); flex: none; }
   .spacer { flex: 1; }
-  .ghost { border: 1px solid var(--line); background: transparent; color: var(--muted); border-radius: 8px; padding: 6px 10px; font: inherit; font-size: 13px; cursor: pointer; }
-  .ghost:hover { color: var(--text); border-color: #cfd3de; }
-  #messages { flex: 1; overflow-y: auto; padding: 20px 16px 8px; display: flex; flex-direction: column; gap: 10px; }
+  .ghost {
+    border: 1px solid var(--ink); background: transparent; color: var(--ink);
+    padding: 9px 14px; font: inherit; font-family: var(--font-mono); font-size: 10.5px;
+    letter-spacing: .12em; text-transform: uppercase; cursor: pointer;
+  }
+  .ghost:hover { background: var(--ink); color: var(--paper); }
+
+  #messages { flex: 1; overflow-y: auto; padding: 20px 16px 10px; display: flex; flex-direction: column; gap: 10px; background: var(--paper-2); }
   .msg { display: flex; }
   .msg.user { justify-content: flex-end; }
-  .bubble { max-width: min(82%, 560px); padding: 10px 14px; border-radius: 18px; white-space: pre-wrap; overflow-wrap: anywhere; unicode-bidi: plaintext; text-align: start; }
-  .msg.bot .bubble { background: var(--bot); border-bottom-left-radius: 6px; }
-  .msg.user .bubble { background: var(--accent); color: #fff; border-bottom-right-radius: 6px; }
-  .msg.user .bubble a { color: #fff; }
-  .msg.error .bubble { background: #fff1f1; color: #b42318; border: 1px solid #fecdca; font-size: 14px; }
-  .bubble a { color: var(--accent); }
-  .typing .bubble { display: flex; gap: 4px; padding: 14px 16px; }
-  .typing span { width: 7px; height: 7px; border-radius: 50%; background: #9aa0b4; animation: blink 1.2s infinite; }
-  .typing span:nth-child(2) { animation-delay: .15s; }
-  .typing span:nth-child(3) { animation-delay: .3s; }
-  @keyframes blink { 0%, 80%, 100% { opacity: .3; transform: translateY(0); } 40% { opacity: 1; transform: translateY(-3px); } }
-  #composer { display: flex; gap: 8px; align-items: flex-end; padding: 12px 14px calc(8px + env(safe-area-inset-bottom)); border-top: 1px solid var(--line); }
-  #input { flex: 1; resize: none; max-height: 140px; min-height: 44px; padding: 11px 14px; border-radius: 22px; border: 1px solid var(--line); background: #fafbfd; font: inherit; color: inherit; outline: none; overflow-y: hidden; }
-  #input:focus { border-color: var(--accent); background: #fff; }
-  #send { width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--accent); color: #fff; display: grid; place-items: center; cursor: pointer; flex: none; }
-  #send:disabled { opacity: .45; cursor: default; }
-  .badge { text-align: center; font-size: 11.5px; padding: 0 0 8px; }
-  .badge a { color: #9aa0b4; text-decoration: none; }
-  .badge a:hover { color: var(--muted); }
-  #intro { flex: 1; display: grid; place-items: center; padding: 24px; }
-  .intro-card { width: 100%; max-width: 380px; }
-  .intro-card h1 { font-size: 22px; margin: 0 0 6px; }
-  .intro-card p { color: var(--muted); margin: 0 0 20px; }
-  .field { display: block; margin-bottom: 12px; }
-  .field span { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; }
-  .field input { width: 100%; padding: 11px 12px; border-radius: 10px; border: 1px solid var(--line); font: inherit; outline: none; }
-  .field input:focus { border-color: var(--accent); }
-  .primary { width: 100%; padding: 12px; border: 0; border-radius: 10px; background: var(--accent); color: #fff; font: inherit; font-weight: 600; cursor: pointer; margin-top: 4px; }
+  .bubble {
+    max-width: min(84%, 560px); padding: 11px 14px; font-size: 14.5px; line-height: 1.5;
+    white-space: pre-wrap; overflow-wrap: anywhere; unicode-bidi: plaintext; text-align: start;
+  }
+  .msg.bot .bubble { background: var(--paper); border: 1px solid var(--rule-soft); }
+  .msg.user .bubble { background: var(--ink); color: var(--paper); }
+  .msg.user .bubble a { color: var(--paper); }
+  .msg.error .bubble { background: #FBE9E4; color: #8A2B0B; border: 1px solid #E8B9A8; font-size: 14px; }
+  .bubble a { color: var(--flame); }
+  .typing .bubble { display: flex; gap: 5px; padding: 15px 16px; }
+  .typing span { width: 5px; height: 5px; background: var(--ink); animation: blink 1.2s ease-in-out infinite; }
+  .typing span:nth-child(2) { animation-delay: .18s; }
+  .typing span:nth-child(3) { animation-delay: .36s; }
+  @keyframes blink { 0%, 100% { opacity: .2; } 50% { opacity: 1; } }
+
+  #composer { display: flex; align-items: stretch; border-top: 1px solid var(--ink); background: var(--paper); }
+  #input {
+    flex: 1; resize: none; max-height: 140px; min-height: 58px; padding: 18px 18px;
+    border: 0; background: var(--paper); font: inherit; font-size: 15.5px; color: inherit;
+    outline: none; overflow-y: hidden;
+  }
+  #input:focus { background: #fff; }
+  #send {
+    width: 74px; flex: none; border: 0; border-inline-start: 1px solid var(--ink);
+    background: var(--flame); color: var(--paper); display: grid; place-items: center; cursor: pointer;
+  }
+  #send:hover:not(:disabled) { background: var(--ink); }
+  #send:disabled { opacity: .4; cursor: default; }
+  .badge {
+    text-align: center; padding: 12px 0 calc(12px + env(safe-area-inset-bottom));
+    border-top: 1px solid var(--rule); background: var(--paper);
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
+  }
+  .badge a { color: var(--ink-3); text-decoration: none; }
+  .badge a:hover { color: var(--flame); }
+
+  #intro { flex: 1; display: grid; place-items: center; padding: 24px; background: var(--paper-2); }
+  .intro-card { width: 100%; max-width: 400px; background: var(--paper); border: 1px solid var(--ink); padding: 26px; }
+  .intro-card h1 { font-family: var(--font-display); font-weight: 700; font-size: 25px; letter-spacing: -.035em; line-height: 1.05; margin: 0 0 8px; }
+  .intro-card p { color: var(--ink-2); margin: 0 0 22px; font-size: 14.5px; }
+  .field { display: block; margin-bottom: 14px; }
+  .field span { display: block; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 7px; }
+  .field input { width: 100%; padding: 13px 14px; border: 1px solid var(--rule-soft); background: var(--paper-2); font: inherit; font-size: 15px; outline: none; }
+  .field input:focus { border-color: var(--ink); background: #fff; }
+  .primary {
+    width: 100%; min-height: 52px; border: 0; background: var(--ink); color: var(--paper);
+    font: inherit; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 6px;
+  }
+  .primary:hover:not(:disabled) { background: var(--flame); }
   .primary:disabled { opacity: .6; }
-  .form-error { color: #b42318; font-size: 13.5px; min-height: 20px; margin-top: 8px; }
-  .unavailable { flex: 1; display: grid; place-items: center; color: var(--muted); padding: 24px; text-align: center; }
-  body.embed .app { max-width: none; box-shadow: none; }
+  .form-error { color: #8A2B0B; font-size: 13.5px; min-height: 20px; margin-top: 10px; }
+  .unavailable { flex: 1; display: grid; place-items: center; color: var(--ink-2); padding: 24px; text-align: center; background: var(--paper-2); }
+
+  body.embed .app { max-width: none; border-inline: 0; }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
 </style>
 </head>
 <body>
 <div class="app">
   <header>
     <div class="avatar" id="avatar" aria-hidden="true">•</div>
-    <div><div class="title" id="botName">&nbsp;</div><div class="sub" id="bizName">Online</div></div>
+    <div><div class="title" id="botName">&nbsp;</div><div class="sub" id="bizName">En ligne</div></div>
     <div class="spacer"></div>
-    <button class="ghost" id="newChat" hidden>New chat</button>
+    <button class="ghost" id="newChat" hidden>Nouvelle discussion</button>
   </header>
 
-  <div class="unavailable" id="unavailable" hidden><p id="unavailableText">This chat is not available right now.</p></div>
+  <div class="unavailable" id="unavailable" hidden><p id="unavailableText">Cette discussion n'est pas disponible pour le moment.</p></div>
 
   <section id="intro" hidden>
     <form class="intro-card" id="introForm">
-      <h1 id="introTitle">Welcome 👋</h1>
+      <h1 id="introTitle">Bienvenue 👋</h1>
       <p id="introText"></p>
-      <label class="field"><span>Your name</span><input id="nameInput" autocomplete="name" maxlength="200" dir="auto"></label>
-      <label class="field"><span>Phone or email</span><input id="contactInput" autocomplete="email" maxlength="200" dir="auto"></label>
-      <button class="primary" id="startBtn" type="submit">Start chatting</button>
+      <label class="field"><span>Votre nom</span><input id="nameInput" autocomplete="name" maxlength="200" dir="auto"></label>
+      <label class="field"><span>Téléphone ou email</span><input id="contactInput" autocomplete="email" maxlength="200" dir="auto"></label>
+      <button class="primary" id="startBtn" type="submit">Commencer la discussion</button>
       <div class="form-error" id="introError" role="alert"></div>
     </form>
   </section>
@@ -83,12 +142,12 @@
   <main id="messages" aria-live="polite" hidden></main>
 
   <form id="composer" hidden>
-    <textarea id="input" rows="1" placeholder="Type your message…" dir="auto" maxlength="1200" aria-label="Message"></textarea>
-    <button id="send" type="submit" aria-label="Send" disabled>
+    <textarea id="input" rows="1" placeholder="Écrivez en derja, français ou anglais…" dir="auto" maxlength="1200" aria-label="Message"></textarea>
+    <button id="send" type="submit" aria-label="Envoyer" disabled>
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
     </button>
   </form>
-  <div class="badge" id="badge" hidden><a href="/" target="_blank" rel="noopener">⚡ Powered by DigiPlus AI</a></div>
+  <div class="badge" id="badge" hidden><a href="/" target="_blank" rel="noopener">Propulsé par DigiPlus AI</a></div>
 </div>
 
 <script>
@@ -120,7 +179,7 @@
     const res = await fetch(url, { method, headers, body: body ? JSON.stringify(body) : undefined });
     let data = {};
     try { data = await res.json(); } catch {}
-    if (!res.ok) { const err = new Error(data.error || 'Something went wrong'); err.status = res.status; throw err; }
+    if (!res.ok) { const err = new Error(data.error || 'Une erreur est survenue'); err.status = res.status; throw err; }
     return data;
   }
 
@@ -148,7 +207,7 @@
   function showTyping() {
     const row = document.createElement('div');
     row.className = 'msg bot typing';
-    row.innerHTML = '<div class="bubble" aria-label="Typing"><span></span><span></span><span></span></div>';
+    row.innerHTML = '<div class="bubble" aria-label="En train d\'écrire"><span></span><span></span><span></span></div>';
     $('messages').append(row);
     scrollDown();
     return row;
@@ -173,7 +232,9 @@
     $('composer').hidden = true;
     $('newChat').hidden = true;
     const required = config.askClientInfo === 'required';
-    $('introText').textContent = required ? 'Please tell us who you are before we start.' : 'Tell us who you are so we can help you better (optional).';
+    $('introText').textContent = required
+      ? 'Dites-nous qui vous êtes avant de commencer.'
+      : 'Dites-nous qui vous êtes pour mieux vous aider (optionnel).';
     $('nameInput').required = required;
     $('contactInput').required = required;
     $('nameInput').value = params.get('name') || '';
@@ -223,18 +284,20 @@
   }
 
   async function init() {
-    if (!publicId) return showUnavailable('This chat link is incomplete.');
+    if (!publicId) return showUnavailable('Ce lien de discussion est incomplet.');
     try {
       config = await api(`/api/chat/bot/${publicId}`);
     } catch (e) {
-      return showUnavailable(e.status === 404 ? 'This chat is not available right now.' : 'Chat is unavailable right now. Please try again later.');
+      return showUnavailable(e.status === 404
+        ? "Cette discussion n'est pas disponible pour le moment."
+        : "La discussion n'est pas disponible. Réessayez plus tard.");
     }
     document.documentElement.style.setProperty('--accent', config.accentColor);
     document.title = `${config.botName} · ${config.businessName}`;
     $('botName').textContent = config.botName;
     $('bizName').textContent = config.businessName;
     $('avatar').textContent = (config.botName || '?').trim().charAt(0).toUpperCase();
-    $('introTitle').textContent = `Welcome to ${config.businessName} 👋`;
+    $('introTitle').textContent = `Bienvenue chez ${config.businessName} 👋`;
     $('badge').hidden = !config.showBadge;
 
     if (session) {
@@ -313,7 +376,7 @@
         writeSession(null);
         session = null;
         stopPolling();
-        addError('This conversation is no longer available. Tap "New chat" to start again.');
+        addError('Cette discussion n\'est plus disponible. Appuyez sur « Nouvelle discussion » pour recommencer.');
       } else {
         addError(err.message);
       }
@@ -325,7 +388,7 @@
   });
 
   $('newChat').addEventListener('click', async () => {
-    if (!confirm('Start a new conversation?')) return;
+    if (!confirm('Commencer une nouvelle discussion ?')) return;
     const old = session;
     if (old) api(`/api/chat/${old.id}/end`, { method: 'POST', body: {} }).catch(() => {});
     session = null;
