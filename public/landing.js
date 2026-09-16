@@ -77,7 +77,7 @@
 
       const price = document.createElement('p');
       price.className = 'price';
-      price.textContent = currency === 'TND' ? `${plan.priceTND} DT` : `$${plan.priceUSD}`;
+      price.textContent = currency === 'TND' ? `${plan.priceTND} ${L.dt || 'DT'}` : `$${plan.priceUSD}`;
 
       const per = document.createElement('span');
       per.className = 'per';
@@ -118,8 +118,9 @@
     const addons = $('#addons');
     if (addons && pricing.addons) {
       const a = pricing.addons;
+      const dt = L.dt || 'DT';
       addons.textContent = currency === 'TND'
-        ? (L.addons ? L.addons(`${a.extraBot.priceTND} DT`, fmt(a.replyPack.replies), `${a.replyPack.priceTND} DT`) : '')
+        ? (L.addons ? L.addons(`${a.extraBot.priceTND} ${dt}`, fmt(a.replyPack.replies), `${a.replyPack.priceTND} ${dt}`) : '')
         : (L.addons ? L.addons(`$${a.extraBot.priceUSD}`, fmt(a.replyPack.replies), `$${a.replyPack.priceUSD}`) : '');
     }
   }

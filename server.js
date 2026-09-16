@@ -14,6 +14,7 @@ const server = express();
 server.disable('x-powered-by');
 server.get('/', page('index.html'));
 server.get(['/en', '/en/'], page('en.html'));
+server.get(['/ar', '/ar/'], page('ar.html'));
 server.get('/ui', page('ui.html')); // internal design system reference
 server.get(['/login', '/signup', '/reset-password'], page('auth.html'));
 server.get('/app', page('app.html'));
