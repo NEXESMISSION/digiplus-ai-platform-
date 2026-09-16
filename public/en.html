@@ -320,14 +320,30 @@
 
 <section id="faq" class="steps-bg">
   <div class="wrap">
-    <div class="section-head"><div class="kicker"><span class="ki"><svg class="ico"><use href="#i-chat"/></svg></span>FAQ</div><h2>Your questions</h2></div>
-    <div class="faq">
-      <details><summary>What is an “AI reply”?</summary><p>Every answer the assistant sends to a client counts as one reply. A normal sales conversation uses 5 to 10 replies. Summaries don't count.</p></details>
-      <details><summary>Can it invent prices or promises?</summary><p>No. It only uses the prices, services and rules you write. When it doesn't know, it says the team will follow up and shares your contact details.</p></details>
-      <details><summary>Which languages does it speak?</summary><p>It replies in the same language and alphabet the client writes in: Tunisian Derja in Arabic letters or in Arabizi (9adeh, 3andi), French, Arabic or English.</p></details>
-      <details><summary>What happens if I reach my monthly limit?</summary><p>Your assistant stops answering and shows your contact details to clients. Add a reply pack or move to a bigger plan and it continues right away.</p></details>
-      <details><summary>Can I have several businesses?</summary><p>Yes. Each assistant is one business, with its own knowledge, link and conversations. Pro includes 3 assistants, Business includes 10, and you can add more to any plan.</p></details>
-      <details><summary>How does the free trial work?</summary><p>You get 7 days with no bank card: create your assistant, teach it your prices and let it answer real clients. When the 7 days end, choose a plan to keep it answering. Your account, your assistants and everything you wrote stay saved.</p></details>
+    <div class="section-head">
+      <div class="kicker"><span class="ki"><svg class="ico"><use href="#i-question"/></svg></span>FAQ</div>
+      <h2>Your <span class="mark">most common questions</span></h2>
+      <p>The answers people ask us for most often. If something is still unclear, write to us on WhatsApp.</p>
+    </div>
+    <div class="faq-wrap">
+      <div class="faq-art" aria-hidden="true">
+        <div class="fa-card">
+          <span class="fa-q"><svg class="ico"><use href="#i-question"/></svg></span>
+          <span class="fa-chip">A question?</span>
+          <span class="fa-bub" style="width:86%"></span>
+          <span class="fa-bub o" style="width:62%"></span>
+          <span class="fa-bub" style="width:74%"></span>
+          <span class="fa-bub" style="width:48%"></span>
+        </div>
+      </div>
+      <div class="faq">
+        <details><summary><span class="fq-n">01</span>What is an “AI reply”?<span class="fq-chev"><svg class="ico"><use href="#i-chevron"/></svg></span></summary><p>Every answer the assistant sends to a client counts as one reply. A normal sales conversation uses 5 to 10 replies. Summaries don't count.</p></details>
+        <details><summary><span class="fq-n">02</span>Can it invent prices or promises?<span class="fq-chev"><svg class="ico"><use href="#i-chevron"/></svg></span></summary><p>No. It only uses the prices, services and rules you write. When it doesn't know, it says the team will follow up and shares your contact details.</p></details>
+        <details><summary><span class="fq-n">03</span>Which languages does it speak?<span class="fq-chev"><svg class="ico"><use href="#i-chevron"/></svg></span></summary><p>It replies in the same language and alphabet the client writes in: Tunisian Derja in Arabic letters or in Arabizi (9adeh, 3andi), French, Arabic or English.</p></details>
+        <details><summary><span class="fq-n">04</span>What happens if I reach my monthly limit?<span class="fq-chev"><svg class="ico"><use href="#i-chevron"/></svg></span></summary><p>Your assistant stops answering and shows your contact details to clients. Add a reply pack or move to a bigger plan and it continues right away.</p></details>
+        <details><summary><span class="fq-n">05</span>Can I have several businesses?<span class="fq-chev"><svg class="ico"><use href="#i-chevron"/></svg></span></summary><p>Yes. Each assistant is one business, with its own knowledge, link and conversations. Pro includes 3 assistants, Business includes 10, and you can add more to any plan.</p></details>
+        <details><summary><span class="fq-n">06</span>How does the free trial work?<span class="fq-chev"><svg class="ico"><use href="#i-chevron"/></svg></span></summary><p>You get 7 days with no bank card: create your assistant, teach it your prices and let it answer real clients. When the 7 days end, choose a plan to keep it answering. Your account, your assistants and everything you wrote stay saved.</p></details>
+      </div>
     </div>
   </div>
 </section>
@@ -335,9 +351,19 @@
 <section>
   <div class="wrap">
     <div class="cta-band">
-      <h2>Your next client is writing to you right now.</h2>
-      <p>Let an assistant answer in seconds — even at 2 a.m.</p>
-      <a class="btn primary" href="/signup?lang=en">Start my 7 free days<svg class="ico ico-sm"><use href="#i-arrow"/></svg></a>
+      <div>
+        <div class="cta-ic"><svg class="ico"><use href="#i-bolt"/></svg></div>
+        <h2>Your next client <span class="grad-cool">is writing to you right now.</span></h2>
+        <p>Let an assistant answer in seconds — even at 2 a.m.</p>
+        <a class="btn primary" href="/signup?lang=en">Start my 7 free days<svg class="ico ico-sm"><use href="#i-arrow"/></svg></a>
+      </div>
+      <div class="cta-art" aria-hidden="true">
+        <div class="wa-card">
+          <div class="wa-top"><span class="wa-ic"><svg class="ico"><use href="#i-whatsapp"/></svg></span><b>New message</b><span class="wa-when">now</span></div>
+          <p>Hello, I'd like more information about your services, is that possible?</p>
+          <span class="wa-typing"><i></i><i></i><i></i></span>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -361,6 +387,12 @@
     pro: 'For busy businesses and several branches.',
     business: 'For chains, agencies and large online stores.',
   };
+  // icon and accent per plan; the middle one wears the brand orange on purpose
+  const LOOK = {
+    starter: { icon: 'i-rocket', tone: 'blue' },
+    pro: { icon: 'i-crown', tone: 'orange' },
+    business: { icon: 'i-diamond', tone: 'violet' },
+  };
   const fmt = (n) => Number(n).toLocaleString('en-US');
   let pricing = null;
   let currency = 'TND';
@@ -374,7 +406,9 @@
     const box = document.getElementById('plans');
     box.replaceChildren(...pricing.plans.map((plan) => {
       const card = document.createElement('div');
-      card.className = `plan${plan.id === 'pro' ? ' featured' : ''}`;
+      const look = LOOK[plan.id] || LOOK.starter;
+      const featured = plan.id === 'pro';
+      card.className = `plan${featured ? ' featured' : ''}${look.tone === 'violet' ? ' violet-plan' : ''}`;
       const items = [
         (plan.channels || ['web']).map((ch) => pricing.channelNames?.[ch] || ch).join(' · '),
         `${plan.bots} assistant${plan.bots > 1 ? 's' : ''}`,
@@ -383,15 +417,27 @@
         'AI summaries, deal scores & human takeover',
         plan.badge ? 'Chat link and widget for your website' : 'No DigiPlus AI branding',
       ];
-      card.innerHTML = `<h3></h3><div class="for"></div><div class="price"></div><ul></ul><a class="btn ${plan.id === 'pro' ? 'primary' : ''}" href="/signup?lang=en"></a>`;
+      card.innerHTML = `
+        ${featured ? '<span class="plan-badge">Most chosen</span>' : ''}
+        <div class="plan-top">
+          <div class="plan-ic ${look.tone}"><svg class="ico"><use href="#${look.icon}"/></svg></div>
+          <div class="plan-vig ${look.tone}" aria-hidden="true"><i></i><i></i><i><svg class="ico"><use href="#${look.icon}"/></svg></i></div>
+        </div>
+        <h3></h3><div class="for"></div><div class="price"></div><ul></ul>
+        <a class="btn ${featured ? 'primary' : ''}" href="/signup?lang=en"><span class="lbl"></span><svg class="ico ico-sm"><use href="#i-arrow"/></svg></a>`;
       card.querySelector('h3').textContent = plan.name;
       card.querySelector('.for').textContent = FOR[plan.id] || '';
       const p = card.querySelector('.price');
       p.textContent = price(plan);
       const s = document.createElement('small'); s.textContent = ' / month'; p.append(s);
       const ul = card.querySelector('ul');
-      for (const text of items) { const li = document.createElement('li'); li.textContent = text; ul.append(li); }
-      card.querySelector('a').textContent = `Choose ${plan.name}`;
+      for (const text of items) {
+        const li = document.createElement('li');
+        li.innerHTML = '<span class="tick"><svg class="ico"><use href="#i-check"/></svg></span>';
+        li.append(text); // text node: never parsed as markup
+        ul.append(li);
+      }
+      card.querySelector('.lbl').textContent = `Choose ${plan.name}`;
       return card;
     }));
     const a = pricing.addons;
