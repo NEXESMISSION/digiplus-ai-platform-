@@ -5,6 +5,7 @@ const prompts = require('../prompts');
 const { sanitizeSettings } = require('../settings');
 const { limitsFor, currentPeriod } = require('../plans');
 const { HttpError } = require('../lib/http');
+const { detectAlphabet, repairAlphabet } = require('../lib/alphabet');
 
 const MAX_HISTORY = 20; // messages sent with each reply (cost grows with history)
 const MAX_HISTORY_CHARS = 6_000; // and with their length: 20 long messages would cost ~14x a normal reply
@@ -35,7 +36,38 @@ async function runWithAllowance({ account, system, messages, json = false, maxOu
   }
 }
 
-const replyWithAllowance = ({ account, system, messages }) => runWithAllowance({ account, system, messages });
+// A client writing Arabizi must not get "Livraison mawjouda برك fi Sousse" back.
+// The model mixes scripts however firmly the prompt forbids it, so the reply is
+// repaired against the alphabet the client actually used.
+async function replyWithAllowance({ account, system, messages }) {
+  const outcome = await runWithAllowance({ account, system, messages });
+  if (!outcome.ok) return outcome;
+
+  const lastFromClient = [...messages].reverse().find((m) => m.role === 'user')?.content || '';
+  const { value, fixed } = repairAlphabet(outcome.result.text, detectAlphabet(lastFromClient));
+  if (fixed) outcome.result = { ...outcome.result, text: value };
+  return outcome;
+}
+
+// Several model calls that together do one job (AI Setup splits its work in two so
+// it finishes in half the time). They cost the account one reply, not one each.
+async function runBatchWithAllowance({ account, calls }) {
+  const period = currentPeriod();
+  const { replies } = limitsFor(account);
+  if (!(await db.consumeReply(account.id, period, replies))) return { ok: false, reason: 'limit' };
+
+  const settled = await Promise.allSettled(calls.map((c) => ai.generate(c)));
+  for (const s of settled) {
+    const result = s.status === 'fulfilled' ? s.value : s.reason?.result;
+    if (result) await recordAi(account.id, result, false);
+  }
+  const failed = settled.find((s) => s.status === 'rejected');
+  if (failed) {
+    await db.releaseReply(account.id, period).catch(() => {});
+    throw failed.reason;
+  }
+  return { ok: true, results: settled.map((s) => s.value) };
+}
 
 // Keeps the newest messages inside a character budget, so neither one very long
 // message nor twenty of them can multiply the cost of every following reply.
@@ -128,6 +160,7 @@ module.exports = {
   MAX_HISTORY_CHARS,
   trimHistory,
   runWithAllowance,
+  runBatchWithAllowance,
   replyWithAllowance,
   replyToConversation,
   summarizeConversation,

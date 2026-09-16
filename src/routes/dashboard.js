@@ -179,6 +179,33 @@ router.post(
   })
 );
 
+// "Tell the AI what changed" — the owner writes one sentence instead of hunting
+// for the right field. Nothing is saved until they accept it.
+router.post(
+  '/api/bots/:botId/revise',
+  rateLimit('revise', 30, 10 * 60_000, (req) => req.user.id),
+  route(async (req, res) => {
+    const bot = await ownBot(req);
+    const limits = limitsFor(req.account);
+
+    let outcome;
+    try {
+      outcome = await setup.reviseSettings({
+        account: req.account,
+        current: sanitizeSettings(bot.settings),
+        instruction: req.body?.instruction,
+      });
+    } catch (e) {
+      throw e instanceof HttpError ? e : new HttpError(502, e.message);
+    }
+    if (!outcome.ok) {
+      throw new HttpError(402, 'You used all AI replies of this month. Buy a reply pack or upgrade to keep going.', { code: 'reply_limit' });
+    }
+
+    res.json({ settings: outcome.settings, changed: outcome.changed, dataSize: outcome.dataSize, dataLimit: limits.dataChars });
+  })
+);
+
 router.post('/api/bots/:botId/prompt-preview', route(async (req, res) => {
   const bot = await ownBot(req);
   res.json({ prompt: buildSystemPrompt(sanitizeSettings(req.body?.settings || bot.settings)) });

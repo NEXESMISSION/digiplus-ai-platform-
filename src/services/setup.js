@@ -7,11 +7,13 @@ const ai = require('../ai');
 const assistant = require('./assistant');
 const { DEFAULTS, DEFAULT_GOALS, sanitizeSettings, dataSize } = require('../settings');
 const { HttpError } = require('../lib/http');
+const { detectAlphabet, repairAlphabet, ALPHABET_RULE } = require('../lib/alphabet');
 
-const SETUP_MAX_TOKENS = 6000;
+const PROFILE_MAX_TOKENS = 3000;
+const OFFER_MAX_TOKENS = 2500;
 const PAGE_TIMEOUT_MS = 12_000;
 const PAGE_MAX_BYTES = 1_500_000;
-const PAGE_MAX_CHARS = 18_000;
+const PAGE_MAX_CHARS = 12_000;
 const SOURCE_MAX_CHARS = 24_000;
 
 // ---------------------------------------------------------------- website reading
@@ -69,7 +71,7 @@ function htmlToText(html) {
     .replace(/&#39;|&apos;/gi, "'")
     .replace(/&lt;/gi, '<')
     .replace(/&gt;/gi, '>')
-    .replace(/[ \t ]+/g, ' ')
+    .replace(/[^\S\n]+/g, ' ')
     .replace(/\n\s*\n\s*\n+/g, '\n\n')
     .split('\n')
     .map((line) => line.trim())
@@ -114,27 +116,36 @@ async function readWebsite(rawUrl) {
   return { host: url.hostname, text };
 }
 
-// ---------------------------------------------------------------- the prompt
+// ---------------------------------------------------------------- the prompts
 
 const SYSTEM = `You set up AI chat assistants for small businesses, mostly in Tunisia and North Africa.
 
-The owner gives you rough material about their business. You turn it into a complete, ready-to-use configuration for their assistant.
+The owner gives you rough material about their business. You turn it into part of a ready-to-use configuration for their assistant.
 
 Rules you must follow:
 - Use ONLY facts the owner gave you. Never invent a price, a phone number, an address, an opening hour, a guarantee or a delivery time. If something is missing, leave that field empty instead of guessing.
-- Write every text in the SAME language and alphabet the owner used. If the owner wrote in Tunisian Arabizi (Latin letters, like "3andi", "9adeh"), write in that same Arabizi. If they wrote in Arabic letters, use Arabic letters. If French, French.
 - Write the way a real person in that business would speak to a customer — warm, short, concrete. Not corporate, not robotic.
 - Prices: copy them exactly as the owner wrote them, with the same currency.
 - Be compact. Every character you write is sent to the AI on every single reply, and the owner pays for it.
 
 Return ONLY a JSON object. No markdown, no explanation.`;
 
-function buildUserMessage({ businessName, text, page, budget }) {
+function sourceBlock({ businessName, text, page }) {
   const parts = [`The business is called: ${businessName || '(not given)'}`];
   if (text) parts.push(`\nWhat the owner told us:\n"""\n${text}\n"""`);
-  if (page) parts.push(`\nText from their website (${page.host}) — it may contain menus, prices and navigation junk, use only what is clearly about the business:\n"""\n${page.text}\n"""`);
+  if (page) {
+    parts.push(
+      `\nText from their website (${page.host}) — it may contain menus, prices and navigation junk, use only what is clearly about the business:\n"""\n${page.text}\n"""`
+    );
+  }
+  return parts.join('\n');
+}
 
-  parts.push(`
+function profilePrompt(source, alphabet, budget) {
+  return `${source}
+
+${ALPHABET_RULE[alphabet]}
+
 Return JSON with exactly these keys:
 
 {
@@ -144,22 +155,35 @@ Return JSON with exactly these keys:
   "tone": "2-4 lines describing how this assistant should talk, written for this specific business.",
   "knowledge": [{ "title": "short topic name", "content": "the facts about that topic" }],
   "faqs": [{ "q": "a question clients really ask this business", "a": "the answer, from the owner's material" }],
-  "packages": [{ "name": "service or product", "price": "exactly as given, with currency", "includes": "what the client gets" }],
-  "pricingNotes": "payment terms, deposits, what costs extra, delivery fees. Empty string if not given.",
-  "rules": "lines starting with '- ': things the assistant must always or never say for this business. Empty string if nothing applies.",
-  "handoff": "how a client reaches a human (phone, WhatsApp, address). Empty string if not given.",
-  "goals": [{ "key": "lowercase_with_underscores", "label": "short goal name", "enabled": true, "instructions": "how the assistant pursues it here" }],
   "missing": ["short plain-language things the owner still needs to add, e.g. 'your phone number', 'delivery prices'. Max 5."]
 }
 
 Guidance:
 - knowledge: 3-8 blocks, one topic each (services, how it works, delivery, hours, location, guarantees...). Skip topics you have no facts for.
 - faqs: 3-8 questions, only ones you can answer from the material.
+- Keep this JSON under about ${budget} characters.`;
+}
+
+function offerPrompt(source, alphabet, budget) {
+  return `${source}
+
+${ALPHABET_RULE[alphabet]}
+
+Return JSON with exactly these keys:
+
+{
+  "packages": [{ "name": "service or product", "price": "exactly as given, with currency", "includes": "what the client gets" }],
+  "pricingNotes": "payment terms, deposits, what costs extra, delivery fees. Empty string if not given.",
+  "rules": "lines starting with '- ': things the assistant must always or never say for this business. Empty string if nothing applies.",
+  "handoff": "how a client reaches a human (phone, WhatsApp, address). Empty string if not given.",
+  "goals": [{ "key": "lowercase_with_underscores", "label": "short goal name", "enabled": true, "instructions": "how the assistant pursues it here" }]
+}
+
+Guidance:
 - packages: one per service or product with a price. If the owner gave a menu, each dish or group is a package. If no prices were given at all, return [].
 - goals: 3-5. Start from these standard ones and adapt their instructions to this business: understand the client's need, explain prices, close the deal, collect contact details. Add one specific to this business if it obviously needs it.
-- Keep the total under about ${budget} characters.`);
-
-  return parts.join('\n');
+- "key" stays in lowercase Latin letters and underscores — it is an internal id, never shown to anyone.
+- Keep this JSON under about ${budget} characters.`;
 }
 
 // ---------------------------------------------------------------- generation
@@ -167,8 +191,23 @@ Guidance:
 const str = (v) => (typeof v === 'string' ? v.trim() : '');
 const arr = (v) => (Array.isArray(v) ? v : []);
 
-// The model's draft replaces only the fields it actually filled, so a re-run
-// never wipes something the owner already wrote by hand.
+function parseJson(text, what) {
+  try {
+    return JSON.parse(text);
+  } catch {
+    const start = text.indexOf('{');
+    const end = text.lastIndexOf('}');
+    if (start < 0 || end <= start) throw new HttpError(502, `The AI answer (${what}) could not be read. Please try again.`);
+    try {
+      return JSON.parse(text.slice(start, end + 1));
+    } catch {
+      throw new HttpError(502, `The AI answer (${what}) could not be read. Please try again.`);
+    }
+  }
+}
+
+// The draft replaces only the fields the model actually filled, so re-running the
+// setup never wipes something the owner already wrote by hand.
 function mergeDraft(current, raw) {
   const d = raw && typeof raw === 'object' ? raw : {};
   const next = { ...current };
@@ -198,7 +237,8 @@ function mergeDraft(current, raw) {
       instructions: str(g?.instructions),
     }))
     .filter((g) => g.label);
-  next.goals = goals.length ? goals : DEFAULT_GOALS;
+  if (goals.length) next.goals = goals;
+  else if (!next.goals?.length) next.goals = DEFAULT_GOALS;
 
   return next;
 }
@@ -210,6 +250,8 @@ const missingList = (raw) =>
     .slice(0, 5);
 
 // Builds a draft brain. Nothing is saved — the owner reviews it first.
+// Split into two model calls that run at the same time: one big call took ~40s,
+// which is uncomfortably close to the 60s function limit on Vercel.
 async function draftSettings({ account, current, businessName, text, url, dataLimit }) {
   if (!ai.isConfigured()) throw new HttpError(503, 'AI setup is not available right now.');
 
@@ -217,38 +259,120 @@ async function draftSettings({ account, current, businessName, text, url, dataLi
   const source = str(text).slice(0, SOURCE_MAX_CHARS);
   if (!source && !page) throw new HttpError(400, 'Tell us about your business, or give us your website link.');
 
+  const alphabet = detectAlphabet(`${businessName || ''}\n${source}`);
   const budget = Math.max(2000, Math.round(dataLimit * 0.7));
-  const user = buildUserMessage({ businessName, text: source, page, budget });
+  const block = sourceBlock({ businessName, text: source, page });
 
-  const outcome = await assistant.runWithAllowance({
+  const outcome = await assistant.runBatchWithAllowance({
     account,
-    system: SYSTEM,
-    messages: [{ role: 'user', content: user }],
-    json: true,
-    maxOutputTokens: SETUP_MAX_TOKENS,
-    effort: 'medium',
+    calls: [
+      {
+        system: SYSTEM,
+        messages: [{ role: 'user', content: profilePrompt(block, alphabet, Math.round(budget * 0.6)) }],
+        json: true,
+        maxOutputTokens: PROFILE_MAX_TOKENS,
+        effort: 'low',
+      },
+      {
+        system: SYSTEM,
+        messages: [{ role: 'user', content: offerPrompt(block, alphabet, Math.round(budget * 0.4)) }],
+        json: true,
+        maxOutputTokens: OFFER_MAX_TOKENS,
+        effort: 'low',
+      },
+    ],
   });
   if (!outcome.ok) return { ok: false, reason: outcome.reason };
 
-  let raw;
-  try {
-    raw = JSON.parse(outcome.result.text);
-  } catch {
-    const t = outcome.result.text;
-    const start = t.indexOf('{');
-    const end = t.lastIndexOf('}');
-    if (start < 0 || end <= start) throw new HttpError(502, 'The AI answer could not be read. Please try again.');
-    raw = JSON.parse(t.slice(start, end + 1));
-  }
+  const profile = parseJson(outcome.results[0].text, 'business profile');
+  const offer = parseJson(outcome.results[1].text, 'prices and goals');
 
-  const settings = sanitizeSettings(mergeDraft({ ...DEFAULTS, ...current, businessName: businessName || current.businessName }, raw));
+  const draft = mergeDraft({ ...DEFAULTS, ...current, businessName: businessName || current.businessName }, { ...profile, ...offer });
+  const repaired = repairAlphabet(draft, alphabet);
+  if (repaired.fixed) console.warn(`[setup] repaired ${repaired.fixed} field(s) that came back in the wrong alphabet`);
+  const settings = sanitizeSettings(repaired.value);
+
   return {
     ok: true,
     settings,
-    missing: missingList(raw),
+    missing: missingList(profile),
     dataSize: dataSize(settings),
     readFrom: page ? page.host : null,
   };
 }
 
-module.exports = { draftSettings, readWebsite, htmlToText };
+// ---------------------------------------------------------------- revise
+
+const REVISE_MAX_TOKENS = 3500;
+
+const REVISE_SYSTEM = `You maintain the configuration of a small business's AI chat assistant.
+
+The owner tells you, in their own words, what changed about their business. You apply exactly that change to the configuration and nothing else.
+
+Rules you must follow:
+- Change ONLY what the owner asked for. Every other field must stay exactly as it is.
+- Never invent a price, a phone number, an address or an opening hour the owner did not give you.
+- Keep the wording and the language of the existing configuration.
+- If you change a list, return the COMPLETE new list, including the items that did not change.
+- If the owner's message asks for nothing you can apply, return {"changed": []} and no other key.
+
+Return ONLY a JSON object. No markdown, no explanation.`;
+
+// A compact view of the brain: enough for the model to edit, without the fields
+// it must never touch.
+const revisableView = (s) => ({
+  botName: s.botName,
+  businessDescription: s.businessDescription,
+  welcomeMessage: s.welcomeMessage,
+  tone: s.tone,
+  knowledge: s.knowledge,
+  faqs: s.faqs,
+  packages: s.packages,
+  pricingNotes: s.pricingNotes,
+  rules: s.rules,
+  handoff: s.handoff,
+  goals: s.goals,
+});
+
+async function reviseSettings({ account, current, instruction }) {
+  if (!ai.isConfigured()) throw new HttpError(503, 'AI is not available right now.');
+  const ask = str(instruction).slice(0, 4000);
+  if (!ask) throw new HttpError(400, 'Write what you want to change.');
+
+  const alphabet = detectAlphabet(`${ask}\n${current.businessDescription}\n${current.welcomeMessage}`);
+  const user = `Current configuration:
+"""
+${JSON.stringify(revisableView(current), null, 1)}
+"""
+
+The owner says:
+"""
+${ask}
+"""
+
+${ALPHABET_RULE[alphabet]}
+
+Return JSON containing ONLY the keys you changed, with the same shapes as above, plus:
+  "changed": ["one short line per change you made, in the owner's language. Empty list if you changed nothing."]`;
+
+  const outcome = await assistant.runWithAllowance({
+    account,
+    system: REVISE_SYSTEM,
+    messages: [{ role: 'user', content: user }],
+    json: true,
+    maxOutputTokens: REVISE_MAX_TOKENS,
+    effort: 'minimal', // a mechanical edit, not a design task — this halves the wait
+  });
+  if (!outcome.ok) return { ok: false, reason: outcome.reason };
+
+  const raw = parseJson(outcome.result.text, 'the change');
+  const changed = arr(raw.changed).map((x) => str(x)).filter(Boolean).slice(0, 8);
+
+  const merged = mergeDraft({ ...current }, raw);
+  const repaired = repairAlphabet(merged, alphabet);
+  const settings = sanitizeSettings({ ...repaired.value, businessName: current.businessName });
+
+  return { ok: true, settings, changed, dataSize: dataSize(settings) };
+}
+
+module.exports = { draftSettings, reviseSettings, readWebsite, htmlToText };

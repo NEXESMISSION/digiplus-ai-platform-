@@ -9,36 +9,41 @@
 <link rel="stylesheet" href="/app.css">
 </head>
 <body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="i-inbox" viewBox="0 0 24 24"><path d="M4 13h4l2 3h4l2-3h4"/><path d="M5.4 5h13.2l2.4 8v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4z"/></symbol>
+  <symbol id="i-brain" viewBox="0 0 24 24"><path d="M12 5a3 3 0 0 0-5.9-.7A3 3 0 0 0 4 9.5a3 3 0 0 0 .5 4.8A3 3 0 0 0 8 19a3 3 0 0 0 4 .8z"/><path d="M12 5a3 3 0 0 1 5.9-.7A3 3 0 0 1 20 9.5a3 3 0 0 1-.5 4.8A3 3 0 0 1 16 19a3 3 0 0 1-4 .8z"/><path d="M12 5v15"/></symbol>
+  <symbol id="i-signal" viewBox="0 0 24 24"><path d="M5 12.5a7 7 0 0 1 14 0"/><path d="M2 15a10 10 0 0 1 20 0"/><circle cx="12" cy="19" r="1.6"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 9 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 9a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></symbol>
+  <symbol id="i-card" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.4 8.3-8 9.7C7.4 20.3 4 17 4 12V6z"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M18.5 15l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-8 8H7l-4 3v-6.5A8 8 0 0 1 11 4h2a8 8 0 0 1 8 8z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></symbol>
+  <symbol id="i-dot" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+</defs></svg>
+
 <div id="boot" class="boot"><img class="logo-mark" src="/logo.png" alt=""><span id="bootText">Loading your dashboard…</span></div>
 
 <div id="app" class="layout" hidden>
   <aside class="sidebar" id="sidebar">
     <div class="brand"><img class="logo-mark" src="/logo.png" alt=""><span class="brand-name">DigiPlus AI</span></div>
 
-    <div class="bot-switch" id="botSwitch">
-      <label for="botSelect" class="nav-label">Your bot</label>
-      <div class="bot-switch-row">
-        <select id="botSelect"></select>
-        <button class="icon-btn light" id="newBotBtn" title="Create a new bot" aria-label="Create a new bot">＋</button>
-      </div>
-    </div>
-
     <nav id="botNav">
-      <button data-tab="conversations"><span>🗂</span>Conversations</button>
-      <button data-tab="channels"><span>📡</span>Channels</button>
-      <button data-tab="brain"><span>🧠</span>Knowledge</button>
-      <button data-tab="pricing"><span>💰</span>Pricing</button>
-      <button data-tab="goals"><span>🎯</span>Goals</button>
-      <button data-tab="settings"><span>⚙️</span>Chat settings</button>
-      <button data-tab="test"><span>🧪</span>Test the bot</button>
-      <button data-tab="install"><span>🔗</span>Share &amp; install</button>
+      <button data-tab="conversations"><svg class="i"><use href="#i-inbox"/></svg>Inbox</button>
+      <button data-tab="brain"><svg class="i"><use href="#i-brain"/></svg>Brain<span class="nav-dot" id="brainDot" hidden></span></button>
+      <button data-tab="channels"><svg class="i"><use href="#i-signal"/></svg>Channels &amp; links</button>
+      <button data-tab="settings"><svg class="i"><use href="#i-gear"/></svg>Settings</button>
     </nav>
 
     <span class="nav-label">Account</span>
     <nav>
-      <button data-tab="billing"><span>💳</span>Plan &amp; billing</button>
-      <button data-tab="account"><span>👤</span>Account</button>
-      <a href="/super" id="superLink" class="nav-link" hidden><span>🛡</span>Super admin</a>
+      <button data-tab="billing"><svg class="i"><use href="#i-card"/></svg>Plan &amp; billing</button>
+      <button data-tab="account"><svg class="i"><use href="#i-user"/></svg>Account</button>
+      <a href="/super" id="superLink" class="nav-link" hidden><svg class="i"><use href="#i-shield"/></svg>Super admin</a>
     </nav>
 
     <div class="sidebar-foot">
@@ -51,287 +56,276 @@
   </aside>
 
   <main class="content">
-    <button class="menu-btn" id="menuBtn" aria-controls="sidebar">☰ Menu</button>
-    <div id="banners"></div>
+    <div class="topbar">
+      <button class="menu-btn" id="menuBtn" aria-controls="sidebar"><svg class="i"><use href="#i-menu"/></svg>Menu</button>
+      <h2 id="pageTitle">Inbox</h2>
+      <span class="spacer"></span>
+      <button class="btn sm" id="botMenuBtn" hidden><span id="botMenuName"></span> ▾</button>
+      <button class="btn sm" id="openTest"><svg class="i i-sm"><use href="#i-chat"/></svg>Try your bot</button>
+    </div>
 
-    <!-- ---------- first bot ---------- -->
-    <section class="panel" data-panel="empty" hidden>
-      <div class="card welcome-card">
-        <img class="logo-mark" src="/logo.png" alt="" style="width:52px;height:52px;margin:0 auto 14px">
-        <h1>Create your first AI assistant</h1>
-        <p>Give it a name — usually your business name. You'll teach it your services and prices next.</p>
-        <form id="firstBotForm">
-          <input id="firstBotName" maxlength="120" placeholder="e.g. Salon Amira" dir="auto" required>
-          <button class="btn primary" type="submit">Create bot</button>
-        </form>
-      </div>
-    </section>
+    <div class="content-inner">
+      <div id="banners"></div>
 
-    <!-- ---------- conversations ---------- -->
-    <section class="panel" data-panel="conversations" hidden>
-      <div class="stats" id="stats"></div>
-      <div class="conv-layout">
-        <div class="conv-list-wrap">
-          <div class="filters">
-            <input id="search" type="search" placeholder="Search names, messages, summaries…">
-            <div class="filter-row">
-              <select id="channelFilter">
-                <option value="">All channels</option>
-                <option value="web">Website</option>
-                <option value="messenger">Messenger</option>
-                <option value="instagram">Instagram</option>
-                <option value="whatsapp">WhatsApp</option>
-              </select>
-              <select id="stageFilter">
-                <option value="">All stages</option>
-                <option value="new">New</option>
-                <option value="exploring">Exploring</option>
-                <option value="interested">Interested</option>
-                <option value="negotiating">Negotiating</option>
-                <option value="ready_to_buy">Ready to buy</option>
-                <option value="won">Won</option>
-                <option value="lost">Lost</option>
-                <option value="support">Support</option>
-              </select>
-              <select id="statusFilter">
-                <option value="">Open &amp; closed</option>
-                <option value="open">Open</option>
-                <option value="closed">Closed</option>
-              </select>
+      <!-- ---------- AI setup (first bot + re-run) ---------- -->
+      <section class="panel" data-panel="setup" hidden>
+        <div class="setup-wrap">
+          <div class="setup-card">
+            <div class="setup-steps" id="setupSteps"><span class="on"></span><span></span><span></span></div>
+
+            <!-- step 1: tell us about the business -->
+            <div id="setupStep1">
+              <h1>Let's build your assistant</h1>
+              <p>Write about your business the way you'd explain it to a new employee. The AI writes everything else — prices, answers, the way it talks.</p>
+
+              <label class="field" style="margin-top:22px"><span>Business name</span>
+                <input id="setupName" maxlength="120" dir="auto" placeholder="e.g. Dar Sofra"></label>
+
+              <label class="field"><span>Tell us about it — or paste your menu, your price list, anything you already have</span>
+                <textarea id="setupText" rows="8" dir="auto" placeholder="Write in your own language: Arabizi, Arabic, French, English…"></textarea></label>
+
+              <div class="setup-example">
+                <b>Example</b>
+                3andi restaurant f Sousse centre ville. Plats tunisiens: couscous 18 dt, ojja merguez 12 dt, chorba 6 dt. Menu midi plat + boisson 22 dt. Neftho mel 11h lel 23h, ferme el lundi. Nwasslou f Sousse b 4 dt. Telephone 58 123 456.
+              </div>
+
+              <div class="setup-or">and / or</div>
+
+              <label class="field"><span>Your website (we'll read it for you)</span>
+                <input id="setupUrl" dir="ltr" inputmode="url" placeholder="darsofra.tn"></label>
+
+              <div class="setup-actions">
+                <button class="btn brand lg" id="setupGo"><svg class="i i-sm"><use href="#i-spark"/></svg>Build my assistant</button>
+                <button class="btn ghost" id="setupSkip">I'll fill it in myself</button>
+              </div>
+            </div>
+
+            <!-- step 2: working -->
+            <div id="setupWorking" hidden>
+              <div class="working">
+                <div class="spin"></div>
+                <h2>Building your assistant…</h2>
+                <p class="hint">This takes about half a minute. Don't close the page.</p>
+                <ul class="steps" id="workSteps">
+                  <li data-w="read"><svg class="i i-sm"><use href="#i-dot"/></svg>Reading what you gave us</li>
+                  <li data-w="write"><svg class="i i-sm"><use href="#i-dot"/></svg>Writing the business profile</li>
+                  <li data-w="price"><svg class="i i-sm"><use href="#i-dot"/></svg>Building prices, answers and goals</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- step 3: review -->
+            <div id="setupReview" hidden>
+              <div class="review-head">
+                <div>
+                  <h1>Here's your assistant</h1>
+                  <p class="hint" id="reviewNote">Read it quickly. Anything wrong, you can change it after saving.</p>
+                </div>
+              </div>
+              <div id="missingBox"></div>
+              <div class="review-grid" id="reviewBody"></div>
+              <div class="setup-actions">
+                <button class="btn brand lg" id="setupSave">Save and continue</button>
+                <button class="btn" id="setupRetry">Try again</button>
+                <button class="btn ghost" id="setupBack">Go back</button>
+              </div>
             </div>
           </div>
-          <div id="convList" class="conv-list"></div>
         </div>
-        <div id="convDetail" class="conv-detail"></div>
-      </div>
-    </section>
+      </section>
 
-    <!-- ---------- channels ---------- -->
-    <section class="panel narrow" data-panel="channels" hidden>
-      <header class="panel-head">
-        <h1>Channels</h1>
-        <p>Where this bot answers your clients. Every message lands in Conversations, where you can pause the bot and reply yourself.</p>
-      </header>
-      <div id="channelsBody"></div>
-    </section>
-
-    <!-- ---------- knowledge ---------- -->
-    <section class="panel narrow" data-panel="brain" hidden>
-      <header class="panel-head">
-        <h1>Knowledge</h1>
-        <p>Everything the bot knows about the business. It <b>only</b> uses what you write here.</p>
-      </header>
-      <div class="data-meter" data-meter>
-        <div class="row"><span><b>Business data</b> — sent to the AI with every reply</span><span data-meter-text></span></div>
-        <div class="bar"><div data-meter-bar></div></div>
-      </div>
-
-      <div class="card">
-        <h2>Identity</h2>
-        <div class="grid-2">
-          <label class="field"><span>Business name</span><input data-bind="businessName" dir="auto"></label>
-          <label class="field"><span>Assistant name</span><input data-bind="botName" dir="auto" placeholder="e.g. Sara"></label>
+      <!-- ---------- inbox ---------- -->
+      <section class="panel" data-panel="conversations" hidden>
+        <div class="stats" id="stats"></div>
+        <div class="conv-layout">
+          <div class="conv-list-wrap">
+            <div class="filters">
+              <input id="search" type="search" placeholder="Search names, messages, summaries…">
+              <div class="filter-row">
+                <select id="channelFilter">
+                  <option value="">All channels</option>
+                  <option value="web">Website</option>
+                  <option value="messenger">Messenger</option>
+                  <option value="instagram">Instagram</option>
+                  <option value="whatsapp">WhatsApp</option>
+                </select>
+                <select id="stageFilter">
+                  <option value="">All stages</option>
+                  <option value="new">New</option>
+                  <option value="exploring">Exploring</option>
+                  <option value="interested">Interested</option>
+                  <option value="negotiating">Negotiating</option>
+                  <option value="ready_to_buy">Ready to buy</option>
+                  <option value="won">Won</option>
+                  <option value="lost">Lost</option>
+                  <option value="support">Support</option>
+                </select>
+                <select id="statusFilter">
+                  <option value="">Open &amp; closed</option>
+                  <option value="open">Open</option>
+                  <option value="closed">Closed</option>
+                </select>
+              </div>
+            </div>
+            <div id="convList" class="conv-list"></div>
+          </div>
+          <div id="convDetail" class="conv-detail"></div>
         </div>
-        <label class="field"><span>About the business</span>
-          <textarea data-bind="businessDescription" rows="5" dir="auto" placeholder="What you do, who your clients are, what makes you different, where you are, opening hours…"></textarea></label>
-        <label class="field"><span>Welcome message (first thing the client sees on the website chat)</span>
-          <textarea data-bind="welcomeMessage" rows="2" dir="auto"></textarea></label>
-      </div>
+      </section>
 
-      <div class="card">
-        <h2>How the bot talks</h2>
-        <label class="field"><span>Tone &amp; style</span><textarea data-bind="tone" rows="4" dir="auto"></textarea></label>
-        <label class="field"><span>Language rule</span><input data-bind="languageRule" dir="auto"></label>
-      </div>
+      <!-- ---------- brain: a summary you read, not a form you fill ---------- -->
+      <section class="panel narrow" data-panel="brain" hidden>
+        <header class="panel-head">
+          <h1>Brain</h1>
+          <p>What your assistant knows. It only ever says what is here — it never invents a price or a promise.</p>
+        </header>
 
-      <div class="card">
-        <div class="card-head">
-          <div><h2>Knowledge base</h2><p class="hint">Services, process, delivery times, guarantees, policies… one topic per block.</p></div>
-          <button class="btn" data-add="knowledge">+ Add topic</button>
+        <div class="ready" id="readyBox"></div>
+
+        <div class="card ask-card">
+          <h2><svg class="i i-sm"><use href="#i-spark"/></svg> Tell the AI what to change</h2>
+          <p class="hint" style="margin-bottom:12px">Write it like you would say it out loud.</p>
+          <textarea id="askText" rows="3" dir="auto" placeholder="couscous wala 20 dt &#183; zedna livraison l Monastir 6 dt &#183; ma3adch na9blou cash"></textarea>
+          <div class="row" style="margin-top:12px">
+            <button class="btn brand" id="askGo"><svg class="i i-sm"><use href="#i-spark"/></svg>Update</button>
+            <span class="spacer"></span>
+            <button class="btn ghost sm" id="rebuildAll">Rebuild from scratch</button>
+          </div>
+          <div id="askResult"></div>
         </div>
-        <div id="knowledgeList" class="items"></div>
-      </div>
 
-      <div class="card">
-        <div class="card-head">
-          <div><h2>FAQ</h2><p class="hint">Questions clients ask a lot, with your exact answer.</p></div>
-          <button class="btn" data-add="faqs">+ Add question</button>
+        <div class="sum-list" id="sumList"></div>
+
+        <div class="data-meter" data-meter>
+          <div class="row"><span><b>Size of the brain</b> — sent to the AI with every reply</span><span data-meter-text></span></div>
+          <div class="bar"><div data-meter-bar></div></div>
         </div>
-        <div id="faqsList" class="items"></div>
-      </div>
+      </section>
 
-      <div class="card">
-        <h2>Rules — what to say / never say</h2>
-        <label class="field"><textarea data-bind="rules" rows="6" dir="auto" placeholder="- Never promise delivery in less than 7 days&#10;- Never talk about competitors&#10;- Always mention the free consultation"></textarea></label>
-        <label class="field"><span>Hand-off — how clients reach a human (phone, WhatsApp, booking link)</span>
-          <input data-bind="handoff" dir="auto" placeholder="e.g. WhatsApp +216 XX XXX XXX"></label>
-      </div>
-    </section>
+      <!-- ---------- channels & links ---------- -->
+      <section class="panel narrow" data-panel="channels" hidden>
+        <header class="panel-head">
+          <h1>Channels &amp; links</h1>
+          <p>Where your assistant answers clients. Every message lands in the Inbox, where you can pause it and reply yourself.</p>
+        </header>
+        <div id="channelsBody"></div>
 
-    <!-- ---------- pricing ---------- -->
-    <section class="panel narrow" data-panel="pricing" hidden>
-      <header class="panel-head">
-        <h1>Pricing</h1>
-        <p>The bot can only quote the prices written here. It never invents a price or a discount.</p>
-      </header>
-      <div class="data-meter" data-meter>
-        <div class="row"><span><b>Business data</b> — sent to the AI with every reply</span><span data-meter-text></span></div>
-        <div class="bar"><div data-meter-bar></div></div>
-      </div>
-      <div class="card">
-        <div class="card-head"><div><h2>Packages</h2></div><button class="btn" data-add="packages">+ Add package</button></div>
-        <div id="packagesList" class="items"></div>
-      </div>
-      <div class="card">
-        <h2>Pricing notes</h2>
-        <label class="field"><textarea data-bind="pricingNotes" rows="6" dir="auto" placeholder="Payment terms, deposits, what's extra, taxes…"></textarea></label>
-      </div>
-    </section>
-
-    <!-- ---------- goals ---------- -->
-    <section class="panel narrow" data-panel="goals" hidden>
-      <header class="panel-head">
-        <h1>Goals</h1>
-        <p>What the bot aims for in every conversation, in priority order. Each summary reports progress on every active goal.</p>
-      </header>
-      <div class="card">
-        <div class="card-head"><div><h2>Goals</h2></div><button class="btn" data-add="goals">+ Add custom goal</button></div>
-        <div id="goalsList" class="items"></div>
-      </div>
-    </section>
-
-    <!-- ---------- chat settings ---------- -->
-    <section class="panel narrow" data-panel="settings" hidden>
-      <header class="panel-head"><h1>Chat settings</h1></header>
-      <div class="card">
-        <h2>Bot</h2>
-        <div class="grid-2">
-          <label class="field"><span>Bot name (only you see it)</span>
-            <div class="copy-row"><input id="botNameInput" maxlength="120" dir="auto"><button class="btn" id="botNameSave">Save</button></div></label>
-          <div class="field"><span>Status</span>
-            <label class="switch"><input type="checkbox" id="botActive"> <span id="botActiveLabel">Answering clients</span></label>
-            <p class="hint" id="botServingHint"></p></div>
+        <div class="sec"><h2>Share it</h2></div>
+        <div class="card">
+          <h2>Chat link</h2>
+          <p class="hint">Send it to clients on WhatsApp, Instagram, Facebook, email…</p>
+          <div class="copy-row" style="margin-top:12px"><input id="chatLink" readonly><button class="btn" data-copy="chatLink">Copy</button><a class="btn" id="openChat" target="_blank" rel="noopener">Open</a></div>
         </div>
-      </div>
-      <div class="card">
-        <h2>Chat behaviour</h2>
-        <div class="grid-2">
-          <label class="field"><span>Ask the client's name &amp; contact before chatting (website)</span>
-            <select data-bind="askClientInfo">
-              <option value="optional">Optional</option>
-              <option value="required">Required</option>
-              <option value="off">Don't ask</option>
-            </select></label>
-          <label class="field"><span>Brand color</span><input type="color" data-bind="accentColor"></label>
+        <div class="card">
+          <h2>Add the chat bubble to your website</h2>
+          <p class="hint">Paste this before <code>&lt;/body&gt;</code> on any website.</p>
+          <div class="copy-row" style="margin-top:12px"><input id="embedCode" readonly><button class="btn" data-copy="embedCode">Copy</button></div>
         </div>
-        <label class="field"><span>Message shown when the bot can't answer</span><input data-bind="fallbackMessage" dir="auto"></label>
-        <label class="check"><input type="checkbox" data-bind="autoSummary"> Summarize conversations automatically when the client goes quiet</label>
-      </div>
-      <div class="card danger-zone">
-        <h2>Delete this bot</h2>
-        <p class="hint">Deletes the bot, its knowledge, its channel connections and all its conversations. This cannot be undone.</p>
-        <div class="row" style="margin-top:10px"><button class="btn danger" id="deleteBot">Delete bot…</button></div>
-      </div>
-    </section>
+        <div class="card">
+          <h2>Personal link for one client</h2>
+          <p class="hint">Fills in the client's name and tags where they came from.</p>
+          <div class="grid-2" style="margin-top:12px">
+            <label class="field"><span>Client name</span><input id="linkName" dir="auto" placeholder="Ahmed"></label>
+            <label class="field"><span>Source / campaign</span><input id="linkRef" placeholder="instagram-ad"></label>
+          </div>
+          <div class="copy-row"><input id="personalLink" readonly><button class="btn" data-copy="personalLink">Copy</button></div>
+        </div>
+        <div class="card">
+          <h2>Download your conversations</h2>
+          <p class="hint">Every conversation of this bot with summaries and notes (JSON).</p>
+          <div class="row" style="margin-top:12px"><button class="btn" id="exportBtn">⬇ Download</button></div>
+        </div>
+      </section>
 
-    <!-- ---------- test ---------- -->
-    <section class="panel narrow" data-panel="test" hidden>
-      <header class="panel-head">
-        <h1>Test the bot</h1>
-        <p>Chat like a client. Uses your <b>current settings, even unsaved</b>. Each answer counts as one AI reply.</p>
-      </header>
-      <div class="card test-chat">
-        <div class="test-toolbar">
-          <span class="hint" id="testNote"></span>
-          <div class="row">
-            <button class="btn sm" id="showPrompt">View bot instructions</button>
-            <button class="btn sm" id="resetTest">Reset chat</button>
+      <!-- ---------- settings ---------- -->
+      <section class="panel narrow" data-panel="settings" hidden>
+        <header class="panel-head"><h1>Settings</h1><p>How this assistant behaves and looks.</p></header>
+        <div class="card">
+          <h2>This bot</h2>
+          <div class="grid-2">
+            <label class="field"><span>Name (only you see it)</span>
+              <div class="copy-row"><input id="botNameInput" maxlength="120" dir="auto"><button class="btn" id="botNameSave">Save</button></div></label>
+            <div class="field"><span>Status</span>
+              <label class="switch"><input type="checkbox" id="botActive"> <span id="botActiveLabel">Answering clients</span></label>
+              <p class="hint" id="botServingHint" style="margin-top:6px"></p></div>
           </div>
         </div>
-        <div id="testMessages" class="transcript test-messages"></div>
-        <form id="testForm" class="test-form">
-          <textarea id="testInput" rows="2" dir="auto" placeholder="Write like a client… (Enter to send)"></textarea>
-          <button class="btn primary" type="submit" id="testSend">Send</button>
-        </form>
-      </div>
-    </section>
-
-    <!-- ---------- install ---------- -->
-    <section class="panel narrow" data-panel="install" hidden>
-      <header class="panel-head"><h1>Share &amp; install</h1></header>
-      <div class="card">
-        <h2>Chat link</h2>
-        <p class="hint">Send it to clients on WhatsApp, Instagram, Facebook, email…</p>
-        <div class="copy-row" style="margin-top:10px"><input id="chatLink" readonly><button class="btn" data-copy="chatLink">Copy</button><a class="btn" id="openChat" target="_blank" rel="noopener">Open</a></div>
-      </div>
-      <div class="card">
-        <h2>Personal link for a client</h2>
-        <p class="hint">Pre-fills the client's name and tags where they came from.</p>
-        <div class="grid-2" style="margin-top:10px">
-          <label class="field"><span>Client name</span><input id="linkName" dir="auto" placeholder="Ahmed"></label>
-          <label class="field"><span>Source / campaign</span><input id="linkRef" placeholder="instagram-ad"></label>
+        <div class="card">
+          <h2>Chat behaviour</h2>
+          <div class="grid-2">
+            <label class="field"><span>Ask the client's name &amp; contact first (website chat)</span>
+              <select data-bind="askClientInfo">
+                <option value="optional">Optional</option>
+                <option value="required">Required</option>
+                <option value="off">Don't ask</option>
+              </select></label>
+            <label class="field"><span>Brand color of the chat bubble</span><input type="color" data-bind="accentColor"></label>
+          </div>
+          <label class="field"><span>Message shown when something breaks</span><input data-bind="fallbackMessage" dir="auto"></label>
+          <label class="check" style="margin-bottom:0"><input type="checkbox" data-bind="autoSummary"> Summarize conversations automatically when the client goes quiet</label>
         </div>
-        <div class="copy-row"><input id="personalLink" readonly><button class="btn" data-copy="personalLink">Copy</button></div>
-      </div>
-      <div class="card">
-        <h2>Add the chat bubble to your website</h2>
-        <p class="hint">Paste this before <code>&lt;/body&gt;</code> on any website.</p>
-        <div class="copy-row" style="margin-top:10px"><input id="embedCode" readonly><button class="btn" data-copy="embedCode">Copy</button></div>
-      </div>
-      <div class="card">
-        <h2>Export</h2>
-        <p class="hint">Download every conversation of this bot with summaries and notes (JSON).</p>
-        <div class="row" style="margin-top:10px"><button class="btn" id="exportBtn">⬇ Download conversations</button></div>
-      </div>
-    </section>
-
-    <!-- ---------- billing ---------- -->
-    <section class="panel" data-panel="billing" hidden>
-      <header class="panel-head"><h1>Plan &amp; billing</h1><p>Pay in dinars (D17 or bank transfer) or by card in USD.</p></header>
-      <div class="card" id="billingCurrent"></div>
-      <div class="plan-grid" id="plansGrid"></div>
-      <div class="pay-grid" id="payGrid">
-        <div class="card" id="manualCard">
-          <h2>Pay in dinars — D17 or bank transfer</h2>
-          <div class="pay-instructions" id="manualInstructions"></div>
-          <form id="manualForm">
-            <div class="grid-2">
-              <label class="field"><span>Plan</span>
-                <select id="mPlan"><option value="starter">Starter</option><option value="pro">Pro</option><option value="business">Business</option><option value="">No plan — reply packs only</option></select></label>
-              <label class="field"><span>Months</span>
-                <select id="mMonths"><option value="1">1 month</option><option value="3">3 months</option><option value="6">6 months</option><option value="12">12 months</option></select></label>
-              <label class="field"><span>Extra bots</span><input id="mExtraBots" type="number" min="0" max="20" value="0"></label>
-              <label class="field"><span>Reply packs (+1,000 replies this month)</span><input id="mPacks" type="number" min="0" max="50" value="0"></label>
-              <label class="field"><span>Paid with</span>
-                <select id="mMethod"><option value="d17">D17</option><option value="bank">Bank transfer</option><option value="cash">Cash</option><option value="other">Other</option></select></label>
-              <label class="field"><span>Transaction reference</span><input id="mReference" maxlength="200" placeholder="D17 / transfer reference" required></label>
-            </div>
-            <div class="row"><span class="hint">Total to pay</span><span class="amount" id="mAmount">0 DT</span><span class="spacer"></span>
-              <button class="btn primary" type="submit">I paid — activate</button></div>
-            <p class="hint" style="margin-top:8px">We check your payment and activate your plan, usually within a few hours.</p>
-          </form>
+        <div class="card">
+          <div class="card-head">
+            <div><h2>Your bots</h2><p class="hint" id="botsHint"></p></div>
+            <button class="btn" id="newBotBtn">+ New bot</button>
+          </div>
+          <div id="botsList" class="items"></div>
         </div>
-        <div class="card" id="cardCard">
-          <h2>Pay by card (USD)</h2>
-          <div id="cardBody"></div>
+        <div class="card danger-zone">
+          <h2>Delete this bot</h2>
+          <p class="hint">Deletes the bot, its brain, its channel connections and all its conversations. This cannot be undone.</p>
+          <div class="row" style="margin-top:12px"><button class="btn danger" id="deleteBot">Delete bot…</button></div>
         </div>
-      </div>
-      <div class="card">
-        <h2>Payment history</h2>
-        <div class="table-wrap" id="paymentHistory"></div>
-      </div>
-    </section>
+      </section>
 
-    <!-- ---------- account ---------- -->
-    <section class="panel narrow" data-panel="account" hidden>
-      <header class="panel-head"><h1>Account</h1></header>
-      <div class="card">
-        <label class="field"><span>Business / account name</span>
-          <div class="copy-row"><input id="accountName" maxlength="120" dir="auto"><button class="btn" id="accountNameSave">Save</button></div></label>
-        <div class="field"><span>Email</span><div id="accountEmail"></div></div>
-        <button class="btn" id="logout2">Log out</button>
-      </div>
-    </section>
+      <!-- ---------- billing ---------- -->
+      <section class="panel" data-panel="billing" hidden>
+        <header class="panel-head"><h1>Plan &amp; billing</h1><p>Pay in dinars (D17 or bank transfer) or by card in USD.</p></header>
+        <div class="card" id="billingCurrent"></div>
+        <div class="plan-grid" id="plansGrid"></div>
+        <div class="pay-grid" id="payGrid">
+          <div class="card" id="manualCard">
+            <h2>Pay in dinars — D17 or bank transfer</h2>
+            <div class="pay-instructions" id="manualInstructions"></div>
+            <form id="manualForm">
+              <div class="grid-2">
+                <label class="field"><span>Plan</span>
+                  <select id="mPlan"><option value="starter">Starter</option><option value="pro">Pro</option><option value="business">Business</option><option value="">No plan — reply packs only</option></select></label>
+                <label class="field"><span>Months</span>
+                  <select id="mMonths"><option value="1">1 month</option><option value="3">3 months</option><option value="6">6 months</option><option value="12">12 months</option></select></label>
+                <label class="field"><span>Extra bots</span><input id="mExtraBots" type="number" min="0" max="20" value="0"></label>
+                <label class="field"><span>Reply packs (+1,000 replies this month)</span><input id="mPacks" type="number" min="0" max="50" value="0"></label>
+                <label class="field"><span>Paid with</span>
+                  <select id="mMethod"><option value="d17">D17</option><option value="bank">Bank transfer</option><option value="cash">Cash</option><option value="other">Other</option></select></label>
+                <label class="field"><span>Transaction reference</span><input id="mReference" maxlength="200" placeholder="D17 / transfer reference" required></label>
+              </div>
+              <div class="row"><span class="hint">Total to pay</span><span class="amount" id="mAmount">0 DT</span><span class="spacer"></span>
+                <button class="btn primary" type="submit">I paid — activate</button></div>
+              <p class="hint" style="margin-top:10px">We check your payment and activate your plan, usually within a few hours.</p>
+            </form>
+          </div>
+          <div class="card" id="cardCard">
+            <h2>Pay by card (USD)</h2>
+            <div id="cardBody"></div>
+          </div>
+        </div>
+        <div class="card">
+          <h2>Payment history</h2>
+          <div class="table-wrap" id="paymentHistory"></div>
+        </div>
+      </section>
+
+      <!-- ---------- account ---------- -->
+      <section class="panel narrow" data-panel="account" hidden>
+        <header class="panel-head"><h1>Account</h1></header>
+        <div class="card">
+          <label class="field"><span>Business / account name</span>
+            <div class="copy-row"><input id="accountName" maxlength="120" dir="auto"><button class="btn" id="accountNameSave">Save</button></div></label>
+          <div class="field"><span>Email</span><div id="accountEmail"></div></div>
+          <button class="btn" id="logout2">Log out</button>
+        </div>
+      </section>
+    </div>
   </main>
 
   <div id="savebar" class="savebar" hidden>
@@ -341,13 +335,116 @@
   </div>
 </div>
 
+<div id="editGroups" hidden>
+  <div data-group="identity">
+    <div class="grid-2">
+      <label class="field"><span>Business name</span><input data-bind="businessName" dir="auto"></label>
+      <label class="field"><span>Assistant name</span><input data-bind="botName" dir="auto" placeholder="e.g. Sara"></label>
+    </div>
+    <label class="field" style="margin-bottom:0"><span>First message the client sees</span>
+      <textarea data-bind="welcomeMessage" rows="3" dir="auto"></textarea></label>
+  </div>
+
+  <div data-group="about">
+    <label class="field" style="margin-bottom:0"><span>What you do, who your clients are, where you are, opening hours</span>
+      <textarea data-bind="businessDescription" rows="9" dir="auto"></textarea></label>
+  </div>
+
+  <div data-group="prices">
+    <div class="card-head">
+      <div><p class="hint">The assistant can only quote what is listed here.</p></div>
+      <button class="btn sm" data-add="packages">+ Add</button>
+    </div>
+    <div id="packagesList" class="items"></div>
+    <label class="field" style="margin:16px 0 0"><span>Payment &amp; delivery notes</span>
+      <textarea data-bind="pricingNotes" rows="4" dir="auto" placeholder="Deposits, delivery fees, what costs extra, how clients pay…"></textarea></label>
+  </div>
+
+  <div data-group="knowledge">
+    <div class="card-head">
+      <div><p class="hint">One topic per block: how you work, delivery, hours, location, guarantees…</p></div>
+      <button class="btn sm" data-add="knowledge">+ Add</button>
+    </div>
+    <div id="knowledgeList" class="items"></div>
+  </div>
+
+  <div data-group="faqs">
+    <div class="card-head">
+      <div><p class="hint">Your exact answer, so the assistant never improvises.</p></div>
+      <button class="btn sm" data-add="faqs">+ Add</button>
+    </div>
+    <div id="faqsList" class="items"></div>
+  </div>
+
+  <div data-group="style">
+    <label class="field"><span>Tone &amp; style</span><textarea data-bind="tone" rows="4" dir="auto"></textarea></label>
+    <label class="field"><span>What to always say, and never say</span>
+      <textarea data-bind="rules" rows="5" dir="auto" placeholder="- Never promise delivery in less than 7 days&#10;- Never talk about competitors"></textarea></label>
+    <details class="advanced">
+      <summary>Language rule (advanced)</summary>
+      <label class="field" style="margin:10px 0 0"><input data-bind="languageRule" dir="auto"></label>
+    </details>
+  </div>
+
+  <div data-group="contact">
+    <label class="field" style="margin-bottom:0"><span>Phone, WhatsApp or address the assistant gives out</span>
+      <input data-bind="handoff" dir="auto" placeholder="e.g. WhatsApp +216 XX XXX XXX"></label>
+  </div>
+
+  <div data-group="goals">
+    <div class="card-head">
+      <div><p class="hint">In priority order. Every conversation summary reports progress on each one.</p></div>
+      <button class="btn sm" data-add="goals">+ Add</button>
+    </div>
+    <div id="goalsList" class="items"></div>
+  </div>
+</div>
+
+<dialog id="editDialog" class="dialog wide">
+  <div class="dialog-head"><h2 id="editTitle"></h2><button class="icon-btn" id="editX" aria-label="Close"><svg class="i"><use href="#i-close"/></svg></button></div>
+  <div class="dialog-body" id="editBody"></div>
+  <div class="dialog-foot">
+    <button class="btn" id="editCancel">Cancel</button>
+    <button class="btn primary" id="editSave">Save</button>
+  </div>
+</dialog>
+
+<dialog id="botDialog" class="dialog">
+  <div class="dialog-head"><h2>Your bots</h2><button class="btn sm" id="botDialogClose">Close</button></div>
+  <div class="dialog-body"><div id="botPickList" class="items"></div></div>
+</dialog>
+
+<!-- ---------- test drawer ---------- -->
+<div id="testBack" class="drawer-back" hidden></div>
+<aside id="testDrawer" class="drawer" hidden aria-label="Try your bot">
+  <div class="drawer-head">
+    <svg class="i"><use href="#i-chat"/></svg>
+    <h2>Try your bot</h2>
+    <button class="icon-btn" id="testClose" aria-label="Close"><svg class="i"><use href="#i-close"/></svg></button>
+  </div>
+  <div class="test-chat">
+    <div class="test-toolbar">
+      <span class="hint" id="testNote"></span>
+      <div class="row">
+        <button class="btn sm" id="showPrompt">Instructions</button>
+        <button class="btn sm" id="resetTest">Reset</button>
+      </div>
+    </div>
+    <div id="testMessages" class="transcript test-messages"></div>
+    <form id="testForm" class="test-form">
+      <textarea id="testInput" rows="2" dir="auto" placeholder="Write like a client… (Enter to send)"></textarea>
+      <button class="btn primary" type="submit" id="testSend">Send</button>
+    </form>
+  </div>
+</aside>
+
 <dialog id="newBotDialog" class="dialog">
   <form method="dialog" id="newBotForm">
     <div class="dialog-head"><h2>New bot</h2><button class="btn sm" value="cancel" formnovalidate>Close</button></div>
     <div class="dialog-body">
       <label class="field"><span>Name (usually the business name)</span><input id="newBotName" maxlength="120" dir="auto" required></label>
       <p class="hint" id="newBotHint"></p>
-      <div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn primary" id="newBotCreate" value="create">Create bot</button></div>
+      <div class="row" style="justify-content:flex-end;margin-top:14px"><button class="btn primary" id="newBotCreate" value="create">Create bot</button></div>
     </div>
   </form>
 </dialog>
@@ -362,7 +459,7 @@
   <div class="dialog-body">
     <p class="hint">Pick the Facebook Pages and Instagram accounts this bot should answer.</p>
     <div id="pagesList" class="items" style="margin-top:12px"></div>
-    <div class="row" style="justify-content:flex-end;margin-top:14px"><button class="btn primary" id="pagesConnect">Connect selected</button></div>
+    <div class="row" style="justify-content:flex-end;margin-top:16px"><button class="btn primary" id="pagesConnect">Connect selected</button></div>
   </div>
 </dialog>
 
@@ -383,7 +480,7 @@
         <label class="field" style="margin-top:10px"><span>App secret of your Meta app</span><input id="manualSecret" type="password" autocomplete="off"></label>
         <p class="hint">With an app secret we give you a private webhook URL and verify token to paste into your own app.</p>
       </details>
-      <div class="row" style="justify-content:flex-end;margin-top:14px"><button class="btn primary" type="submit" id="manualSubmit">Connect</button></div>
+      <div class="row" style="justify-content:flex-end;margin-top:16px"><button class="btn primary" type="submit" id="manualSubmit">Connect</button></div>
     </div>
   </form>
 </dialog>

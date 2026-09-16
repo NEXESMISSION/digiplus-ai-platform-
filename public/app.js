@@ -4,7 +4,19 @@ const { el, api, toast, fmt, timeAgo, dateTime, date } = DP;
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 
-const BOT_TABS = ['conversations', 'channels', 'brain', 'pricing', 'goals', 'settings', 'test', 'install'];
+const BOT_TABS = ['conversations', 'brain', 'channels', 'settings'];
+const TAB_TITLES = {
+  conversations: 'Inbox', brain: 'Brain', channels: 'Channels & links', settings: 'Settings',
+  billing: 'Plan & billing', account: 'Account', setup: 'Set up your assistant',
+};
+// Mirrors readiness() on the server, so the meter moves while the owner types.
+const READY_STEPS = [
+  ['Describe the business', (s) => s.businessDescription.trim().length >= 60],
+  ['Add your services and prices', (s) => s.packages.length > 0],
+  ['Add what the bot should know', (s) => s.knowledge.length > 0],
+  ['Answer the questions clients ask', (s) => s.faqs.length > 0],
+  ['Say how clients reach a human', (s) => s.handoff.trim().length > 0],
+];
 const ACCOUNT_TABS = ['billing', 'account'];
 const STAGE_LABELS = { new: 'New', exploring: 'Exploring', interested: 'Interested', negotiating: 'Negotiating', ready_to_buy: 'Ready to buy', won: 'Won', lost: 'Lost', support: 'Support' };
 const GOAL_STATUS_LABELS = { achieved: 'Achieved', in_progress: 'In progress', not_started: 'Not started', not_applicable: 'N/A' };
@@ -35,6 +47,7 @@ let testHistory = [];
 let billing = null;
 let metaConfig = null;
 let staticReady = false;
+let setupDraft = null;
 
 // ============================================================ boot
 boot();
@@ -65,11 +78,10 @@ async function loadMe() {
 }
 
 function renderSidebar() {
-  const select = $('#botSelect');
-  select.replaceChildren(...me.bots.map((b) => el('option', { value: b.id, text: `${b.name}${b.serving ? '' : ' — paused'}` })));
-  if (bot) select.value = bot.id;
-  $('#botSwitch').hidden = !me.bots.length;
   $('#botNav').hidden = !me.bots.length;
+  // One bot is the normal case, so nothing about bots is shown until there are two.
+  $('#botMenuBtn').hidden = me.bots.length < 2 || !bot;
+  if (bot) $('#botMenuName').textContent = bot.name;
   $('#planPill').textContent = me.limits.planName;
   const u = me.usage;
   const pct = Math.min(100, Math.round((u.replies / Math.max(1, u.limit)) * 100));
@@ -112,14 +124,24 @@ function initStatic() {
   $('#menuBtn').addEventListener('click', () => $('#sidebar').classList.toggle('open'));
   $('#logout').addEventListener('click', confirmLogout);
   $('#logout2').addEventListener('click', confirmLogout);
-  $('#botSelect').addEventListener('change', (e) => selectBot(e.target.value));
   $('#newBotBtn').addEventListener('click', openNewBot);
-  $('#newBotForm').addEventListener('submit', createBotFromDialog);
-  $('#firstBotForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    await createBot($('#firstBotName').value);
+  $('#botMenuBtn').addEventListener('click', () => {
+    renderBotPick();
+    $('#botDialog').showModal();
   });
+  $('#botDialogClose').addEventListener('click', () => $('#botDialog').close());
+  $('#askGo').addEventListener('click', runRevise);
+  $('#editSave').addEventListener('click', saveEdit);
+  $('#editCancel').addEventListener('click', cancelEdit);
+  $('#editX').addEventListener('click', cancelEdit);
+  $('#editDialog').addEventListener('cancel', (e) => {
+    e.preventDefault();
+    cancelEdit();
+  });
+  $('#newBotForm').addEventListener('submit', createBotFromDialog);
   initBindings();
+  initSetup();
+  initDrawer();
   initConversations();
   initChannels();
   initTest();
@@ -138,19 +160,26 @@ function initStatic() {
 }
 
 function switchTab(next) {
-  if (!me.bots.length && BOT_TABS.includes(next)) next = 'empty';
+  if (!me.bots.length && BOT_TABS.includes(next)) next = 'setup';
   tab = next;
   $$('.sidebar [data-tab]').forEach((b) => b.classList.toggle('active', b.dataset.tab === next));
   $$('.panel').forEach((p) => (p.hidden = p.dataset.panel !== next));
-  if (next !== 'empty') history.replaceState(null, '', `#${next}`);
+  $('#pageTitle').textContent = TAB_TITLES[next] || '';
+  $('#openTest').hidden = !bot || next === 'setup';
+  if (next !== 'setup') history.replaceState(null, '', `#${next}`);
   clearInterval(listTimer);
   if (next === 'conversations') {
     loadConversations();
     listTimer = setInterval(() => document.visibilityState === 'visible' && loadConversations(true), 15000);
   }
-  if (next === 'channels') loadChannels();
-  if (next === 'test') renderTest();
-  if (next === 'install') renderInstall();
+  if (next === 'brain') {
+    renderReady();
+    renderSummaries();
+  }
+  if (next === 'channels') {
+    loadChannels();
+    renderInstall();
+  }
   if (next === 'settings') renderBotSettings();
   if (next === 'billing') loadBilling();
   if (next === 'account') renderAccount();
@@ -167,10 +196,7 @@ async function confirmLogout() {
 
 // ============================================================ bots
 async function selectBot(id, { keepTab = false } = {}) {
-  if (bot && id !== bot.id && isDirty() && !confirm('You have unsaved changes. Switch bot anyway?')) {
-    $('#botSelect').value = bot.id;
-    return;
-  }
+  if (bot && id !== bot.id && isDirty() && !confirm('You have unsaved changes. Switch bot anyway?')) return;
   try {
     const data = await api(`/api/bots/${id}`);
     bot = data.bot;
@@ -180,9 +206,9 @@ async function selectBot(id, { keepTab = false } = {}) {
     safeSet('dp_bot', bot.id);
     selectedId = null;
     testHistory = [];
-    $('#botSelect').value = bot.id;
     $('#convDetail').replaceChildren(emptyDetail('Select a conversation to see the summary and the full chat.'));
     renderSettings();
+    renderSidebar();
     if (!keepTab) switchTab(BOT_TABS.includes(tab) ? tab : 'conversations');
   } catch (e) {
     toast(e.message, true);
@@ -215,8 +241,8 @@ async function createBot(name) {
     savedJson = settings ? JSON.stringify(settings) : '';
     await loadMe();
     await selectBot(created.id, { keepTab: true });
-    switchTab('brain');
-    toast('Bot created — now teach it about the business');
+    resetSetup(name);
+    switchTab('setup');
     return true;
   } catch (err) {
     toast(err.message, true);
@@ -273,7 +299,7 @@ function dataSize(s) {
 
 function markDirty() {
   const dirty = isDirty();
-  $('#savebar').hidden = !dirty || !BOT_TABS.includes(tab);
+  $('#savebar').hidden = !dirty || !BOT_TABS.includes(tab) || $('#editDialog').open;
   if (!settings) return;
   const size = dataSize(settings);
   const pct = Math.min(100, Math.round((size / Math.max(1, dataLimit)) * 100));
@@ -282,6 +308,50 @@ function markDirty() {
     n.style.width = `${pct}%`;
     n.className = size > dataLimit ? 'danger' : pct >= 85 ? 'warn' : '';
   });
+  if (tab === 'brain') renderReady();
+  const ready = readyOf(settings);
+  $('#brainDot').hidden = ready.percent === 100;
+}
+
+// ============================================================ readiness
+function readyOf(s) {
+  if (!s) return { percent: 0, steps: [] };
+  const steps = READY_STEPS.map(([label, done]) => ({ label, done: done(s) }));
+  return { percent: Math.round((steps.filter((x) => x.done).length / steps.length) * 100), steps };
+}
+
+function renderReady() {
+  const box = $('#readyBox');
+  if (!box || !settings) return;
+  const { percent, steps } = readyOf(settings);
+  const left = steps.filter((x) => !x.done);
+  box.replaceChildren(
+    el('div', { class: 'ready-top' },
+      el('span', { class: 'ready-pct', text: `${percent}%` }),
+      el('div', {},
+        el('b', { text: percent === 100 ? 'Your assistant is ready' : 'Your assistant is almost there' }),
+        el('div', { class: 'hint', text: left.length ? `${left.length} thing${left.length > 1 ? 's' : ''} left to add.` : 'It knows everything it needs to sell for you.' })
+      )
+    ),
+    el('div', { class: 'bar' }, el('div', { style: `width:${percent}%` })),
+    el('div', { class: 'ready-steps' },
+      ...steps.map((x) =>
+        el('span', { class: `ready-step${x.done ? ' done' : ''}` },
+          iconEl(x.done ? 'i-check' : 'i-dot'),
+          el('span', { text: x.label })
+        )
+      )
+    )
+  );
+}
+
+function iconEl(name) {
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('class', 'i');
+  const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+  use.setAttribute('href', `#${name}`);
+  svg.append(use);
+  return svg;
 }
 
 async function saveSettings() {
@@ -293,8 +363,10 @@ async function saveSettings() {
     dataLimit = data.dataLimit;
     renderSettings();
     toast('Saved — the bot uses it from the next message');
+    return true;
   } catch (e) {
     toast(e.message, true);
+    return false;
   } finally {
     $('#save').disabled = false;
   }
@@ -459,6 +531,7 @@ function initBotSettings() {
 
 function renderBotSettings() {
   if (!bot) return;
+  renderBotsCard();
   const info = me.bots.find((b) => b.id === bot.id);
   $('#botNameInput').value = bot.name;
   $('#botActive').checked = bot.is_active;
@@ -467,6 +540,320 @@ function renderBotSettings() {
     bot.is_active && info && !info.serving
       ? `Paused by your plan: it allows ${me.limits.bots} active bot${me.limits.bots > 1 ? 's' : ''}. Pause another bot or upgrade.`
       : '';
+}
+
+// ============================================================ AI setup
+function initSetup() {
+  $('#setupGo').addEventListener('click', runAutofill);
+  $('#setupRetry').addEventListener('click', runAutofill);
+  $('#setupSkip').addEventListener('click', skipSetup);
+  $('#setupSave').addEventListener('click', saveDraft);
+  $('#setupBack').addEventListener('click', () => showSetupStep(1));
+  $('#rebuildAll').addEventListener('click', () => {
+    resetSetup(settings?.businessName || bot?.name || '');
+    switchTab('setup');
+  });
+}
+
+function resetSetup(name = '') {
+  setupDraft = null;
+  $('#setupName').value = name;
+  $('#setupText').value = '';
+  $('#setupUrl').value = '';
+  showSetupStep(1);
+}
+
+function showSetupStep(n) {
+  $('#setupStep1').hidden = n !== 1;
+  $('#setupWorking').hidden = n !== 2;
+  $('#setupReview').hidden = n !== 3;
+  $$('#setupSteps span').forEach((dot, i) => (dot.className = i + 1 === n ? 'on' : i + 1 < n ? 'done' : ''));
+}
+
+// The first bot does not exist yet when the wizard opens, and autofill needs one.
+async function ensureBot(name) {
+  if (bot) return true;
+  if (!name.trim()) {
+    toast('Enter your business name first', true);
+    $('#setupName').focus();
+    return false;
+  }
+  try {
+    const { bot: created } = await api('/api/bots', { body: { name: name.trim() } });
+    await loadMe();
+    await selectBot(created.id, { keepTab: true });
+    return true;
+  } catch (e) {
+    toast(e.message, true);
+    if (e.data?.code === 'bot_limit') switchTab('billing');
+    return false;
+  }
+}
+
+async function skipSetup() {
+  if (!(await ensureBot($('#setupName').value))) return;
+  switchTab('brain');
+}
+
+let workTimer = null;
+function runWorkAnimation() {
+  const items = $$('#workSteps li');
+  items.forEach((li) => (li.className = ''));
+  let i = 0;
+  const tick = () => {
+    if (i > 0) items[i - 1].className = 'done';
+    if (i < items.length) items[i].className = 'on';
+    i += 1;
+  };
+  tick();
+  clearInterval(workTimer);
+  workTimer = setInterval(() => (i <= items.length ? tick() : clearInterval(workTimer)), 7000);
+}
+
+async function runAutofill() {
+  const name = $('#setupName').value.trim();
+  const text = $('#setupText').value.trim();
+  const url = $('#setupUrl').value.trim();
+  if (!text && !url) return toast('Tell us about your business, or give us your website link', true);
+  if (!(await ensureBot(name || text.slice(0, 60)))) return;
+
+  showSetupStep(2);
+  runWorkAnimation();
+  try {
+    const data = await api(`/api/bots/${bot.id}/autofill`, { body: { businessName: name, text, url } });
+    setupDraft = data;
+    renderReview(data);
+    showSetupStep(3);
+    window.scrollTo(0, 0);
+  } catch (e) {
+    showSetupStep(1);
+    toast(e.message, true);
+    if (e.data?.code === 'reply_limit') switchTab('billing');
+  } finally {
+    clearInterval(workTimer);
+    loadMe().catch(() => {}); // the draft cost one AI reply
+  }
+}
+
+function renderReview(data) {
+  const s = data.settings;
+  $('#reviewNote').textContent = data.readFrom
+    ? `Written from what you told us and from ${data.readFrom}. Read it quickly — you can change anything after saving.`
+    : 'Read it quickly — you can change anything after saving.';
+
+  $('#missingBox').replaceChildren(
+    data.missing?.length
+      ? el('div', { class: 'missing-box' },
+          el('b', { text: 'The AI had no information about these. Add them later in the Brain:' }),
+          el('ul', {}, ...data.missing.map((m) => el('li', { dir: 'auto', text: m })))
+        )
+      : ''
+  );
+
+  const block = (label, body, count) =>
+    el('div', { class: 'rv' },
+      el('b', {}, count && el('span', { class: 'rv-count', text: count }), el('span', { text: label })),
+      body
+    );
+  const textBlock = (label, v) => (v && v.trim() ? block(label, el('div', { class: 'v', dir: 'auto', text: v })) : null);
+  const listBlock = (label, items, line) =>
+    items.length ? block(label, el('ul', {}, ...items.map((x) => el('li', { dir: 'auto', text: line(x) }))), String(items.length)) : null;
+
+  $('#reviewBody').replaceChildren(
+    ...[
+      textBlock('Assistant name', s.botName),
+      textBlock('First message the client sees', s.welcomeMessage),
+      textBlock('About the business', s.businessDescription),
+      listBlock('Services & prices', s.packages, (p) => `${p.name}${p.price ? ` — ${p.price}` : ''}`),
+      listBlock('Topics it knows', s.knowledge, (k) => k.title || k.content.slice(0, 60)),
+      listBlock('Questions it can answer', s.faqs, (f) => f.q),
+      listBlock('Goals in every chat', s.goals.filter((g) => g.enabled), (g) => g.label),
+      textBlock('How it talks', s.tone),
+      textBlock('Rules it follows', s.rules),
+      textBlock('How clients reach you', s.handoff),
+    ].filter(Boolean)
+  );
+}
+
+async function saveDraft() {
+  if (!setupDraft) return;
+  $('#setupSave').disabled = true;
+  try {
+    const data = await api(`/api/bots/${bot.id}/settings`, { method: 'PUT', body: setupDraft.settings });
+    settings = data.settings;
+    savedJson = JSON.stringify(settings);
+    dataLimit = data.dataLimit;
+    renderSettings();
+    setupDraft = null;
+    switchTab('brain');
+    toast('Saved. Hit "Try your bot" and talk to it like a client.');
+  } catch (e) {
+    toast(e.message, true);
+  } finally {
+    $('#setupSave').disabled = false;
+  }
+}
+
+// ============================================================ test drawer
+function initDrawer() {
+  $('#openTest').addEventListener('click', openTestDrawer);
+  $('#testClose').addEventListener('click', closeTestDrawer);
+  $('#testBack').addEventListener('click', closeTestDrawer);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !$('#testDrawer').hidden) closeTestDrawer();
+  });
+}
+
+function openTestDrawer() {
+  if (!bot) return toast('Create your assistant first', true);
+  $('#testBack').hidden = false;
+  $('#testDrawer').hidden = false;
+  renderTest();
+  $('#testInput').focus();
+}
+
+function closeTestDrawer() {
+  $('#testDrawer').hidden = true;
+  $('#testBack').hidden = true;
+}
+
+// ============================================================ brain summary
+// The owner reads short cards and opens one focused editor at a time; the real
+// form lives in #editGroups and is moved in and out of the dialog, so every
+// binding set up by initBindings() keeps working.
+const SUMMARIES = [
+  { key: 'identity', label: 'Name', title: 'Name & greeting',
+    preview: (s) => [s.botName, s.welcomeMessage].filter(Boolean).join(' — ') },
+  { key: 'about', label: 'About', title: 'About the business',
+    preview: (s) => s.businessDescription },
+  { key: 'prices', label: 'Prices', title: 'Services & prices',
+    count: (s) => s.packages.length,
+    preview: (s) => s.packages.map((p) => `${p.name}${p.price ? ` ${p.price}` : ''}`).join(' · ') },
+  { key: 'knowledge', label: 'Topics', title: 'What the bot should know',
+    count: (s) => s.knowledge.length,
+    preview: (s) => s.knowledge.map((k) => k.title).filter(Boolean).join(' · ') },
+  { key: 'faqs', label: 'Answers', title: 'Questions clients ask',
+    count: (s) => s.faqs.length,
+    preview: (s) => s.faqs.map((f) => f.q).filter(Boolean).join(' · ') },
+  { key: 'contact', label: 'Contact', title: 'How clients reach a human',
+    preview: (s) => s.handoff },
+  { key: 'style', label: 'How it talks', title: 'Tone and rules',
+    preview: (s) => s.tone },
+  { key: 'goals', label: 'Goals', title: 'What it aims for in every chat',
+    count: (s) => s.goals.filter((g) => g.enabled).length,
+    preview: (s) => s.goals.filter((g) => g.enabled).map((g) => g.label).join(' · ') },
+];
+
+function renderSummaries() {
+  const box = $('#sumList');
+  if (!box || !settings) return;
+  box.replaceChildren(
+    ...SUMMARIES.map((cfg) => {
+      const n = cfg.count ? cfg.count(settings) : 0;
+      const text = String(cfg.preview(settings) || '').trim();
+      return el('button', { class: 'sum', onclick: () => openEdit(cfg) },
+        el('span', { class: 'sum-label' },
+          el('span', { text: cfg.label }),
+          n ? el('span', { class: 'pill gray', text: String(n) }) : null
+        ),
+        el('span', { class: `sum-body${text ? '' : ' empty'}`, dir: 'auto', text: text || 'Nothing yet — click to add' }),
+        el('span', { class: 'sum-go', text: 'Edit' })
+      );
+    })
+  );
+}
+
+let editGroup = null;
+
+function openEdit(cfg) {
+  const group = $(`#editGroups [data-group="${cfg.key}"]`);
+  if (!group) return;
+  editGroup = group;
+  $('#editTitle').textContent = cfg.title;
+  $('#editBody').replaceChildren(group);
+  $('#editDialog').showModal();
+  markDirty();
+  $('#editBody').querySelector('input:not([type=checkbox]), textarea')?.focus();
+}
+
+function putGroupBack() {
+  if (editGroup) $('#editGroups').append(editGroup);
+  editGroup = null;
+  $('#editDialog').close();
+  renderSummaries();
+  markDirty();
+}
+
+async function saveEdit() {
+  $('#editSave').disabled = true;
+  try {
+    if (await saveSettings()) putGroupBack();
+  } finally {
+    $('#editSave').disabled = false;
+  }
+}
+
+function cancelEdit() {
+  settings = JSON.parse(savedJson);
+  renderSettings();
+  putGroupBack();
+}
+
+// "Tell the AI what to change" — one sentence instead of hunting for a field.
+async function runRevise() {
+  const instruction = $('#askText').value.trim();
+  if (!instruction) return toast('Write what you want to change', true);
+  $('#askGo').disabled = true;
+  $('#askResult').replaceChildren(el('div', { class: 'ask-result hint', text: 'Working…' }));
+  try {
+    const data = await api(`/api/bots/${bot.id}/revise`, { body: { instruction } });
+    if (!data.changed.length) {
+      $('#askResult').replaceChildren(el('div', { class: 'ask-result hint', text: 'That did not change anything. Try saying it another way.' }));
+      return;
+    }
+    settings = data.settings;
+    if (!(await saveSettings())) return;
+    $('#askText').value = '';
+    renderSummaries();
+    $('#askResult').replaceChildren(
+      el('div', { class: 'ask-result' },
+        el('b', { text: 'Changed:' }),
+        el('ul', {}, ...data.changed.map((c) => el('li', { dir: 'auto', text: c })))
+      )
+    );
+  } catch (e) {
+    $('#askResult').replaceChildren();
+    toast(e.message, true);
+    if (e.data?.code === 'reply_limit') switchTab('billing');
+  } finally {
+    $('#askGo').disabled = false;
+    loadMe().catch(() => {});
+  }
+}
+
+// ============================================================ bots
+const botRow = (b, onclick) =>
+  el('button', { class: `bot-row${bot && b.id === bot.id ? ' current' : ''}`, onclick },
+    el('span', { class: 'bot-name', dir: 'auto', text: b.name }),
+    el('span', { class: `pill ${b.serving ? 'green' : 'gray'}`, text: b.serving ? 'Answering' : 'Paused' })
+  );
+
+function renderBotPick() {
+  $('#botPickList').replaceChildren(
+    ...me.bots.map((b) =>
+      botRow(b, () => {
+        $('#botDialog').close();
+        if (!bot || b.id !== bot.id) selectBot(b.id, { keepTab: true });
+      })
+    )
+  );
+}
+
+function renderBotsCard() {
+  $('#botsHint').textContent = `${me.bots.length} of ${me.limits.bots} bot${me.limits.bots > 1 ? 's' : ''} on your ${me.limits.planName} plan.`;
+  $('#botsList').replaceChildren(
+    ...me.bots.map((b) => botRow(b, () => (!bot || b.id !== bot.id) && selectBot(b.id, { keepTab: true })))
+  );
 }
 
 // ============================================================ conversations
@@ -848,7 +1235,7 @@ function channelCard(card, data) {
 
   const body = [];
   if (card.id === 'web') {
-    body.push(el('div', { class: 'row' }, el('button', { class: 'btn sm', text: 'Get the link & website code', onclick: () => switchTab('install') })));
+    body.push(el('div', { class: 'row' }, el('button', { class: 'btn sm', text: 'Get the link & website code', onclick: () => switchTab('channels') })));
   } else if (!allowed) {
     body.push(el('div', { class: 'locked' },
       el('span', { text: `${card.title} is included from the ${data.requiredPlan[card.id]} plan.` }),
@@ -1111,7 +1498,7 @@ function renderTest(pending = false) {
   box.replaceChildren(
     el('div', { class: 't-msg assistant' }, el('div', { class: 'b', dir: 'auto', text: settings.welcomeMessage }), el('div', { class: 'm', text: 'Welcome message' })),
     ...testHistory.map((m) => el('div', { class: `t-msg ${m.role}` }, el('div', { class: 'b', dir: 'auto', text: m.content }), m.meta && el('div', { class: 'm', text: m.meta }))),
-    pending && el('div', { class: 't-msg assistant' }, el('div', { class: 'b' }, el('span', { class: 'typing' }, el('i'), el('i'), el('i'))))
+    ...(pending ? [el('div', { class: 't-msg assistant' }, el('div', { class: 'b' }, el('span', { class: 'typing' }, el('i'), el('i'), el('i'))))] : [])
   );
   box.scrollTop = box.scrollHeight;
 }
