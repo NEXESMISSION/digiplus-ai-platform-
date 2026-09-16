@@ -205,33 +205,90 @@
   .section-head p { color: var(--muted); margin: 0; font-size: 17px; }
   .kicker { color: var(--orange); font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: .14em; }
 
+  /* ---------- section heading furniture ---------- */
+  .kicker {
+    display: inline-flex; align-items: center; gap: 9px; padding: 5px 16px 5px 5px; border-radius: 999px;
+    background: var(--card); border: 1px solid var(--line); color: var(--cream);
+    font-size: 11.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .13em;
+  }
+  .kicker .ki { width: 24px; height: 24px; border-radius: 50%; flex: none; display: grid; place-items: center; background: linear-gradient(180deg, var(--orange-2), var(--orange-deep)); color: #fff; }
+  .kicker .ki .ico { width: 13px; height: 13px; }
+  /* the hand-drawn stroke under the last words of a heading */
+  .mark { position: relative; color: var(--orange-2); white-space: nowrap; }
+  .mark::after {
+    content: ""; position: absolute; left: -2px; right: -2px; bottom: -.17em; height: .15em;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 12' preserveAspectRatio='none'%3E%3Cpath d='M3 8.6C46 3 120 2.3 197 6.4' fill='none' stroke='%23FF9A2E' stroke-width='4.5' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center/100% 100%;
+  }
+  .dots { position: absolute; right: 26px; top: 52px; width: 104px; height: 88px; pointer-events: none; opacity: .55;
+    background-image: radial-gradient(var(--line-strong) 1.5px, transparent 1.5px); background-size: 19px 19px; }
+
+  /* ---------- the little product vignettes inside cards ----------
+     Built in markup rather than generated art: they stay sharp, weigh nothing,
+     and use the real brand colours. Decorative, so aria-hidden in the HTML. */
+  .vig { position: absolute; right: -16px; top: -2px; width: 198px; pointer-events: none; display: flex; flex-direction: column; gap: 6px; }
+  .vig-card { background: var(--card-2); border: 1px solid var(--line); border-radius: 12px; padding: 9px 10px; box-shadow: 0 16px 34px rgba(0,0,0,.45); display: flex; flex-direction: column; gap: 6px; }
+  .vig-line { height: 6px; border-radius: 6px; background: rgba(255,255,255,.1); }
+  .vig-line.o { background: linear-gradient(90deg, var(--orange-2), var(--orange-deep)); }
+  .vig-head { display: flex; align-items: center; gap: 7px; }
+  .vig-av { width: 20px; height: 20px; border-radius: 7px; flex: none; display: grid; place-items: center; background: linear-gradient(145deg, var(--orange-2), var(--orange-deep)); color: #fff; }
+  .vig-av .ico { width: 11px; height: 11px; }
+  .vig-t { font-size: 9px; font-weight: 700; color: var(--cream); text-transform: uppercase; letter-spacing: .06em; }
+  /* Panels may bleed off the card edge — that reads as deliberate. Text must not:
+     a bubble clipped mid-word just looks broken, so bubbles keep a right margin. */
+  .vig-bub { font-size: 9.5px; line-height: 1.35; padding: 5px 9px; border-radius: 9px; background: var(--card-2); border: 1px solid var(--line); color: var(--text); width: fit-content; max-width: calc(100% - 22px); margin-right: 22px; box-shadow: 0 8px 18px rgba(0,0,0,.35); }
+  .vig-bub.o { background: linear-gradient(170deg, var(--orange-2), var(--orange-deep)); color: #fff; border-color: transparent; margin-left: auto; }
+  .vig-row { display: flex; align-items: center; gap: 6px; font-size: 9px; color: var(--text); }
+  .vig-row .ico { width: 11px; height: 11px; color: var(--orange-2); flex: none; }
+  .vig-row b { color: var(--cream); font-weight: 650; }
+  .vig-check { display: flex; align-items: center; gap: 6px; font-size: 9px; color: var(--text); }
+  .vig-bx { width: 12px; height: 12px; border-radius: 4px; flex: none; display: grid; place-items: center; background: rgba(244,123,32,.18); border: 1px solid rgba(244,123,32,.45); color: var(--orange-2); }
+  .vig-bx .ico { width: 8px; height: 8px; stroke-width: 3.2; }
+  .vig-btn { display: flex; align-items: center; justify-content: center; gap: 5px; font-size: 9px; font-weight: 700; padding: 6px; border-radius: 8px; background: linear-gradient(180deg, var(--orange-2), var(--orange-deep)); color: #fff; }
+  .vig-btn .ico { width: 10px; height: 10px; }
+  .vig-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+  .vig-chip { display: inline-flex; align-items: center; gap: 5px; font-size: 9px; font-weight: 600; padding: 5px 8px; border-radius: 9px; background: var(--card-2); border: 1px solid var(--line); color: var(--cream); box-shadow: 0 8px 18px rgba(0,0,0,.3); }
+  .vig-chip .ico { width: 11px; height: 11px; color: var(--orange-2); }
+  .vig-phone { border: 1px solid var(--line-strong); border-top-left-radius: 14px; border-top-right-radius: 14px; background: #0E141B; padding: 9px; display: flex; flex-direction: column; gap: 6px; box-shadow: 0 18px 40px rgba(0,0,0,.5); }
+  .vig-input { display: flex; align-items: center; gap: 6px; font-size: 9px; color: var(--muted); padding: 5px 5px 5px 9px; border-radius: 999px; background: rgba(255,255,255,.05); border: 1px solid var(--line); }
+  .vig-send { margin-left: auto; width: 18px; height: 18px; border-radius: 50%; flex: none; display: grid; place-items: center; background: linear-gradient(180deg, var(--orange-2), var(--orange-deep)); color: #fff; }
+  .vig-send .ico { width: 9px; height: 9px; }
+
+  /* ---------- features ---------- */
   .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
   .feature {
-    border: 1px solid var(--line); border-radius: 20px; padding: 28px;
+    position: relative; overflow: hidden; display: flex; flex-direction: column;
+    border: 1px solid var(--line); border-radius: 20px; padding: 24px 26px 26px;
     background: linear-gradient(180deg, var(--card), rgba(18, 23, 31, .55));
     transition: border-color .2s ease, transform .2s ease;
   }
   .feature:hover { border-color: rgba(244, 123, 32, .38); transform: translateY(-3px); }
+  .f-top { position: relative; height: 126px; margin-bottom: 16px; }
   .feature .ic {
     width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center;
-    background: rgba(244, 123, 32, .12); border: 1px solid rgba(244, 123, 32, .22); margin-bottom: 16px;
-    color: var(--orange-2);
+    background: rgba(244, 123, 32, .12); border: 1px solid rgba(244, 123, 32, .22);
+    color: var(--orange-2); position: relative; z-index: 2;
   }
+  .feature .ic.solid { background: linear-gradient(180deg, var(--orange-2), var(--orange-deep)); border-color: transparent; color: #fff; box-shadow: 0 10px 24px rgba(244,123,32,.32); }
   .feature h3 { font-family: var(--font-display); margin: 0 0 8px; font-size: 18px; color: var(--cream); font-weight: 700; }
   .feature p { margin: 0; color: var(--muted); font-size: 15px; }
 
+  /* ---------- how it works ---------- */
   .steps-bg { background: linear-gradient(180deg, rgba(255,255,255,.022), transparent); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; counter-reset: step; }
-  .step { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 28px; }
-  .step::before {
-    counter-increment: step; content: counter(step);
-    width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center;
-    background: linear-gradient(135deg, var(--orange-2), var(--orange-deep)); color: #fff; font-weight: 800;
-    margin-bottom: 16px; box-shadow: 0 8px 22px rgba(244, 123, 32, .30);
+  .steps { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 0 12px; align-items: stretch; }
+  .step { position: relative; display: flex; flex-direction: column; background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 26px; overflow: hidden; }
+  .step-num {
+    font-family: var(--font-display); width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center;
+    background: linear-gradient(180deg, var(--orange-2), var(--orange-deep)); color: #fff; font-weight: 800; font-size: 16px;
+    margin-bottom: 18px; box-shadow: 0 10px 24px rgba(244, 123, 32, .30); letter-spacing: -.02em;
   }
-  .step h3 { font-family: var(--font-display); margin: 0 0 8px; font-size: 18px; color: var(--cream); font-weight: 700; }
-  .step::before { font-family: var(--font-display); }
+  .step h3 { font-family: var(--font-display); margin: 0 0 8px; font-size: 19px; color: var(--cream); font-weight: 700; }
   .step p { margin: 0; color: var(--muted); font-size: 15px; }
+  /* auto margin pins every vignette to the bottom of its card, so they line up
+     across the three steps even though the descriptions differ in length */
+  .step-vig { margin-top: auto; padding-top: 24px; position: relative; }
+  .step-vig .vig { position: static; width: auto; right: auto; top: auto; }
+  .step-arrow { align-self: center; width: 34px; height: 34px; border-radius: 50%; flex: none; display: grid; place-items: center; border: 1px solid var(--line); background: var(--card); color: var(--muted); }
+  .step-arrow .ico { width: 15px; height: 15px; }
 
   /* ---------- pricing ---------- */
   .currency { display: inline-flex; background: rgba(255,255,255,.05); border-radius: 999px; padding: 5px; margin-top: 22px; border: 1px solid var(--line); }
@@ -300,8 +357,14 @@
     .am-body { grid-template-columns: 140px minmax(0, 1fr); }
     .am-sum { display: none; }
   }
+  @media (max-width: 1100px) {
+    .features { grid-template-columns: repeat(2, 1fr); }
+    .dots { display: none; }
+  }
   @media (max-width: 920px) {
     .hero .wrap, .features, .steps, .plans { grid-template-columns: 1fr; }
+    /* the arrows between steps now point down the column instead of across */
+    .step-arrow { transform: rotate(90deg); margin: 14px auto; }
     .nav-links { display: none; }
     .app-mock { margin-top: 34px; }
     .am-body { grid-template-columns: 1fr; min-height: 300px; }
