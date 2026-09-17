@@ -11,6 +11,7 @@
 //     avoid        none of these may appear
 //     card         a card title ("Demande enregistrée") or type ("products", "slots")
 // On every answer, always: at most 3 messages, only real prices, Tunisian words in Derja.
+require('../lib/no-image-api');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');

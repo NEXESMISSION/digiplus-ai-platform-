@@ -1,5 +1,6 @@
 // Local preview: serves public/ the way Vercel does and runs api/chat.js.
 //   npm run dev   →   http://localhost:3000
+require('../lib/no-image-api');
 const http = require('http');
 const fs = require('fs');
 const path = require('path');

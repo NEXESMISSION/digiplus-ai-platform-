@@ -5,6 +5,7 @@
 // Needs SUPABASE_PROJECT_REF and SUPABASE_ACCESS_TOKEN in .env (a Supabase
 // personal access token, from Account → Access Tokens). These are for admin work
 // from your machine only — the app never uses them, so keep them out of Vercel.
+require('../lib/no-image-api');
 
 const fs = require('fs');
 const path = require('path');

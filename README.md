@@ -49,7 +49,13 @@ Live: https://digiplus.lol
 | `npm run dev` | the site on http://localhost:3000 (the inbox skips the sign-in locally) |
 | `npm run exam` | plays the conversations in `exams/` with the real AI and checks every answer. Run it after changing a brain file (uses OpenAI credits) |
 | `npm run sql -- <file.sql>` | runs SQL on the Supabase database |
-| `npm run catalog-images -- <assistant>` | makes the missing product photos (OpenAI images) |
+| `npm run catalog-images -- <assistant>` | prints the prompts for the missing product photos, to paste in ChatGPT |
+
+## Pictures
+
+No picture in this project is ever generated with the paid API: photos, logos and slide images are made in
+**ChatGPT in the browser** (already included in the account) and saved in `public/img/`. `lib/no-image-api.js`
+enforces it — it is loaded by every tool and by `.npmrc`, and any call to an image or video endpoint throws.
 
 ## Deploy
 
