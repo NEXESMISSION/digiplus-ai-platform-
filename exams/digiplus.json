@@ -7,7 +7,7 @@
   {
     "name": "From a plan button, asks about the business",
     "say": ["N7eb el formule Pro (99dt fel chhar)"],
-    "expect": { "language": "derja", "mentionsAny": ["khedmtek", "activité", "clients"] }
+    "expect": { "language": "derja", "mentionsAny": ["5edmtek", "activité", "clients"] }
   },
   {
     "name": "Explains for the business, then saves the details",
