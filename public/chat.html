@@ -2,409 +2,127 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Chat</title>
-<meta name="robots" content="noindex, nofollow">
-<link rel="icon" type="image/png" href="/logo.png">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<title>Chat · DigiPlus AI</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#F8F6F3">
+<link rel="icon" href="/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..900&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-  /* Same editorial system as the landing pages: paper ground, hairline rules,
-     one flame accent, square corners. The visitor's own messages are ink. */
-  :root {
-    --paper: #ECEAE3;
-    --paper-2: #E6E3DB;
-    --ink: #0B0B0A;
-    --ink-2: #35332E;
-    --ink-3: #6B6862;
-    --rule: rgba(11, 11, 10, .16);
-    --rule-soft: rgba(11, 11, 10, .2);
-    --flame: #F47B20;
-    --grad: linear-gradient(135deg, #FF9A2E, #FF6400);
-    --font-display: "Archivo", system-ui, sans-serif;
-    --font-body: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
-    --font-mono: "JetBrains Mono", ui-monospace, monospace;
-  }
-  * { box-sizing: border-box; }
-  [hidden] { display: none !important; }
-  html, body { height: 100%; margin: 0; }
-  body {
-    font: 15px/1.5 var(--font-body), "Noto Sans Arabic", Tahoma, sans-serif;
-    background: var(--paper-2); color: var(--ink); -webkit-font-smoothing: antialiased;
-  }
-  .app {
-    height: 100dvh; max-width: 760px; margin: 0 auto; display: flex; flex-direction: column;
-    background: var(--paper); border-inline: 1px solid var(--rule);
-  }
-
-  header { display: flex; align-items: center; gap: 13px; padding: 14px 18px; border-bottom: 1px solid var(--ink); }
-  .avatar {
-    width: 44px; height: 44px; flex: none; display: grid; place-items: center;
-    background: var(--ink); color: var(--paper); border: 1px solid var(--ink);
-    font-family: var(--font-display); font-weight: 700; font-size: 18px;
-  }
-  .title { font-family: var(--font-display); font-weight: 700; font-size: 18px; letter-spacing: -.03em; line-height: 1.15; }
-  .sub {
-    margin-top: 4px; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase;
-    color: var(--ink-3); display: flex; align-items: center; gap: 7px;
-  }
-  .sub::before { content: ""; width: 8px; height: 8px; background-image: var(--grad); flex: none; }
-  .spacer { flex: 1; }
-  .ghost {
-    border: 1px solid var(--ink); background: transparent; color: var(--ink);
-    padding: 9px 14px; font: inherit; font-family: var(--font-mono); font-size: 10.5px;
-    letter-spacing: .12em; text-transform: uppercase; cursor: pointer;
-  }
-  .ghost:hover { background: var(--ink); color: var(--paper); }
-
-  #messages { flex: 1; overflow-y: auto; padding: 20px 16px 10px; display: flex; flex-direction: column; gap: 10px; background: var(--paper-2); }
-  .msg { display: flex; }
-  .msg.user { justify-content: flex-end; }
-  .bubble {
-    max-width: min(84%, 560px); padding: 11px 14px; font-size: 14.5px; line-height: 1.5;
-    white-space: pre-wrap; overflow-wrap: anywhere; unicode-bidi: plaintext; text-align: start;
-  }
-  .msg.bot .bubble { background: var(--paper); border: 1px solid var(--rule-soft); }
-  .msg.user .bubble { background: var(--ink); color: var(--paper); }
-  .msg.user .bubble a { color: var(--paper); }
-  .msg.error .bubble { background: #FBE9E4; color: #8A2B0B; border: 1px solid #E8B9A8; font-size: 14px; }
-  .bubble a { color: var(--flame); }
-  .typing .bubble { display: flex; gap: 5px; padding: 15px 16px; }
-  .typing span { width: 5px; height: 5px; background: var(--ink); animation: blink 1.2s ease-in-out infinite; }
-  .typing span:nth-child(2) { animation-delay: .18s; }
-  .typing span:nth-child(3) { animation-delay: .36s; }
-  @keyframes blink { 0%, 100% { opacity: .2; } 50% { opacity: 1; } }
-
-  #composer { display: flex; align-items: stretch; border-top: 1px solid var(--ink); background: var(--paper); }
-  #input {
-    flex: 1; resize: none; max-height: 140px; min-height: 58px; padding: 18px 18px;
-    border: 0; background: var(--paper); font: inherit; font-size: 15.5px; color: inherit;
-    outline: none; overflow-y: hidden;
-  }
-  #input:focus { background: #fff; }
-  #send {
-    width: 74px; flex: none; border: 0; border-inline-start: 1px solid var(--ink);
-    background-image: var(--grad); color: var(--paper); display: grid; place-items: center; cursor: pointer;
-  }
-  #send:hover:not(:disabled) { background-image: none; background-color: var(--ink); }
-  #send:disabled { opacity: .4; cursor: default; }
-  .badge {
-    text-align: center; padding: 12px 0 calc(12px + env(safe-area-inset-bottom));
-    border-top: 1px solid var(--rule); background: var(--paper);
-    font-family: var(--font-mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
-  }
-  .badge a { color: var(--ink-3); text-decoration: none; }
-  .badge a:hover { color: var(--flame); }
-
-  #intro { flex: 1; display: grid; place-items: center; padding: 24px; background: var(--paper-2); }
-  .intro-card { width: 100%; max-width: 400px; background: var(--paper); border: 1px solid var(--ink); padding: 26px; }
-  .intro-card h1 { font-family: var(--font-display); font-weight: 700; font-size: 25px; letter-spacing: -.035em; line-height: 1.05; margin: 0 0 8px; }
-  .intro-card p { color: var(--ink-2); margin: 0 0 22px; font-size: 14.5px; }
-  .field { display: block; margin-bottom: 14px; }
-  .field span { display: block; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 7px; }
-  .field input { width: 100%; padding: 13px 14px; border: 1px solid var(--rule-soft); background: var(--paper-2); font: inherit; font-size: 15px; outline: none; }
-  .field input:focus { border-color: var(--ink); background: #fff; }
-  .primary {
-    width: 100%; min-height: 52px; border: 0; background: var(--ink); color: var(--paper);
-    font: inherit; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 6px;
-  }
-  .primary:hover:not(:disabled) { background-image: var(--grad); }
-  .primary:disabled { opacity: .6; }
-  .form-error { color: #8A2B0B; font-size: 13.5px; min-height: 20px; margin-top: 10px; }
-  .unavailable { flex: 1; display: grid; place-items: center; color: var(--ink-2); padding: 24px; text-align: center; background: var(--paper-2); }
-
-  body.embed .app { max-width: none; border-inline: 0; }
-  @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700..800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/chat.css">
 </head>
 <body>
-<div class="app">
-  <header>
-    <div class="avatar" id="avatar" aria-hidden="true">•</div>
-    <div><div class="title" id="botName">&nbsp;</div><div class="sub" id="bizName">En ligne</div></div>
-    <div class="spacer"></div>
-    <button class="ghost" id="newChat" hidden>Nouvelle discussion</button>
+<div class="page">
+
+  <!-- Wide screens: site bar above the chat -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <a class="round-btn back" href="/" data-back aria-label="Retour" title="Retour">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+      </a>
+      <a class="brand" href="/"><img src="/logo.png" alt="" width="30" height="30">DigiPlus AI</a>
+    </div>
+    <div class="topbar-right">
+      <span class="demo-pill" data-demo hidden>Démo · essayez comme un client</span>
+      <a class="cta-btn" data-demo href="/chat/digiplus" hidden>Avoir ce chat
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
+      </a>
+      <a class="text-link" data-not-demo href="/#tarifs" hidden>Voir les tarifs</a>
+    </div>
   </header>
 
-  <div class="unavailable" id="unavailable" hidden><p id="unavailableText">Cette discussion n'est pas disponible pour le moment.</p></div>
+  <div class="layout">
+    <aside class="profile" id="profile" aria-label="À propos"></aside>
 
-  <section id="intro" hidden>
-    <form class="intro-card" id="introForm">
-      <h1 id="introTitle">Bienvenue 👋</h1>
-      <p id="introText"></p>
-      <label class="field"><span>Votre nom</span><input id="nameInput" autocomplete="name" maxlength="200" dir="auto"></label>
-      <label class="field"><span>Téléphone ou email</span><input id="contactInput" autocomplete="email" maxlength="200" dir="auto"></label>
-      <button class="primary" id="startBtn" type="submit">Commencer la discussion</button>
-      <div class="form-error" id="introError" role="alert"></div>
-    </form>
-  </section>
+    <section class="chat is-loading" aria-label="Conversation">
+      <!-- Small screens: demo strip -->
+      <div class="demo-bar" data-demo hidden>
+        <span>Démo · essayez comme un client</span>
+        <a href="/chat/digiplus">Avoir ce chat
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
 
-  <main id="messages" aria-live="polite" hidden></main>
+      <header class="chat-head">
+        <a class="back-btn" href="/" data-back aria-label="Retour" title="Retour">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+        </a>
+        <div class="avatar" id="avatar" aria-hidden="true"></div>
+        <div class="who">
+          <h1 id="name"></h1>
+          <p class="status"><span class="dot"></span><span>En ligne · répond en quelques secondes</span></p>
+        </div>
+        <button class="round-btn tinted" id="restart" type="button" aria-label="Recommencer la conversation" title="Recommencer" hidden>
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3"/><path d="M4.5 4v4h4"/></svg>
+        </button>
+      </header>
 
-  <form id="composer" hidden>
-    <textarea id="input" rows="1" placeholder="Écrivez en derja, français ou anglais…" dir="auto" maxlength="1200" aria-label="Message"></textarea>
-    <button id="send" type="submit" aria-label="Envoyer" disabled>
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-    </button>
-  </form>
-  <div class="badge" id="badge" hidden><a href="/" target="_blank" rel="noopener">Propulsé par DigiPlus AI</a></div>
+      <main class="log" id="log" role="log" aria-live="polite" aria-label="Messages"></main>
+
+      <footer class="composer">
+        <!-- A shop's products, always one tap away (phones and tablets) -->
+        <div class="catalog-strip" id="catalog-strip" hidden></div>
+        <form id="form" autocomplete="off">
+          <textarea id="input" rows="1" maxlength="600" placeholder="Écrivez votre message…" enterkeyhint="send" aria-label="Votre message" disabled></textarea>
+          <button class="send" id="send" type="submit" aria-label="Envoyer" disabled>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 3.5L10 14"/><path d="M20.5 3.5l-6.7 17-3.8-6.5-6.5-3.8z"/></svg>
+          </button>
+        </form>
+        <a class="powered" href="/"><img src="/logo.png" alt="" width="13" height="13"><span>Propulsé par DigiPlus AI</span></a>
+      </footer>
+    </section>
+  </div>
 </div>
 
-<script>
-(() => {
-  const $ = (id) => document.getElementById(id);
-  const params = new URLSearchParams(location.search);
-  const publicId = (location.pathname.match(/^\/c\/([a-z0-9]+)/) || [])[1] || params.get('b') || '';
-  const STORE_KEY = `dp_chat_${publicId}`;
-  const POLL_MS = 4000;
-  if (params.get('embed') === '1') document.body.classList.add('embed');
+<dialog class="sheet" id="restart-dialog" aria-labelledby="restart-title">
+  <form method="dialog">
+    <h2 id="restart-title">Recommencer la conversation&nbsp;?</h2>
+    <p>Les messages de cette conversation seront effacés.</p>
+    <div class="sheet-actions">
+      <button class="sheet-btn" value="cancel">Annuler</button>
+      <button class="sheet-btn primary" value="confirm">Recommencer</button>
+    </div>
+  </form>
+</dialog>
 
-  let config = null;
-  let session = readSession();
-  let busy = false;
-  let lastId = 0; // highest message id shown (used to fetch replies typed by a human)
-  let pollTimer = null;
+<!-- Catalogue on phones -->
+<dialog class="sheet full" id="catalog-sheet" aria-label="Catalogue">
+  <div class="sheet-head">
+    <h2>Catalogue</h2>
+    <button class="round-btn" type="button" data-close aria-label="Fermer">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12"/><path d="M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="sheet-body" id="catalog-sheet-body"></div>
+</dialog>
 
-  function readSession() {
-    try { return JSON.parse(localStorage.getItem(STORE_KEY)) || null; } catch { return null; }
-  }
-  function writeSession(value) {
-    try { value ? localStorage.setItem(STORE_KEY, JSON.stringify(value)) : localStorage.removeItem(STORE_KEY); } catch {}
-  }
+<!-- One product: sizes, quantity, order -->
+<dialog class="sheet product" id="product-sheet" aria-labelledby="product-name">
+  <div class="product-view">
+    <button class="round-btn product-close" type="button" data-close aria-label="Fermer">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12"/><path d="M18 6L6 18"/></svg>
+    </button>
+    <div class="product-media" id="product-media"></div>
+    <div class="product-info">
+      <span class="product-cat" id="product-cat"></span>
+      <h2 id="product-name"></h2>
+      <p id="product-desc"></p>
+      <p class="product-notice" id="product-notice"></p>
+      <div class="options" id="product-options" role="radiogroup" aria-label="Taille"></div>
+      <div class="qty-row">
+        <span>Quantité</span>
+        <div class="qty">
+          <button type="button" id="qty-minus" aria-label="Moins">−</button>
+          <output id="qty-value">1</output>
+          <button type="button" id="qty-plus" aria-label="Plus">+</button>
+        </div>
+      </div>
+      <button class="order-btn" type="button" id="product-order">Commander · <span id="product-total"></span></button>
+    </div>
+  </div>
+</dialog>
 
-  async function api(url, { method = 'GET', body } = {}) {
-    const headers = {};
-    if (body) headers['Content-Type'] = 'application/json';
-    if (session?.token) headers['x-chat-token'] = session.token;
-    const res = await fetch(url, { method, headers, body: body ? JSON.stringify(body) : undefined });
-    let data = {};
-    try { data = await res.json(); } catch {}
-    if (!res.ok) { const err = new Error(data.error || 'Une erreur est survenue'); err.status = res.status; throw err; }
-    return data;
-  }
-
-  // Escape everything, then allow **bold** and links.
-  function format(text) {
-    const escaped = text.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-    return escaped
-      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-      .replace(/(https?:\/\/[^\s<]+[^\s<.,;:!?)\]])/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
-  }
-
-  function addMessage(role, text) {
-    const row = document.createElement('div');
-    row.className = `msg ${role}`;
-    const bubble = document.createElement('div');
-    bubble.className = 'bubble';
-    bubble.dir = 'auto';
-    bubble.innerHTML = format(text);
-    row.append(bubble);
-    $('messages').append(row);
-    scrollDown();
-    return row;
-  }
-
-  function showTyping() {
-    const row = document.createElement('div');
-    row.className = 'msg bot typing';
-    row.innerHTML = '<div class="bubble" aria-label="En train d\'écrire"><span></span><span></span><span></span></div>';
-    $('messages').append(row);
-    scrollDown();
-    return row;
-  }
-
-  const scrollDown = () => { const m = $('messages'); m.scrollTop = m.scrollHeight; };
-  const seen = (id) => { if (id && id > lastId) lastId = id; };
-
-  function showChat() {
-    $('intro').hidden = true;
-    $('messages').hidden = false;
-    $('composer').hidden = false;
-    $('newChat').hidden = false;
-    $('input').focus();
-    startPolling();
-  }
-
-  function showIntro() {
-    stopPolling();
-    $('intro').hidden = false;
-    $('messages').hidden = true;
-    $('composer').hidden = true;
-    $('newChat').hidden = true;
-    const required = config.askClientInfo === 'required';
-    $('introText').textContent = required
-      ? 'Dites-nous qui vous êtes avant de commencer.'
-      : 'Dites-nous qui vous êtes pour mieux vous aider (optionnel).';
-    $('nameInput').required = required;
-    $('contactInput').required = required;
-    $('nameInput').value = params.get('name') || '';
-    $('nameInput').focus();
-  }
-
-  function showUnavailable(text) {
-    stopPolling();
-    $('unavailableText').textContent = text;
-    $('unavailable').hidden = false;
-    ['intro', 'messages', 'composer', 'newChat'].forEach((id) => ($(id).hidden = true));
-  }
-
-  // A person from the business can answer from the dashboard: show their replies without reloading.
-  function startPolling() {
-    stopPolling();
-    pollTimer = setInterval(async () => {
-      if (!session || busy || document.visibilityState !== 'visible') return;
-      try {
-        const data = await api(`/api/chat/${session.id}?after=${lastId}`);
-        for (const m of data.messages) {
-          if (m.id <= lastId) continue;
-          if (m.role === 'assistant') addMessage('bot', m.content);
-          seen(m.id);
-        }
-      } catch (e) {
-        if (e.status === 404) stopPolling();
-      }
-    }, POLL_MS);
-  }
-  function stopPolling() {
-    clearInterval(pollTimer);
-    pollTimer = null;
-  }
-
-  async function startConversation(name = '', contact = '') {
-    const data = await api(`/api/chat/bot/${publicId}/start`, {
-      method: 'POST',
-      body: { name, contact, source: params.get('ref') || (document.referrer ? new URL(document.referrer).hostname : '') },
-    });
-    session = { id: data.id, token: data.token };
-    writeSession(session);
-    lastId = 0;
-    $('messages').replaceChildren();
-    addMessage('bot', config.welcomeMessage);
-    showChat();
-  }
-
-  async function init() {
-    if (!publicId) return showUnavailable('Ce lien de discussion est incomplet.');
-    try {
-      config = await api(`/api/chat/bot/${publicId}`);
-    } catch (e) {
-      return showUnavailable(e.status === 404
-        ? "Cette discussion n'est pas disponible pour le moment."
-        : "La discussion n'est pas disponible. Réessayez plus tard.");
-    }
-    document.documentElement.style.setProperty('--accent', config.accentColor);
-    document.title = `${config.botName} · ${config.businessName}`;
-    $('botName').textContent = config.botName;
-    $('bizName').textContent = config.businessName;
-    $('avatar').textContent = (config.botName || '?').trim().charAt(0).toUpperCase();
-    $('introTitle').textContent = `Bienvenue chez ${config.businessName} 👋`;
-    $('badge').hidden = !config.showBadge;
-
-    if (session) {
-      try {
-        const data = await api(`/api/chat/${session.id}`);
-        addMessage('bot', config.welcomeMessage);
-        for (const m of data.messages) {
-          addMessage(m.role === 'user' ? 'user' : 'bot', m.content);
-          seen(m.id);
-        }
-        showChat();
-        return;
-      } catch {
-        session = null;
-        writeSession(null);
-      }
-    }
-    if (config.askClientInfo === 'off') {
-      try { await startConversation(params.get('name') || ''); } catch (e) { addError(e.message); }
-    } else {
-      showIntro();
-    }
-  }
-
-  function addError(text) {
-    $('messages').hidden = false;
-    addMessage('error', text);
-  }
-
-  $('introForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    $('introError').textContent = '';
-    $('startBtn').disabled = true;
-    try {
-      await startConversation($('nameInput').value.trim(), $('contactInput').value.trim());
-    } catch (err) {
-      $('introError').textContent = err.message;
-    } finally {
-      $('startBtn').disabled = false;
-    }
-  });
-
-  const input = $('input');
-  function autosize() {
-    input.style.height = 'auto';
-    input.style.height = `${Math.min(input.scrollHeight, 140)}px`;
-    input.style.overflowY = input.scrollHeight > 140 ? 'auto' : 'hidden';
-    $('send').disabled = busy || !input.value.trim();
-  }
-  input.addEventListener('input', autosize);
-  input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) {
-      e.preventDefault();
-      $('composer').requestSubmit();
-    }
-  });
-
-  $('composer').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const text = input.value.trim();
-    if (!text || busy || !session) return;
-    busy = true;
-    input.value = '';
-    autosize();
-    addMessage('user', text);
-    const typing = showTyping();
-    try {
-      const data = await api(`/api/chat/${session.id}/message`, { method: 'POST', body: { content: text } });
-      typing.remove();
-      seen(data.messageId);
-      if (data.reply) addMessage('bot', data.reply);
-      seen(data.replyId);
-    } catch (err) {
-      typing.remove();
-      if (err.status === 404) {
-        writeSession(null);
-        session = null;
-        stopPolling();
-        addError('Cette discussion n\'est plus disponible. Appuyez sur « Nouvelle discussion » pour recommencer.');
-      } else {
-        addError(err.message);
-      }
-    } finally {
-      busy = false;
-      autosize();
-      input.focus();
-    }
-  });
-
-  $('newChat').addEventListener('click', async () => {
-    if (!confirm('Commencer une nouvelle discussion ?')) return;
-    const old = session;
-    if (old) api(`/api/chat/${old.id}/end`, { method: 'POST', body: {} }).catch(() => {});
-    session = null;
-    writeSession(null);
-    stopPolling();
-    $('messages').replaceChildren();
-    if (config.askClientInfo === 'off') {
-      try { await startConversation(); } catch (err) { addError(err.message); }
-    } else {
-      showIntro();
-    }
-  });
-
-  init();
-})();
-</script>
+<script src="/chat.js" defer></script>
 </body>
 </html>

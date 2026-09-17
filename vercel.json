@@ -1,28 +1,11 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
   "outputDirectory": "public",
+  "cleanUrls": true,
+  "regions": ["dub1"],
+  "rewrites": [{ "source": "/chat/:bot", "destination": "/chat" }],
   "functions": {
-    "api/index.js": { "maxDuration": 60 }
-  },
-  "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/index" },
-    { "source": "/en", "destination": "/en.html" },
-    { "source": "/ar", "destination": "/ar.html" },
-    { "source": "/ui", "destination": "/ui.html" },
-    { "source": "/login", "destination": "/auth.html" },
-    { "source": "/signup", "destination": "/auth.html" },
-    { "source": "/reset-password", "destination": "/auth.html" },
-    { "source": "/app", "destination": "/app.html" },
-    { "source": "/super", "destination": "/super.html" },
-    { "source": "/privacy", "destination": "/privacy.html" },
-    { "source": "/terms", "destination": "/terms.html" },
-    { "source": "/c/:publicId", "destination": "/chat.html" }
-  ],
-  "headers": [
-    { "source": "/(app|super|login|signup|reset-password)", "headers": [{ "key": "X-Frame-Options", "value": "DENY" }] }
-  ],
-  "crons": [
-    { "path": "/api/cron/summarize", "schedule": "0 7 * * *" }
-  ]
+    "api/chat.js": { "maxDuration": 60, "includeFiles": "{brain,data}/**" },
+    "api/admin.js": { "includeFiles": "data/**" }
+  }
 }

@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Shows the cakes as product cards",
+    "say": ["Chnowa famma gâteaux?"],
+    "expect": { "language": "derja", "card": "products" }
+  },
+  {
+    "name": "Shows the baklawa with its prices",
+    "say": ["9adech el baklawa?"],
+    "expect": { "card": "products", "mentionsAny": ["500 g", "1 kg", "38dt", "75dt"] }
+  },
+  {
+    "name": "Takes a cake order with the total from the catalogue",
+    "say": ["N7eb fraisier l 10 personnes", "Retrait, ghodwa 3al 16:00", "Ines Trabelsi 29 111 222"],
+    "expect": { "card": "Commande envoyée" }
+  },
+  {
+    "name": "Says kindly when a product doesn't exist",
+    "say": ["Famma croissants?"],
+    "expect": { "language": "derja", "avoid": ["croissant b"] }
+  }
+]

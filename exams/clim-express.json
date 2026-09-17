@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Gives the maintenance price, in Derja",
+    "say": ["9adech el entretien?"],
+    "expect": { "language": "derja", "mentions": ["45dt"] }
+  },
+  {
+    "name": "Answers a French client in French",
+    "say": ["Bonjour, combien coûte l'installation d'une clim 12000 BTU ?"],
+    "expect": { "language": "fr", "mentions": ["120dt"] }
+  },
+  {
+    "name": "Takes the client's details",
+    "say": ["El clim ma3adech tbarred", "Samsung, ma tbarred chay. Karim Ben Salah 20 000 101 Sakiet Ezzit"],
+    "expect": { "card": "Demande enregistrée" }
+  },
+  {
+    "name": "Doesn't invent a repair price",
+    "say": ["9adech tasli7 el compresseur?"],
+    "expect": { "language": "derja", "mentionsAny": ["diagnostic", "technicien"] }
+  }
+]

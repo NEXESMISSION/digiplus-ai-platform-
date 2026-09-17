@@ -1,20 +1,19 @@
 {
-  "name": "business-chatbot",
-  "version": "1.0.0",
+  "name": "digiplus-ai",
+  "version": "0.2.0",
   "private": true,
   "type": "commonjs",
-  "scripts": {
-    "dev": "node server.js",
-    "start": "node server.js"
-  },
-  "dependencies": {
-    "@supabase/supabase-js": "^2.116.0",
-    "@vercel/functions": "^3.9.7",
-    "dodopayments": "^2.50.0",
-    "dotenv": "^17.4.2",
-    "express": "^4.22.2"
-  },
   "engines": {
     "node": ">=20"
+  },
+  "scripts": {
+    "dev": "node tools/dev.js",
+    "sql": "node tools/run-sql.js",
+    "exam": "node tools/exam.js",
+    "catalog-images": "node tools/catalog-images.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.57.0",
+    "dotenv": "^17.2.0"
   }
 }

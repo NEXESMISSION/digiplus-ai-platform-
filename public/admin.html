@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Messages · DigiPlus AI</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="icon" href="/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/admin.css">
+</head>
+<body>
+
+<main class="login" id="login" hidden>
+  <form class="login-card" id="login-form" novalidate>
+    <img src="/logo.png" alt="" width="52" height="52">
+    <h1>Espace propriétaire</h1>
+    <p>Entrez votre e-mail, on vous envoie un lien pour vous connecter.</p>
+    <label class="field">
+      <span>E-mail</span>
+      <input id="login-email" type="email" inputmode="email" autocomplete="email" required>
+    </label>
+    <button class="primary" id="login-button" type="submit">Recevoir le lien</button>
+    <p class="login-note" id="login-note" role="status"></p>
+  </form>
+</main>
+
+<div class="app" id="app" hidden>
+  <section class="list-pane" aria-label="Conversations">
+    <header class="list-head">
+      <div class="title-row">
+        <h1>Messages</h1>
+        <button class="round" id="logout" type="button" aria-label="Se déconnecter" title="Se déconnecter">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4"/><path d="M9 16l-4-4 4-4"/><path d="M5 12h11"/></svg>
+        </button>
+      </div>
+      <label class="search">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
+        <input id="search" type="search" placeholder="Rechercher" aria-label="Rechercher un nom, un numéro ou un message" autocomplete="off">
+      </label>
+      <div class="chips" id="chips" role="tablist" aria-label="Assistants"></div>
+    </header>
+    <ul class="rows" id="rows"></ul>
+  </section>
+
+  <section class="thread-pane" id="thread-pane" aria-label="Conversation">
+    <div class="thread-empty" id="thread-empty">
+      <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.1A8 8 0 1 1 20 12z"/></svg>
+      <p>Choisissez une conversation</p>
+    </div>
+
+    <div class="thread" id="thread" hidden>
+      <header class="thread-head">
+        <button class="back" id="back" type="button">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+          <span>Messages</span>
+        </button>
+        <div class="who">
+          <span class="avatar" id="t-avatar" aria-hidden="true"></span>
+          <div class="who-text">
+            <h2 id="t-name"></h2>
+            <p id="t-sub"></p>
+          </div>
+        </div>
+        <a class="round call" id="t-call" aria-label="Appeler" title="Appeler" hidden>
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 3.5h2.6l1.6 4.2-2 1.3a11.5 11.5 0 0 0 6.2 6.2l1.3-2 4.2 1.6v2.6a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.6 5.7a2 2 0 0 1 2-2.2z"/></svg>
+        </a>
+        <button class="round" id="t-delete" type="button" aria-label="Supprimer la conversation" title="Supprimer">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12"/><path d="M9 7V4.5A1.5 1.5 0 0 1 10.5 3h3A1.5 1.5 0 0 1 15 4.5V7"/></svg>
+        </button>
+      </header>
+      <div class="thread-log" id="t-log" role="log"></div>
+      <footer class="thread-foot">L'assistant répond automatiquement à ce client.</footer>
+    </div>
+  </section>
+</div>
+
+<script src="/admin.js" defer></script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 // Runs a .sql file against the Supabase database, or a query given inline.
-//   node tools/run-sql.js supabase/migrate-plans.sql
-//   node tools/run-sql.js -q "select count(*) from public.accounts"
+//   node tools/run-sql.js supabase/schema.sql
+//   node tools/run-sql.js -q "select count(*) from public.conversations"
 //
 // Needs SUPABASE_PROJECT_REF and SUPABASE_ACCESS_TOKEN in .env (a Supabase
 // personal access token, from Account → Access Tokens). These are for admin work

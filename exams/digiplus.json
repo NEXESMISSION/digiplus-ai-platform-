@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Gives the three plans",
+    "say": ["9adech yji?"],
+    "expect": { "language": "derja", "mentions": ["39dt", "99dt", "199dt"] }
+  },
+  {
+    "name": "From a plan button, asks about the business",
+    "say": ["N7eb el formule Pro (99dt fel chhar)"],
+    "expect": { "language": "derja", "mentionsAny": ["khedmtek", "activité", "clients"] }
+  },
+  {
+    "name": "Explains for the business, then saves the details",
+    "say": ["N7eb el formule Starter (39dt fel chhar)", "3andi salon de coiffure fi Sfax, el clients yes2lou 3al prix w el rendez-vous", "Ey behi. Ines 29 111 222"],
+    "expect": { "card": "Demande enregistrée" }
+  },
+  {
+    "name": "Answers a French prospect in French",
+    "say": ["Bonjour, c'est quoi DigiPlus AI exactement ?"],
+    "expect": { "language": "fr" }
+  }
+]

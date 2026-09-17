@@ -1,0 +1,133 @@
+{
+  "currency": "dt",
+  "categories": [
+    { "id": "gateaux", "name": "Gâteaux" },
+    { "id": "tunisien", "name": "Pâtisserie tunisienne" },
+    { "id": "plateaux", "name": "Plateaux & fêtes" }
+  ],
+  "products": [
+    {
+      "id": "gateau-chocolat",
+      "category": "gateaux",
+      "name": "Gâteau au chocolat",
+      "description": "Génoise au chocolat, ganache fondante et copeaux de chocolat noir.",
+      "options": [
+        { "label": "6 personnes", "price": 45 },
+        { "label": "10 personnes", "price": 70 },
+        { "label": "15 personnes", "price": 100 }
+      ],
+      "tags": ["chocolat", "anniversaire"],
+      "notice": "À commander 24h à l'avance"
+    },
+    {
+      "id": "fraisier",
+      "category": "gateaux",
+      "name": "Fraisier",
+      "description": "Génoise légère, crème mousseline vanille et fraises fraîches.",
+      "options": [
+        { "label": "6 personnes", "price": 50 },
+        { "label": "10 personnes", "price": 80 }
+      ],
+      "tags": ["fraise", "fruits", "anniversaire"],
+      "notice": "À commander 24h à l'avance"
+    },
+    {
+      "id": "red-velvet",
+      "category": "gateaux",
+      "name": "Red velvet",
+      "description": "Biscuit rouge moelleux et crème au fromage frais.",
+      "options": [
+        { "label": "6 personnes", "price": 55 },
+        { "label": "10 personnes", "price": 85 }
+      ],
+      "tags": ["anniversaire", "fromage"],
+      "notice": "À commander 24h à l'avance"
+    },
+    {
+      "id": "tiramisu",
+      "category": "gateaux",
+      "name": "Tiramisu",
+      "description": "Biscuits au café, crème mascarpone et cacao.",
+      "options": [
+        { "label": "6 personnes", "price": 42 },
+        { "label": "10 personnes", "price": 68 }
+      ],
+      "tags": ["cafe", "mascarpone"],
+      "notice": "À commander 24h à l'avance"
+    },
+    {
+      "id": "baklawa",
+      "category": "tunisien",
+      "name": "Baklawa aux amandes",
+      "description": "Feuilles fines, amandes et sirop au miel, faite maison.",
+      "options": [
+        { "label": "500 g", "price": 38 },
+        { "label": "1 kg", "price": 75 }
+      ],
+      "tags": ["amandes", "miel", "fete"],
+      "notice": "Disponible tous les jours"
+    },
+    {
+      "id": "makroud",
+      "category": "tunisien",
+      "name": "Makroud aux dattes",
+      "description": "Semoule dorée fourrée aux dattes, trempée dans le miel.",
+      "options": [
+        { "label": "500 g", "price": 14 },
+        { "label": "1 kg", "price": 26 }
+      ],
+      "tags": ["dattes", "miel"],
+      "notice": "Disponible tous les jours"
+    },
+    {
+      "id": "kaak-warka",
+      "category": "tunisien",
+      "name": "Kaak warka",
+      "description": "Anneaux de pâte fine fourrés à la pâte d'amande et à l'eau de rose.",
+      "options": [
+        { "label": "500 g", "price": 30 },
+        { "label": "1 kg", "price": 58 }
+      ],
+      "tags": ["amandes", "fete", "mariage"],
+      "notice": "Disponible tous les jours"
+    },
+    {
+      "id": "samsa",
+      "category": "tunisien",
+      "name": "Samsa aux amandes",
+      "description": "Triangles croustillants aux amandes et graines de sésame.",
+      "options": [
+        { "label": "500 g", "price": 22 },
+        { "label": "1 kg", "price": 42 }
+      ],
+      "tags": ["amandes", "sesame"],
+      "notice": "Disponible tous les jours"
+    },
+    {
+      "id": "plateau-mixte",
+      "category": "plateaux",
+      "name": "Plateau mixte tunisien",
+      "description": "Baklawa, kaak warka, samsa et makroud, présentés sur plateau.",
+      "options": [
+        { "label": "1 kg", "price": 55 },
+        { "label": "2 kg", "price": 105 }
+      ],
+      "tags": ["fete", "mariage", "invites"],
+      "notice": "À commander 24h à l'avance"
+    },
+    {
+      "id": "mignardises",
+      "category": "plateaux",
+      "name": "Mignardises",
+      "description": "Mini tartelettes, éclairs et choux, variés.",
+      "options": [
+        { "label": "30 pièces", "price": 48 },
+        { "label": "60 pièces", "price": 90 }
+      ],
+      "tags": ["fete", "anniversaire", "invites"],
+      "notice": "À commander 24h à l'avance"
+    }
+  ],
+  "delivery": { "fee": 7, "area": "Sfax ville" },
+  "hours": { "open": "08:00", "close": "20:00", "label": "Tous les jours · 8:00 – 20:00" }
+}

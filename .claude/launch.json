@@ -4,7 +4,7 @@
     {
       "name": "chatbot",
       "runtimeExecutable": "node",
-      "runtimeArgs": ["server.js"],
+      "runtimeArgs": ["tools/dev.js"],
       "port": 3000
     }
   ]

@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Gives the family séance price and shows free times",
+    "say": ["N7eb shooting famille"],
+    "expect": { "language": "derja", "mentions": ["180dt"], "card": "slots" }
+  },
+  {
+    "name": "Books a séance",
+    "say": ["N7eb shooting portrait", "Ay wa9t famma samedi?", "El wa9t el loul", "Amira Jlassi 50 000 202"],
+    "expect": { "card": "Demande envoyée" }
+  },
+  {
+    "name": "Says no to weddings without inventing a price",
+    "say": ["ta3mlou mariage?"],
+    "expect": { "language": "derja", "mentionsAny": ["mariage"] }
+  },
+  {
+    "name": "Answers a French client in French",
+    "say": ["Bonjour, vous faites les photos de grossesse ? C'est combien ?"],
+    "expect": { "language": "fr", "mentions": ["200dt"] }
+  }
+]
