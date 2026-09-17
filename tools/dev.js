@@ -12,6 +12,7 @@ process.env.DIGIPLUS_DEV_ADMIN ??= '1';
 
 const chat = require('../api/chat');
 const admin = require('../api/admin');
+const track = require('../api/track');
 
 const PUBLIC = path.join(ROOT, 'public');
 const PORT = Number(process.env.PORT) || 3000;
@@ -48,6 +49,7 @@ http
     const { pathname } = new URL(req.url, 'http://localhost');
     if (pathname === '/api/chat') return chat(req, res);
     if (pathname === '/api/admin') return admin(req, res);
+    if (pathname === '/api/track') return track(req, res);
     const file = fileFor(pathname);
     if (!file) {
       res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });

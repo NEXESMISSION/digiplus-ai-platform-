@@ -1,10 +1,11 @@
 // The owner inbox (/admin).
 //   POST {action: 'login', email}          → email a sign-in link (admins only)
 //   POST {action: 'refresh', refreshToken} → a new access token
-//   GET  ?action=me | inbox | conversation&id=<uuid>   (signed in)
+//   GET  ?action=me | inbox | conversation&id=<uuid> | analytics&days=7   (signed in)
 //   POST {action: 'seen' | 'delete', id}                (signed in)
 const auth = require('../lib/auth');
 const inbox = require('../lib/inbox');
+const analytics = require('../lib/analytics');
 const bots = require('../lib/bots');
 const { HttpError, json, readBody, UUID } = require('../lib/http');
 
@@ -60,6 +61,10 @@ module.exports = async (req, res) => {
       if (action === 'conversation') {
         const data = await inbox.get(idOrThrow(url.searchParams.get('id')));
         return data ? json(res, 200, data) : json(res, 404, { error: 'not_found' });
+      }
+      if (action === 'analytics') {
+        const days = Math.min(90, Math.max(1, Number(url.searchParams.get('days')) || 7));
+        return json(res, 200, await analytics.summary(days));
       }
     }
     if (req.method === 'POST' && body.action === 'seen') {

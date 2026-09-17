@@ -28,6 +28,9 @@
 
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+  // What people do here, counted without any text (see track.js).
+  const track = (name) => window.digiTrack?.(name);
+
   function el(tag, className, text) {
     const node = document.createElement(tag);
     if (className) node.className = className;
@@ -158,6 +161,7 @@
   }
 
   function summaryCard(card) {
+    track('request');
     const box = el('button', 'card summary');
     box.type = 'button';
     box.setAttribute('aria-haspopup', 'dialog');
@@ -374,7 +378,10 @@
     const cta = el('span', 'shop-cta');
     cta.append(el('span', null, 'Voir'), icon('chevron'));
     button.append(thumbs, text, cta);
-    button.addEventListener('click', openCatalog);
+    button.addEventListener('click', () => {
+      track('catalog');
+      openCatalog();
+    });
     bar.replaceChildren(button);
   }
 
@@ -428,6 +435,7 @@
     const { product, option, quantity } = chosen;
     productSheet.close();
     if (catalogSheet.open) catalogSheet.close();
+    track('order');
     // Written like a client would in Derja, so the assistant answers in Derja. Shown as a product card.
     submit(`N7eb: ${product.name} · ${option.label}${quantity > 1 ? ` × ${quantity}` : ''}`);
   });
@@ -518,6 +526,7 @@
     if (!text || !bot) return;
     clearChoices();
     clearNotice();
+    track('message');
     dayChip(null, { follow: true });
     bubble('client', text, { follow: true });
     pending.push(text);

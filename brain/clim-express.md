@@ -19,7 +19,8 @@ A demo business, used to show DigiPlus AI to prospects. Edit this file to change
   Includes the support and 3 meters of tuyau; each extra meter 25dt.
 - Réparation: the price depends on the problem. The technician gives it after the diagnostic. Never guess it.
 - Garantie: 6 mois on installation and réparation.
-- We don't sell climatiseurs.
+- We don't sell climatiseurs. If they want to buy one: say it plainly, and say we install the one they buy
+  (@installation). Never add @unknown after an answer you know.
 Anything else (a brand, a part, a delay): don't guess. Say the technician confirms by phone → @unknown
 
 ## When the technician comes
@@ -100,6 +101,8 @@ French: C'est noté 👌
 @outside-area · they are outside Sfax and the area around it
 Derja: Na5dmou fi Sfax w el jiha mte3ha 🙏
        Ab3athli noumrou mte3ek w technicien y2akkedlek ken ynajjem yji
+French: Nous travaillons à Sfax et dans sa région 🙏
+        Envoyez-moi votre numéro et le technicien vous dira s'il peut se déplacer.
 
 @unknown · something that isn't written here
 Derja: Hedhi ma na3refhech bedhabt 🙏

@@ -81,3 +81,24 @@ revoke all on public.admin_inbox from anon, authenticated;
 -- Orders from a catalogue (e.g. the pastry shop demo).
 alter table public.requests drop constraint if exists requests_kind_check;
 alter table public.requests add constraint requests_kind_check check (kind in ('details', 'booking', 'order'));
+
+-- ---------------------------------------------------------------------------
+-- What people do on the site: one row per page opened, no personal data.
+-- The id comes from the page, so the same view can be updated when it closes.
+create table if not exists public.page_views (
+  id uuid primary key,
+  visitor text not null,
+  session text not null,
+  page text not null,
+  bot text,
+  source text,
+  device text,
+  seconds integer not null default 0,
+  events text[] not null default '{}',
+  ip_hash text,
+  created_at timestamptz not null default now()
+);
+create index if not exists page_views_created_idx on public.page_views (created_at desc);
+create index if not exists page_views_session_idx on public.page_views (session);
+alter table public.page_views enable row level security;
+revoke all on public.page_views from anon, authenticated;

@@ -33,6 +33,9 @@
     <header class="list-head">
       <div class="title-row">
         <h1>Messages</h1>
+        <button class="round" id="stats-open" type="button" aria-label="Visites" title="Visites">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19h16"/><path d="M7 19V11"/><path d="M12 19V5"/><path d="M17 19v-6"/></svg>
+        </button>
         <button class="round" id="logout" type="button" aria-label="Se déconnecter" title="Se déconnecter">
           <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4"/><path d="M9 16l-4-4 4-4"/><path d="M5 12h11"/></svg>
         </button>
@@ -76,6 +79,21 @@
       <footer class="thread-foot">L'assistant répond automatiquement à ce client.</footer>
     </div>
   </section>
+  <!-- What people do on the site -->
+  <section class="stats" id="stats" hidden aria-label="Visites">
+    <header class="stats-head">
+      <button class="round" id="stats-close" type="button" aria-label="Retour">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+      </button>
+      <h2>Visites</h2>
+      <div class="range" id="stats-range" role="group" aria-label="Période">
+        <button type="button" data-days="7" class="on">7 jours</button>
+        <button type="button" data-days="30">30 jours</button>
+      </div>
+    </header>
+    <div class="stats-body" id="stats-body"></div>
+  </section>
+
 </div>
 
 <script src="/admin.js" defer></script>

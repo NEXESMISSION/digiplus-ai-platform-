@@ -506,5 +506,140 @@
     startPolling();
   }
 
+  // ---------- visits: what people do on the site ----------
+
+  const statsNode = $('stats');
+  const statsBody = $('stats-body');
+  let statsDays = 7;
+
+  const minutes = (seconds) => (seconds >= 60 ? `${Math.floor(seconds / 60)} min ${seconds % 60}s` : `${seconds}s`);
+  const pageName = (page) =>
+    page === '/' ? "Accueil" : page.startsWith('/chat/') ? `Chat · ${page.split('/')[2]}` : page === '/privacy' ? 'Confidentialité' : page;
+
+  function statCard(value, label) {
+    const card = el('div', 'card-stat');
+    card.append(el('b', null, String(value)), el('span', null, label));
+    return card;
+  }
+
+  function funnelStep(label, count, total) {
+    const share = total ? Math.round((count / total) * 100) : 0;
+    const step = el('div', 'step');
+    step.append(el('b', null, label), el('span', null, `${count} · ${share}%`));
+    const bar = el('div', 'bar');
+    const fill = el('i');
+    fill.style.width = `${share}%`;
+    bar.append(fill);
+    step.append(bar);
+    return step;
+  }
+
+  function renderStats(data) {
+    const body = statsBody;
+    body.replaceChildren();
+    if (!data.views) {
+      body.append(el('p', 'stats-empty', "Personne n'est encore passé sur ces jours."));
+      return;
+    }
+
+    const cards = el('div', 'cards');
+    cards.append(
+      statCard(data.sessions, 'visites'),
+      statCard(data.visitors, 'personnes'),
+      statCard(data.views, 'pages ouvertes'),
+      statCard(data.funnel.request, 'demandes laissées')
+    );
+    body.append(cards);
+
+    const funnel = el('div', 'panel');
+    funnel.append(el('h3', null, 'Le chemin'));
+    const steps = el('div', 'funnel');
+    const total = data.funnel.visits || 1;
+    steps.append(
+      funnelStep('Sont venus', data.funnel.visits, total),
+      funnelStep('Ont ouvert un chat', data.funnel.chat, total),
+      funnelStep('Ont écrit un message', data.funnel.message, total),
+      funnelStep('Ont laissé une demande', data.funnel.request, total)
+    );
+    funnel.append(steps);
+    body.append(funnel);
+
+    const pages = el('div', 'panel');
+    pages.append(el('h3', null, 'Les pages'));
+    const table = el('table', 'table');
+    const head = el('tr');
+    for (const label of ['Page', 'Ouvertures', 'Temps moyen', "Sont partis d'ici"]) head.append(el('th', null, label));
+    table.append(el('thead').appendChild(head).parentNode);
+    const tbody = el('tbody');
+    for (const row of data.pages) {
+      const tr = el('tr');
+      tr.append(
+        el('td', 'page-name', pageName(row.page)),
+        el('td', null, String(row.views)),
+        el('td', null, row.seconds ? minutes(row.seconds) : '—'),
+        el('td', null, String(row.exits))
+      );
+      tbody.append(tr);
+    }
+    table.append(tbody);
+    pages.append(table);
+    body.append(pages);
+
+    const days = el('div', 'panel');
+    days.append(el('h3', null, 'Par jour'));
+    const chart = el('div', 'days');
+    const top = Math.max(...data.perDay.map((d) => d.count), 1);
+    for (const day of data.perDay) {
+      const column = el('div');
+      const bar = el('i');
+      bar.style.height = `${Math.round((day.count / top) * 90)}px`;
+      bar.title = `${day.count} pages`;
+      column.append(bar, el('small', null, day.day.slice(5)));
+      chart.append(column);
+    }
+    days.append(chart);
+    body.append(days);
+
+    const where = el('div', 'panel');
+    where.append(el('h3', null, "D'où ils viennent"));
+    const tags = el('div', 'tags');
+    for (const source of data.sources) {
+      const tag = el('span', 'tag');
+      tag.append(el('b', null, String(source.count)), el('span', null, source.name === 'direct' ? 'direct' : source.name));
+      tags.append(tag);
+    }
+    for (const device of data.devices) {
+      const tag = el('span', 'tag');
+      tag.append(el('b', null, String(device.count)), el('span', null, device.name === 'phone' ? 'téléphone' : 'ordinateur'));
+      tags.append(tag);
+    }
+    where.append(tags);
+    body.append(where);
+  }
+
+  async function loadStats() {
+    statsBody.replaceChildren(el('p', 'stats-empty', 'Un instant…'));
+    try {
+      renderStats(await api('GET', { query: `?action=analytics&days=${statsDays}` }));
+    } catch {
+      statsBody.replaceChildren(el('p', 'stats-empty', 'Impossible de charger les visites.'));
+    }
+  }
+
+  $('stats-open').addEventListener('click', () => {
+    statsNode.hidden = false;
+    loadStats();
+  });
+  $('stats-close').addEventListener('click', () => {
+    statsNode.hidden = true;
+  });
+  $('stats-range').addEventListener('click', (event) => {
+    const button = event.target.closest('button[data-days]');
+    if (!button) return;
+    statsDays = Number(button.dataset.days);
+    for (const other of $('stats-range').querySelectorAll('button')) other.classList.toggle('on', other === button);
+    loadStats();
+  });
+
   start();
 })();
