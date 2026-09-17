@@ -2,434 +2,748 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Assistant IA qui répond à vos clients 24/7 | DigiPlus AI</title>
-<meta name="description" content="Un assistant qui répond à vos clients en derja sur WhatsApp, Messenger et Instagram, puis vous envoie le nom, le besoin et le téléphone de chaque personne intéressée. 7 jours gratuits, sans carte.">
-<link rel="canonical" href="https://digiplus.lol/">
-<link rel="alternate" hreflang="fr" href="https://digiplus.lol/">
-<link rel="alternate" hreflang="en" href="https://digiplus.lol/en">
-<link rel="alternate" hreflang="ar" href="https://digiplus.lol/ar">
-<link rel="alternate" hreflang="x-default" href="https://digiplus.lol/">
-<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
-<meta name="theme-color" content="#ECEAE3">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="DigiPlus AI">
-<meta property="og:locale" content="fr_FR">
-<meta property="og:locale:alternate" content="en_US">
-<meta property="og:url" content="https://digiplus.lol/">
-<meta property="og:title" content="Il répond, il note tout, il vend.">
-<meta property="og:description" content="Vous décrivez votre business une fois. L'assistant répond ensuite à vos clients en derja et vous envoie leur nom, leur besoin et leur téléphone.">
-<meta property="og:image" content="https://digiplus.lol/og.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Il répond, il note tout, il vend.">
-<meta name="twitter:description" content="Un assistant qui répond à vos clients en derja et vous envoie des contacts appelables.">
-<meta name="twitter:image" content="https://digiplus.lol/og.png">
-<link rel="icon" type="image/png" href="/logo.png">
-<link rel="apple-touch-icon" href="/logo.png">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>DigiPlus AI · Vos clients écrivent, l'assistant répond</title>
+<meta name="description" content="Un lien de chat pour votre activité. L'assistant répond à vos clients à toute heure, prend leurs coordonnées, leurs rendez-vous et leurs commandes. Essayez les démos.">
+<meta property="og:title" content="DigiPlus AI · Vos clients écrivent, l'assistant répond">
+<meta property="og:description" content="Un lien de chat qui répond à vos clients à toute heure. Essayez les démos, dès 39 DT par mois.">
+<meta property="og:image" content="https://digiplus.lol/img/hero.webp">
+<meta name="theme-color" content="#F8F6F3">
+<link rel="icon" href="/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..900&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/site.css">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="/img/hero.webp" fetchpriority="high">
+<style>
+  :root {
+    --bg: #F8F6F3;
+    --surface: #FFFFFF;
+    --ink: #1C1917;
+    --ink-2: #44403C;
+    --muted: #78716C;
+    --line: #E9E4DE;
+    --orange: #C2410C;
+    --orange-hover: #A8380A;
+    --orange-soft: #FDEEE4;
+    --dark: #1C1917;
+    --green: #15803D;
+    --green-soft: #E6F4EA;
+    --blue: #0A84FF;
+    --clim: #00769C;
+    --clim-soft: #E6F7FE;
+    --photo: #A24B36;
+    --photo-soft: #FFEFEB;
+    --cake: #9D3E5C;
+    --radius: 28px;
+    --shadow: 0 24px 60px -20px rgba(28, 25, 23, 0.28), 0 4px 14px -6px rgba(28, 25, 23, 0.12);
+    --display: "Bricolage Grotesque", "Figtree", system-ui, sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Figtree", "Segoe UI", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  img { display: block; max-width: 100%; }
+  a { color: inherit; }
+  :focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
+  .wrap { width: 100%; max-width: 1180px; margin: 0 auto; padding: 0 20px; }
+  @media (min-width: 768px) { .wrap { padding: 0 32px; } }
+
+  h1, h2, h3 { font-family: var(--display); font-weight: 800; letter-spacing: -0.035em; margin: 0; }
+  h2 { font-size: clamp(32px, 4.6vw, 50px); line-height: 1.02; }
+  .section { padding: 0 0 88px; scroll-margin-top: 80px; }
+  @media (min-width: 960px) { .section { padding-bottom: 128px; } }
+  .section-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 10px 24px; margin-bottom: 32px; }
+  .section-head p { margin: 0; color: var(--muted); font-size: 16px; }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; padding: 0 26px;
+    border-radius: 999px; font-size: 16px; font-weight: 700; text-decoration: none; white-space: nowrap;
+    transition: background-color 0.15s ease, transform 0.15s ease, border-color 0.15s ease;
+  }
+  .btn:active { transform: scale(0.98); }
+  .btn svg { flex: none; transition: transform 0.15s ease; }
+  .btn:hover svg { transform: translateX(3px); }
+  .btn-orange { background: var(--orange); color: #FFFFFF; }
+  .btn-orange:hover { background: var(--orange-hover); }
+  .btn-outline { border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); }
+  .btn-outline:hover { border-color: var(--ink); }
+  .btn-dark { background: var(--dark); color: #FFFFFF; }
+  .btn-dark:hover { background: #33302D; }
+  .btn-white { background: #FFFFFF; color: var(--ink); }
+  .btn-white:hover { background: #F4F1ED; }
+
+  /* ---------- header ---------- */
+  .site-head {
+    position: sticky; top: 0; z-index: 20;
+    background: rgba(248, 246, 243, 0.86);
+    -webkit-backdrop-filter: saturate(160%) blur(14px);
+    backdrop-filter: saturate(160%) blur(14px);
+  }
+  .site-head .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 72px; }
+  .brand { display: flex; align-items: center; gap: 10px; min-height: 44px; font-family: var(--display); font-size: 19px; font-weight: 800; letter-spacing: -0.02em; text-decoration: none; white-space: nowrap; }
+  .brand img { width: 32px; height: 32px; border-radius: 9px; }
+  .nav { display: flex; align-items: center; gap: 6px; }
+  .nav-link { display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 999px; color: var(--ink-2); font-size: 15px; font-weight: 600; text-decoration: none; }
+  .nav-link:hover { background: rgba(28, 25, 23, 0.05); }
+  .nav .btn { min-height: 44px; padding: 0 20px; font-size: 15px; }
+  @media (max-width: 560px) { .nav .btn { display: none; } }
+
+  /* ---------- hero ---------- */
+  .hero { position: relative; padding: 24px 0 88px; }
+  @media (min-width: 960px) { .hero { padding: 48px 0 128px; } }
+  /* A soft warm glow behind the headline */
+  .hero::before {
+    content: ""; position: absolute; z-index: -1; top: -120px; right: -140px; width: 520px; height: 520px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(251, 146, 60, 0.22) 0%, rgba(251, 146, 60, 0) 70%); pointer-events: none;
+  }
+  .hero::after {
+    content: ""; position: absolute; z-index: -1; top: 260px; left: -200px; width: 460px; height: 460px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(34, 160, 96, 0.1) 0%, rgba(34, 160, 96, 0) 70%); pointer-events: none;
+  }
+  main { position: relative; z-index: 0; overflow-x: clip; }
+
+  /* Phones: a client message pops up next to "écrivent.", the assistant's answer next to "répond." */
+  .hero-title { position: relative; }
+  .side-chat { display: none; }
+  .hero-title.with-chat .side-chat { display: block; }
+  .side-bubble {
+    position: absolute; left: 0; top: 0; z-index: 1; display: inline-flex; align-items: center; min-height: 32px; padding: 6px 11px;
+    border-radius: 16px; font-family: "Figtree", system-ui, sans-serif; font-size: 12.5px; font-weight: 600; line-height: 1.25;
+    letter-spacing: 0; white-space: nowrap; color: #FFFFFF; box-shadow: 0 12px 26px -14px rgba(28, 25, 23, 0.55);
+    opacity: 0; transform: translate(-8px, -50%) scale(0.94); transform-origin: left center;
+    transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+  }
+  .side-bubble.client { background: var(--ink); border-bottom-left-radius: 5px; }
+  .side-bubble.bot { background: var(--orange); border-bottom-left-radius: 5px; }
+  .side-bubble.show { opacity: 1; transform: translate(0, -50%) scale(1); }
+  .side-dots { display: inline-flex; gap: 4px; padding: 0 2px; }
+  .side-dots i { width: 6px; height: 6px; border-radius: 50%; background: #FFFFFF; animation: side-blink 1.1s infinite ease-in-out both; }
+  .side-dots i:nth-child(2) { animation-delay: 0.15s; }
+  .side-dots i:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes side-blink { 0%, 80%, 100% { opacity: 0.35; } 40% { opacity: 1; } }
+  .hero-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 48px; align-items: center; }
+  @media (min-width: 960px) { .hero-grid { grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: 40px; } }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px; margin: 0 0 22px; padding: 7px 14px;
+    border-radius: 999px; background: var(--green-soft); color: var(--green); font-size: 14px; font-weight: 700;
+  }
+  .eyebrow::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #22A060; box-shadow: 0 0 0 4px rgba(34, 160, 96, 0.18); }
+  .hero h1 { font-size: clamp(46px, 8.4vw, 92px); line-height: 0.96; letter-spacing: -0.045em; }
+  .hero h1 .accent { display: block; color: var(--orange); }
+  .hero-lead { margin: 26px 0 0; max-width: 520px; color: var(--ink-2); font-size: clamp(17px, 2vw, 20px); line-height: 1.55; }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+  .fine { margin: 16px 0 0; color: var(--muted); font-size: 14px; }
+  @media (max-width: 480px) { .hero-actions .btn { flex: 1 1 100%; } }
+
+  /* The photo keeps its own shape (2:3); the chat card sits over the counter, below her phone. */
+  .hero-visual { position: relative; padding-bottom: 150px; }
+  @media (min-width: 560px) { .hero-visual { max-width: 460px; margin: 0 auto; padding-bottom: 90px; } }
+  @media (min-width: 960px) { .hero-visual { max-width: none; margin: 0; padding: 0 0 88px 72px; } }
+  .hero-photo { width: 100%; height: auto; aspect-ratio: 2 / 3; object-fit: cover; border-radius: var(--radius); background: #E9E2D8; }
+
+  .chat-card { position: absolute; left: 14px; right: 14px; bottom: 0; background: var(--surface); border: 1px solid rgba(233, 228, 222, 0.9); border-radius: 22px; box-shadow: var(--shadow); }
+  @media (min-width: 560px) { .chat-card { left: -28px; right: auto; width: 320px; } }
+  @media (min-width: 960px) { .chat-card { left: 0; bottom: 0; width: 320px; } }
+  .chat-head { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-bottom: 1px solid var(--line); }
+  .chat-avatar { width: 36px; height: 36px; flex: none; border-radius: 50%; display: grid; place-items: center; background: var(--orange); color: #FFFFFF; }
+  .chat-name { display: block; font-size: 15px; font-weight: 700; line-height: 1.2; }
+  .chat-status { display: flex; align-items: center; gap: 5px; font-size: 12.5px; color: var(--green); font-weight: 600; }
+  .chat-status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: #22A060; }
+  .chat-body { display: flex; flex-direction: column; gap: 7px; padding: 14px; }
+  .bubble { max-width: 84%; padding: 8px 12px; font-size: 14px; line-height: 1.4; border-radius: 16px; }
+  .bubble.client { align-self: flex-end; background: var(--orange); color: #FFFFFF; border-bottom-right-radius: 5px; }
+  .bubble.bot { align-self: flex-start; background: #F4F2EF; border-bottom-left-radius: 5px; }
+  .saved { align-self: flex-start; display: flex; align-items: center; gap: 9px; margin-top: 2px; padding: 8px 12px 8px 8px; border-radius: 14px; background: var(--green-soft); }
+  .saved i { width: 26px; height: 26px; flex: none; border-radius: 50%; display: grid; place-items: center; background: #22A060; color: #FFFFFF; }
+  .saved b { display: block; color: var(--green); font-size: 13.5px; }
+  .saved small { display: block; color: #3F6B4F; font-size: 12px; }
+
+  /* ---------- demos ---------- */
+  /* Phones and tablets: photo cards you swipe, the next one peeking in. Desktop: three side by side. */
+  .demos {
+    display: flex; gap: 14px; margin: 0 -20px; padding: 6px 20px 24px;
+    overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 20px; scrollbar-width: none;
+  }
+  .demos::-webkit-scrollbar { display: none; }
+  @media (min-width: 768px) { .demos { margin: 0 -32px; padding: 6px 32px 24px; scroll-padding: 0 32px; } }
+  .demo {
+    flex: 0 0 78%; max-width: 330px; scroll-snap-align: start;
+    display: flex; flex-direction: column; overflow: hidden; text-decoration: none; color: var(--ink);
+    background: var(--surface); border: 1px solid var(--line); border-radius: 26px;
+    box-shadow: 0 18px 40px -30px rgba(28, 25, 23, 0.5);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+  .demo:hover { box-shadow: 0 26px 50px -30px rgba(28, 25, 23, 0.55); transform: translateY(-3px); }
+  .demo:active { transform: scale(0.985); }
+  .demo-media { position: relative; display: block; }
+  .demo-thumb { display: block; width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: cover; background: #E9E2D8; }
+  .demo-kind {
+    position: absolute; left: 12px; top: 12px; padding: 6px 11px; border-radius: 999px;
+    background: rgba(255, 255, 255, 0.94); color: var(--c); font-size: 12.5px; font-weight: 700;
+    box-shadow: 0 6px 16px -8px rgba(28, 25, 23, 0.35);
+  }
+  .demo-text { flex: 1; display: flex; flex-direction: column; gap: 6px; padding: 16px 16px 16px 18px; }
+  .demo h3 { font-size: 22px; letter-spacing: -0.02em; line-height: 1.15; }
+  .demo p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.45; }
+  .demo-cta { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: auto; padding-top: 12px; color: var(--c); font-size: 15px; font-weight: 700; }
+  .demo-arrow { width: 40px; height: 40px; flex: none; display: grid; place-items: center; border-radius: 50%; background: var(--c); color: #FFFFFF; transition: transform 0.15s ease; }
+  .demo:hover .demo-arrow { transform: translateX(3px); }
+  @media (min-width: 1024px) {
+    .demos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; margin: 0; padding: 4px 0 0; overflow: visible; }
+    .demo { max-width: none; }
+  }
+
+  /* ---------- how it works: three steps, each with its own picture ---------- */
+  .story { display: flex; flex-direction: column; gap: 56px; }
+  @media (min-width: 900px) { .story { gap: 88px; } }
+  .story-row { display: grid; grid-template-columns: minmax(0, 1fr); gap: 26px; align-items: center; }
+  @media (min-width: 900px) {
+    .story-row { grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr); gap: 64px; }
+    .story-row.flip { grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr); }
+    .story-row.flip .story-media { order: 2; }
+  }
+  .story-media { width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; border-radius: var(--radius); background: #E9E2D8; }
+  .story-n { display: block; font-family: var(--display); font-size: 44px; font-weight: 800; line-height: 1; letter-spacing: -0.04em; color: var(--orange); }
+  .story-text h3 { margin-top: 12px; font-size: clamp(26px, 3.2vw, 34px); line-height: 1.08; }
+  .story-text p { margin: 12px 0 0; max-width: 460px; color: var(--ink-2); font-size: 17px; line-height: 1.6; }
+  /* step 01: one small picture for each place the link goes */
+  .methods-block { display: flex; flex-direction: column; gap: 28px; }
+  .methods { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; }
+  @media (max-width: 1023px) {
+    .methods { display: flex; gap: 14px; margin: 0 -20px; padding: 4px 20px 14px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+    .methods::-webkit-scrollbar { display: none; }
+    .method { flex: 0 0 224px; scroll-snap-align: start; }
+  }
+  @media (min-width: 768px) and (max-width: 1023px) { .methods { margin: 0 -32px; padding: 4px 32px 14px; } }
+  .method { display: flex; flex-direction: column; gap: 4px; }
+  .method > b { margin-top: 10px; font-size: 16px; }
+  .method > span { color: var(--muted); font-size: 14px; line-height: 1.4; }
+  .method-visual {
+    position: relative; height: 236px; overflow: hidden; display: flex; align-items: center; justify-content: center;
+    border: 1px solid var(--line); border-radius: 22px; font-family: "Figtree", system-ui, sans-serif; color: var(--ink);
+  }
+
+  .v-bio { background: linear-gradient(160deg, #FDF1E8 0%, #F6E3D6 100%); }
+  .ig { width: 178px; display: flex; flex-direction: column; gap: 5px; padding: 12px; border-radius: 16px; background: #FFFFFF; box-shadow: 0 14px 30px -18px rgba(28, 25, 23, 0.45); font-size: 10.5px; line-height: 1.3; }
+  .ig-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 3px; }
+  .ig-av { width: 40px; height: 40px; border-radius: 50%; padding: 2px; background: conic-gradient(#F59E0B, #EF4444, #D946EF, #F59E0B); }
+  .ig-av::after { content: ""; display: block; width: 100%; height: 100%; border: 2px solid #FFFFFF; border-radius: 50%; background: url("/img/hero.webp") 50% 25% / cover; }
+  .ig-stat { display: flex; flex-direction: column; align-items: center; }
+  .ig-stat b { font-size: 11.5px; }
+  .ig-stat i { color: var(--muted); font-size: 8.5px; font-style: normal; }
+  .ig-name { font-size: 11.5px; }
+  .ig-line { color: var(--ink-2); }
+  .ig-link { display: flex; align-items: center; gap: 4px; margin: 1px -5px; padding: 4px 5px; border-radius: 7px; background: #FFF4EA; box-shadow: inset 0 0 0 1.5px var(--orange); color: #1D4ED8; font-weight: 700; }
+  .ig-btns { display: flex; gap: 5px; margin-top: 3px; }
+  .ig-btns i { flex: 1; padding: 5px 0; border-radius: 7px; background: #EFEFEF; font-style: normal; font-weight: 700; text-align: center; }
+
+  .v-story { background: #EDE6DF; }
+  .story-frame { position: relative; width: 122px; height: 208px; overflow: hidden; border-radius: 16px; box-shadow: 0 16px 34px -18px rgba(28, 25, 23, 0.6); }
+  .story-frame img { width: 100%; height: 100%; object-fit: cover; object-position: 55% 30%; }
+  .story-frame::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, 0) 70%, rgba(0, 0, 0, 0.25) 100%); }
+  .story-bar { position: absolute; z-index: 1; top: 7px; left: 7px; right: 7px; height: 2.5px; border-radius: 2px; background: rgba(255, 255, 255, 0.45); }
+  .story-bar::after { content: ""; display: block; width: 62%; height: 100%; border-radius: 2px; background: #FFFFFF; }
+  .story-user { position: absolute; z-index: 1; top: 15px; left: 7px; display: flex; align-items: center; gap: 4px; color: #FFFFFF; font-size: 8.5px; font-weight: 700; }
+  .story-user i { width: 14px; height: 14px; border: 1.5px solid #FFFFFF; border-radius: 50%; background: url("/img/hero.webp") 50% 25% / cover; }
+  .story-sticker {
+    position: absolute; z-index: 1; left: 50%; bottom: 40px; transform: translateX(-50%) rotate(-4deg);
+    display: flex; align-items: center; gap: 4px; padding: 6px 9px; border-radius: 9px; background: #FFFFFF;
+    color: var(--orange); font-size: 10.5px; font-weight: 800; white-space: nowrap; box-shadow: 0 8px 18px -8px rgba(0, 0, 0, 0.5);
+  }
+
+  .v-msg { background-color: #EFEAE2; background-image: radial-gradient(rgba(28, 25, 23, 0.07) 1px, transparent 1px); background-size: 12px 12px; }
+  .wa-bubble { width: 180px; display: flex; flex-direction: column; gap: 5px; padding: 5px 5px 4px; border-radius: 12px 12px 3px 12px; background: #D9FDD3; box-shadow: 0 1px 1px rgba(0, 0, 0, 0.12); font-size: 11px; line-height: 1.35; }
+  .wa-preview { display: flex; gap: 6px; padding: 5px; border-radius: 8px; background: rgba(0, 0, 0, 0.05); }
+  .wa-thumb { width: 36px; height: 36px; flex: none; border-radius: 6px; background: url("/img/hero.webp") 50% 25% / cover; }
+  .wa-text { min-width: 0; display: flex; flex-direction: column; justify-content: center; }
+  .wa-text b { font-size: 10.5px; }
+  .wa-text i { color: #667781; font-size: 9px; font-style: normal; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .wa-msg { padding: 0 3px; }
+  .wa-time { align-self: flex-end; display: flex; align-items: center; gap: 2px; padding-right: 2px; color: #667781; font-size: 9px; }
+
+  .v-map { background: #EAF0E4; }
+  .map-park { position: absolute; left: -20px; top: 18px; width: 120px; height: 80px; border-radius: 40%; background: #D5E8C8; }
+  .map-road { position: absolute; background: #FFFFFF; border-radius: 4px; }
+  .map-road.r1 { left: -10%; right: -10%; top: 96px; height: 10px; transform: rotate(-8deg); }
+  .map-road.r2 { top: -10%; bottom: -10%; left: 62%; width: 9px; transform: rotate(12deg); }
+  .map-road.r3 { left: 20%; right: -10%; top: 40px; height: 6px; transform: rotate(22deg); background: #F6E7B0; }
+  .map-pin { position: absolute; left: 50%; top: 58px; width: 26px; height: 26px; margin-left: -13px; border-radius: 50% 50% 50% 0; background: #EA4335; transform: rotate(-45deg); box-shadow: 0 6px 10px -4px rgba(0, 0, 0, 0.4); }
+  .map-pin::after { content: ""; position: absolute; left: 8px; top: 8px; width: 10px; height: 10px; border-radius: 50%; background: #FFFFFF; }
+  .map-card { position: absolute; left: 12px; right: 12px; bottom: 12px; display: flex; flex-direction: column; gap: 3px; padding: 10px; border-radius: 14px; background: #FFFFFF; box-shadow: 0 10px 24px -14px rgba(28, 25, 23, 0.5); font-size: 10.5px; }
+  .map-card b { font-size: 12px; }
+  .map-rating { color: #B45309; font-size: 9.5px; }
+  .map-btns { display: flex; gap: 5px; margin-top: 4px; }
+  .map-btns i { flex: 1; padding: 5px 0; border: 1px solid #DADCE0; border-radius: 999px; color: #1A73E8; font-style: normal; font-weight: 700; text-align: center; }
+  .map-btns i.on { border-color: var(--orange); background: #FFF4EA; color: var(--orange); box-shadow: inset 0 0 0 1px var(--orange); }
+
+  .v-qr { background: linear-gradient(180deg, #F3EDE6 0%, #F3EDE6 70%, #D9C2A5 70%, #CFB595 100%); }
+  .qr-stand { position: relative; display: flex; flex-direction: column; align-items: center; margin-top: 10px; }
+  .qr-card { display: flex; flex-direction: column; align-items: center; gap: 7px; width: 118px; padding: 12px 12px 10px; border-radius: 10px; background: #FFFFFF; box-shadow: 0 14px 26px -16px rgba(28, 25, 23, 0.55); }
+  .qr { width: 92px; height: 92px; }
+  .qr-card span { color: var(--ink); font-size: 9.5px; font-weight: 800; letter-spacing: 0.01em; text-align: center; }
+  .qr-base { width: 104px; height: 16px; margin-top: -6px; border-radius: 4px; background: linear-gradient(180deg, #B98E5E, #9C7447); }
+  .mini-chat { display: flex; flex-direction: column; gap: 7px; max-width: 340px; margin-top: 18px; }
+  .mini-chat .bubble.client { align-self: flex-start; background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 16px 16px 16px 5px; }
+  .mini-chat .bubble.bot { align-self: flex-end; background: var(--clim); color: #FFFFFF; border-radius: 16px 16px 5px 16px; }
+  .mini-chat time { align-self: flex-start; color: var(--muted); font-size: 12px; font-weight: 600; }
+
+  .inbox-panel { display: flex; align-items: center; justify-content: center; padding: 24px 16px; background: linear-gradient(140deg, #F2E6DA 0%, #FBF1E8 60%, #F6EEE6 100%); }
+  @media (min-width: 900px) { .inbox-panel { padding: 32px; } }
+  .inbox { width: 100%; max-width: 420px; padding: 18px 0 6px; background: var(--surface); border-radius: 24px; box-shadow: var(--shadow); }
+  .inbox-title { display: flex; align-items: center; justify-content: space-between; padding: 0 18px 10px; }
+  .inbox-title b { font-family: var(--display); font-size: 26px; letter-spacing: -0.03em; }
+  .inbox-title span { color: var(--muted); font-size: 13px; font-weight: 600; }
+  .inbox-row { position: relative; display: flex; align-items: center; gap: 12px; padding: 0 16px 0 28px; }
+  .inbox-row .dot { position: absolute; left: 11px; top: 50%; width: 9px; height: 9px; margin-top: -4.5px; border-radius: 50%; background: var(--blue); }
+  .inbox-row .av { width: 44px; height: 44px; flex: none; border-radius: 50%; display: grid; place-items: center; font-size: 15px; font-weight: 700; }
+  .inbox-row .main { flex: 1; min-width: 0; padding: 11px 0; border-bottom: 1px solid #F0ECE7; }
+  .inbox-row:last-child .main { border-bottom: 0; }
+  .inbox-row .top { display: flex; justify-content: space-between; gap: 8px; }
+  .inbox-row .top b { font-size: 15px; }
+  .inbox-row .top span { color: var(--muted); font-size: 12.5px; }
+  .inbox-row .msg { display: block; color: var(--ink-2); font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .inbox-row .tag { display: inline-block; margin-top: 4px; padding: 2px 8px; border-radius: 999px; background: #E8F1FF; color: #0A5BD7; font-size: 11.5px; font-weight: 700; }
+
+  /* ---------- pricing ---------- */
+  .plans { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  @media (min-width: 900px) { .plans { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; align-items: stretch; } }
+  .plan { display: flex; flex-direction: column; padding: 28px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+  .plan-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .plan h3 { font-size: 24px; letter-spacing: -0.02em; }
+  .badge { padding: 5px 11px; border-radius: 999px; background: var(--orange); color: #FFFFFF; font-size: 12.5px; font-weight: 700; }
+  .plan .for { margin: 4px 0 0; color: var(--muted); font-size: 15px; }
+  .price { display: flex; align-items: baseline; gap: 8px; margin: 26px 0 22px; }
+  .price b { font-family: var(--display); font-size: 60px; font-weight: 800; line-height: 0.9; letter-spacing: -0.05em; }
+  .price span { color: var(--muted); font-size: 15px; font-weight: 600; }
+  .plan ul { list-style: none; margin: 0 0 26px; padding: 18px 0 0; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 11px; font-size: 15.5px; color: var(--ink-2); }
+  .plan li { display: flex; align-items: center; gap: 10px; }
+  .plan li svg { flex: none; color: var(--orange); }
+  .plan .btn { margin-top: auto; width: 100%; }
+  .plan.featured { background: var(--dark); border-color: var(--dark); color: #FFFFFF; }
+  .plan.featured .for, .plan.featured .price span { color: #A8A29E; }
+  .plan.featured ul { border-color: rgba(255, 255, 255, 0.12); color: #E7E5E4; }
+  .plan.featured li svg { color: #FB923C; }
+  @media (max-width: 899px) { .plan.featured { order: -1; } }
+  .pricing-note { margin: 22px auto 0; max-width: 720px; color: var(--muted); font-size: 14px; line-height: 1.6; text-align: center; }
+
+  /* ---------- call to action ---------- */
+  .cta {
+    display: flex; flex-direction: column; align-items: flex-start; gap: 22px; padding: 40px 28px;
+    border-radius: var(--radius); background: var(--orange); color: #FFFFFF;
+  }
+  @media (min-width: 768px) { .cta { flex-direction: row; align-items: center; justify-content: space-between; padding: 56px; } }
+  .cta h2 { font-size: clamp(30px, 4.4vw, 46px); }
+  .cta p { margin: 10px 0 0; color: rgba(255, 255, 255, 0.88); font-size: 17px; }
+
+  .site-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; padding-top: 8px; padding-bottom: 40px; color: var(--muted); font-size: 14px; }
+  .site-foot a { display: inline-flex; align-items: center; min-height: 44px; color: var(--muted); }
+</style>
 </head>
 <body>
-<div class="shell" id="top">
 
-  <header class="top">
-    <div class="bar">
-      <a class="brand" href="/"><img src="/logo.png" alt="" width="26" height="26"><b>DigiPlus AI</b></a>
-      <nav class="nav" id="nav">
-        <a href="#produit">Produit</a>
-        <a href="#pourqui">Pour qui</a>
-        <a href="#methode">Méthode</a>
-        <a href="#tarifs">Tarifs</a>
-        <a href="#questions">Questions</a>
-      </nav>
-      <div class="head-right">
-        <div class="lang">
-          <span class="on">FR</span>
-          <a href="/ar" hreflang="ar" lang="ar" title="العربية">ع</a>
-          <a href="/en" hreflang="en" lang="en" title="English">EN</a>
-        </div>
-        <a class="head-cta" href="/signup">Essai 7 jours</a>
-        <button class="burger" id="burger" type="button" aria-label="Menu"><i></i><i></i></button>
-      </div>
-    </div>
-  </header>
-
-  <section class="hero">
-    <div class="hero-copy">
-      <p class="kicker"><b>Assistant IA</b>&nbsp;· pour les métiers de service</p>
-      <h1>Il répond à 22h.<br>Il donne le prix.<br>Il vous ramène <span class="hl">le client.</span></h1>
-      <p class="lead">Il répond en derja sur WhatsApp, Messenger et Instagram — et vous envoie chaque client avec son besoin et son numéro.</p>
-      <div class="hero-cta">
-        <a class="btn flame" href="/signup">Commencer — 7 jours gratuits</a>
-        <a class="btn" href="#methode">Voir comment ça marche</a>
-      </div>
-      <p class="hero-note">Sans carte bancaire. Prêt en 5 minutes.</p>
-      <div class="trades">
-        <span class="trade"><img src="/img/t-salon.png" alt="" width="30" height="30">Salons</span>
-        <span class="trade"><img src="/img/t-dentist.png" alt="" width="30" height="30">Dentistes</span>
-        <span class="trade"><img src="/img/t-garage.png" alt="" width="30" height="30">Garages</span>
-        <span class="trade"><img src="/img/t-photo.png" alt="" width="30" height="30">Photographes</span>
-        <span class="trade"><img src="/img/t-gym.png" alt="" width="30" height="30">Coachs</span>
-        <span class="trade"><img src="/img/t-realestate.png" alt="" width="30" height="30">Immobilier</span>
-        <span class="trade more">et tous les autres</span>
-      </div>
-    </div>
-
-    <div class="hero-show">
-      <div class="demo" aria-hidden="true">
-        <div class="demo-head">
-          <span class="ava">S</span>
-          <span><span class="who">Sarra Ben Amira</span><br><span class="sub">WhatsApp · 22:14</span></span>
-          <span class="live"><i></i><span>Répond 24h/24</span></span>
-        </div>
-        <div class="demo-body">
-        <span class="bub them">Aslema, 3andkom coloration ?</span>
-        <span class="bub us">Aslema 😊 El coloration tebda men 70dt</span>
-        <span class="bub them">W 9adech to9ood ?</span>
-        <span class="bub us">To9ood ta9riban 4 w 6 semaines. N7ejzlek blasa ghodwa ?</span>
-          <span class="typing"><i></i><i></i><i></i></span>
-        </div>
-      </div>
-      <div class="won" aria-hidden="true">
-        <div class="top"><span class="tick">✓</span>Cliente prête à réserver<span class="score">82% de chance</span></div>
-        <dl>
-          <div><dt>Cliente</dt><dd>Sarra Ben Amira</dd></div>
-          <div><dt>Besoin</dt><dd>Coloration</dd></div>
-          <div><dt>Créneau proposé</dt><dd>Samedi 10h</dd></div>
-          <div><dt>Téléphone</dt><dd>24 991 208</dd></div>
-        </dl>
-      </div>
-    </div>
-  </section>
-
-  <div class="marquee">
-    <div class="track">
-      <span>Derja tunisienne<span class="flame">◆</span>WhatsApp<span class="flame">◆</span>Instagram<span class="flame">◆</span>Messenger<span class="flame">◆</span>Résumés automatiques<span class="flame">◆</span>Paiement en dinars<span class="flame">◆</span>Prêt en 5 minutes<span class="flame">◆</span></span>
-      <span>Derja tunisienne<span class="flame">◆</span>WhatsApp<span class="flame">◆</span>Instagram<span class="flame">◆</span>Messenger<span class="flame">◆</span>Résumés automatiques<span class="flame">◆</span>Paiement en dinars<span class="flame">◆</span>Prêt en 5 minutes<span class="flame">◆</span></span>
-    </div>
+<header class="site-head">
+  <div class="wrap">
+    <a class="brand" href="/"><img src="/logo.png" alt="" width="32" height="32">DigiPlus AI</a>
+    <nav class="nav" aria-label="Menu">
+      <a class="nav-link" href="#tarifs">Tarifs</a>
+      <a class="btn btn-dark" href="/chat/digiplus">Parler à DigiPlus</a>
+    </nav>
   </div>
+</header>
 
-  <section class="facts" data-reveal>
-    <div><span class="mono">Langues</span><p class="big">4</p><p class="note">Derja, français, arabe, anglais</p></div>
-    <div><span class="mono">Canaux</span><p class="big">4</p><p class="note">Site, WhatsApp, Messenger, Instagram</p></div>
-    <div><span class="mono">Disponible</span><p class="big">24/7</p><p class="note">Même à 2h du matin</p></div>
-    <div><span class="mono">Essai</span><p class="big">7 j</p><p class="note">Sans carte bancaire</p></div>
-  </section>
-
-  <section id="produit" data-reveal>
-    <div class="sec-head">
+<main>
+  <section class="hero">
+    <div class="wrap hero-grid">
       <div>
-        <span class="mono flame">01 — Produit</span>
-        <h2 style="margin-top:18px">Ce que fait<br>un bon vendeur.<br>Sans le salaire.</h2>
+        <p class="eyebrow">Répond à toute heure</p>
+        <div class="hero-title">
+          <h1>Vos clients <span id="w-client">écrivent.</span> <span class="accent">L'assistant <span id="w-bot">répond.</span></span></h1>
+          <div class="side-chat" aria-hidden="true">
+            <span class="side-bubble client" id="side-client"></span>
+            <span class="side-bubble bot" id="side-bot"></span>
+          </div>
+        </div>
+        <p class="hero-lead">Un lien de chat pour votre activité. Il répond aux questions, prend les coordonnées et les demandes de rendez-vous.</p>
+        <div class="hero-actions">
+          <a class="btn btn-orange" href="#demos">Essayer la démo
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="btn btn-outline" href="#tarifs">Voir les tarifs</a>
+        </div>
+        <p class="fine">Essayez les démos, sans inscription</p>
       </div>
-      <p class="say">Pour les boutiques, salons, cliniques et agences — tout business qui reçoit des messages toute la journée et perd des ventes la nuit.</p>
-    </div>
-    <div class="cells">
-      <div class="cell">
-        <span class="num">01</span>
-        <h3>Vos services, vos prix</h3>
-        <p>Ajoutez vos offres une fois. Il répond uniquement avec ce que vous avez écrit — jamais un prix inventé.</p>
-        <p class="out">Résultat : zéro erreur de prix</p>
-      </div>
-      <div class="cell">
-        <span class="num">02</span>
-        <h3>Derja, français, anglais</h3>
-        <p>Il change de langue au milieu de la conversation, selon la façon dont le client écrit.</p>
-        <p class="out">Résultat : le client se sent chez lui</p>
-      </div>
-      <div class="cell">
-        <span class="num">03</span>
-        <h3>Vous recevez un contact complet</h3>
-        <p>Besoin, budget, ville, nom, téléphone. Vous récupérez une fiche prête à appeler, pas une discussion à relire.</p>
-        <p class="out">Résultat : des contacts appelables</p>
-      </div>
-      <div class="cell">
-        <span class="num">04</span>
-        <h3>Un résumé par discussion</h3>
-        <p>Objections, chance de vente, prochaine étape, et un message de relance prêt à envoyer.</p>
-        <p class="out">Résultat : vous savez qui rappeler</p>
-      </div>
-      <div class="cell">
-        <span class="num">05</span>
-        <h3>Tous vos canaux</h3>
-        <p>WhatsApp, Messenger, Instagram et une bulle de chat sur votre site. Connexion en quelques clics.</p>
-        <p class="out">Résultat : une seule boîte de réception</p>
-      </div>
-      <div class="cell">
-        <span class="num">06</span>
-        <h3>Plusieurs business</h3>
-        <p>Un assistant par business ou par branche, chacun avec ses informations, son lien et ses conversations.</p>
-        <p class="out">Résultat : chaque branche séparée</p>
-      </div>
-    </div>
-  </section>
 
-  <section id="pourqui" data-reveal>
-    <div class="sec-head">
-      <h2>Ce qu'il répond,<br>métier par métier.</h2>
-      <span class="mono">02 — Pour qui</span>
-    </div>
-    <div class="thirds">
-      <div class="who-card">
-        <span class="tag">Salons · Coiffure · Esthétique</span>
-        <h3>Le prix, la durée, et une place libre.</h3>
-        <p>Les questions arrivent pendant que vous avez les mains prises. L'assistant répond et propose un créneau.</p>
-        <div class="who-chat">
-          <span class="them">9adech el coloration ?</span>
-          <span class="us">Tebda men 70dt. N7ejzlek blasa ghodwa ?</span>
-        </div>
-      </div>
-      <div class="who-card">
-        <span class="tag">Boutiques · E-commerce</span>
-        <h3>Disponible, livrable, payable.</h3>
-        <p>Taille, stock, livraison, paiement : les quatre questions qui reviennent toute la journée.</p>
-        <div class="who-chat">
-          <span class="them">3andkom livraison l Sfax ?</span>
-          <span class="us">Ey, nwasslou l Sfax b 7dt 👌</span>
-        </div>
-      </div>
-      <div class="who-card" style="border-inline-end:0">
-        <span class="tag">Cliniques · Cabinets</span>
-        <h3>Le motif et le téléphone, avant l'appel.</h3>
-        <p>Vous ouvrez votre téléphone et la fiche est déjà écrite : qui appelle, pourquoi, et quand.</p>
-        <div class="who-chat">
-          <span class="them">N7eb rendez-vous</span>
-          <span class="us">Behi, chnowa el motif ? W ab3athli numéro mte3ek</span>
+      <div class="hero-visual">
+        <img class="hero-photo" src="/img/hero.webp" width="880" height="1320" alt="Une pâtissière sourit en lisant une commande sur son téléphone, derrière son comptoir" fetchpriority="high">
+        <div class="chat-card" aria-label="Exemple : un client commande un gâteau par le chat de la pâtisserie">
+          <div class="chat-head">
+            <span class="chat-avatar" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="M5 20v-6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v6"/><path d="M5 16c1.5 1 3 1 4.5 0s3-1 4.5 0 3 1 4.5 0"/><path d="M12 12V8"/><path d="M12 5.5c.8-.8.8-1.7 0-2.5-.8.8-.8 1.7 0 2.5z"/></svg></span>
+            <span><span class="chat-name">Pâtisserie Nour</span><span class="chat-status">En ligne</span></span>
+          </div>
+          <div class="chat-body">
+            <div class="bubble client">Famma gâteau l 10 personnes el youm?</div>
+            <div class="bubble bot">Ey famma 😊 Chocolat wala fraise?</div>
+            <div class="bubble client">Chocolat, net3adda 3al 18h</div>
+            <div class="saved">
+              <i><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i>
+              <span><b>Commande enregistrée</b><small>Nom, téléphone, heure</small></span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="methode" data-reveal>
-    <div class="sec-head">
-      <h2>Trois étapes.<br>Aucune compétence technique.</h2>
-      <span class="mono">03 — Méthode</span>
-    </div>
-    <div class="thirds">
-      <div class="step">
-        <span class="big-n">1</span>
-        <h3>Créez l'assistant</h3>
-        <p>Lancez les 7 jours gratuits, donnez-lui un nom, décrivez le business en quelques lignes.</p>
-        <div class="box"><span class="k">Nom</span><p class="v">Amira — Salon Dar Zina</p></div>
+  <section class="section" id="demos">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Essayez comme un client</h2>
+        <p>Trois démos. Écrivez en derja ou en français.</p>
       </div>
-      <div class="step">
-        <span class="big-n">2</span>
-        <h3>Apprenez-lui vos offres</h3>
-        <p>Ajoutez services et prix, puis discutez avec lui comme un client jusqu'à ce que les réponses soient justes.</p>
-        <div class="box" style="display:flex;flex-direction:column;gap:8px">
-          <span style="align-self:flex-start;background:var(--paper-2);padding:8px 12px;font-size:13.5px">9adech el coloration ?</span>
-          <span style="align-self:flex-end;background:var(--ink);color:var(--paper);padding:8px 12px;font-size:13.5px">Tebda men 70dt.</span>
+      <div class="demos">
+        <a class="demo" href="/chat/clim-express" style="--c: var(--clim)">
+          <span class="demo-media">
+            <img class="demo-thumb" src="/img/clim.webp" width="760" height="760" alt="Un technicien installe une climatisation dans un salon" loading="lazy">
+            <span class="demo-kind">Entreprise de services</span>
+          </span>
+          <span class="demo-text">
+            <h3>Clim Express</h3>
+            <p>Donne les prix et prend les coordonnées du client.</p>
+            <span class="demo-cta">Essayer la démo <span class="demo-arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span></span>
+          </span>
+        </a>
+
+        <a class="demo" href="/chat/yasmine-photo" style="--c: var(--photo)">
+          <span class="demo-media">
+            <img class="demo-thumb" src="/img/photo.webp" width="760" height="760" alt="Une photographe prend en photo une famille dans son studio" loading="lazy">
+            <span class="demo-kind">Freelance</span>
+          </span>
+          <span class="demo-text">
+            <h3>Yasmine Photographe</h3>
+            <p>Présente les séances et propose les créneaux libres.</p>
+            <span class="demo-cta">Essayer la démo <span class="demo-arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span></span>
+          </span>
+        </a>
+
+        <a class="demo" href="/chat/patisserie-nour" style="--c: var(--cake)">
+          <span class="demo-media">
+            <img class="demo-thumb" src="/img/catalog/fraisier.webp" width="760" height="760" alt="Un fraisier aux fraises fraîches" loading="lazy">
+            <span class="demo-kind">Boutique avec catalogue</span>
+          </span>
+          <span class="demo-text">
+            <h3>Pâtisserie Nour</h3>
+            <p>Montre les gâteaux avec photos et prix, et prend la commande.</p>
+            <span class="demo-cta">Essayer la démo <span class="demo-arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span></span>
+          </span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="comment">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Comment ça marche</h2>
+        <p>On prépare votre assistant avec vos services, vos prix et vos horaires. Ensuite :</p>
+      </div>
+
+      <div class="story">
+        <article class="methods-block">
+          <div class="story-text">
+            <span class="story-n">01</span>
+            <h3>Vous partagez votre lien</h3>
+            <p>Mettez-le là où vos clients vous trouvent déjà. Ils l'ouvrent et écrivent, sans rien installer.</p>
+          </div>
+
+          <ul class="methods" aria-label="Où mettre le lien">
+            <li class="method">
+              <div class="method-visual v-bio" aria-hidden="true">
+                <div class="ig">
+                  <div class="ig-top">
+                    <span class="ig-av"></span>
+                    <span class="ig-stat"><b>248</b><i>publications</i></span>
+                    <span class="ig-stat"><b>3,1 k</b><i>abonnés</i></span>
+                  </div>
+                  <b class="ig-name">Pâtisserie Nour</b>
+                  <span class="ig-line">Gâteaux sur commande · Sfax</span>
+                  <span class="ig-link"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>digiplus.lol/chat/nour</span>
+                  <span class="ig-btns"><i>Suivre</i><i>Message</i></span>
+                </div>
+              </div>
+              <b>Bio Instagram ou Facebook</b>
+              <span>Le lien sous le nom de votre page.</span>
+            </li>
+
+            <li class="method">
+              <div class="method-visual v-story" aria-hidden="true">
+                <div class="story-frame">
+                  <img src="/img/hero.webp" alt="" width="880" height="1320" loading="lazy">
+                  <span class="story-bar"></span>
+                  <span class="story-user"><i></i>patisserie.nour</span>
+                  <span class="story-sticker"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>Commandez ici</span>
+                </div>
+              </div>
+              <b>Story</b>
+              <span>Un sticker « lien » sur vos stories.</span>
+            </li>
+
+            <li class="method">
+              <div class="method-visual v-msg" aria-hidden="true">
+                <div class="wa-bubble">
+                  <span class="wa-preview">
+                    <span class="wa-thumb"></span>
+                    <span class="wa-text"><b>Pâtisserie Nour</b><i>digiplus.lol/chat/nour</i></span>
+                  </span>
+                  <span class="wa-msg">Pour commander, écrivez-nous ici 👇</span>
+                  <span class="wa-time">10:24 <svg width="14" height="10" viewBox="0 0 16 11" fill="none" stroke="#53BDEB" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6l3 3 6-7"/><path d="M6 9l1 1 6-8"/></svg></span>
+                </div>
+              </div>
+              <b>WhatsApp</b>
+              <span>En statut ou en réponse à un client.</span>
+            </li>
+
+            <li class="method">
+              <div class="method-visual v-map" aria-hidden="true">
+                <span class="map-park"></span>
+                <span class="map-road r1"></span>
+                <span class="map-road r2"></span>
+                <span class="map-road r3"></span>
+                <span class="map-pin"></span>
+                <div class="map-card">
+                  <b>Pâtisserie Nour</b>
+                  <span class="map-rating">4,8 ★★★★★ · Pâtisserie</span>
+                  <span class="map-btns"><i>Itinéraire</i><i class="on">Site web</i></span>
+                </div>
+              </div>
+              <b>Google Maps</b>
+              <span>Dans « Site web » de votre fiche.</span>
+            </li>
+
+            <li class="method">
+              <div class="method-visual v-qr" aria-hidden="true">
+                <div class="qr-stand">
+                  <div class="qr-card">
+                    <svg class="qr" viewBox="0 0 29 29" shape-rendering="crispEdges"><path stroke="#1C1917" d="M0 0.5h7m4 0h5m1 0h4m1 0h7M0 1.5h1m5 0h1m3 0h1m2 0h4m1 0h1m1 0h1m1 0h1m5 0h1M0 2.5h1m1 0h3m1 0h1m1 0h1m4 0h1m1 0h1m2 0h2m2 0h1m1 0h3m1 0h1M0 3.5h1m1 0h3m1 0h1m1 0h1m1 0h3m1 0h2m1 0h1m4 0h1m1 0h3m1 0h1M0 4.5h1m1 0h3m1 0h1m1 0h1m1 0h1m4 0h2m1 0h3m1 0h1m1 0h3m1 0h1M0 5.5h1m5 0h1m1 0h2m8 0h1m1 0h1m1 0h1m5 0h1M0 6.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M8 7.5h2m1 0h1m2 0h1m1 0h1m2 0h2M0 8.5h1m1 0h5m3 0h3m4 0h1m1 0h1m2 0h5M1 9.5h2m1 0h2m1 0h2m1 0h6m3 0h1m2 0h3m3 0h1M3 10.5h2m1 0h1m1 0h4m1 0h4m4 0h1m1 0h2M2 11.5h4m1 0h1m1 0h1m2 0h2m4 0h1m1 0h2m3 0h1m1 0h1M0 12.5h1m4 0h2m2 0h2m3 0h6m5 0h2M1 13.5h2m1 0h2m5 0h2m3 0h9m3 0h1M2 14.5h2m2 0h2m1 0h1m1 0h1m3 0h3m2 0h1m1 0h2m1 0h2M1 15.5h2m1 0h2m1 0h1m1 0h2m1 0h1m1 0h3m2 0h3m1 0h2m2 0h1M0 16.5h2m1 0h1m1 0h2m5 0h1m2 0h3m1 0h1m5 0h2M0 17.5h5m2 0h1m1 0h1m1 0h4m1 0h1m1 0h3m1 0h3m1 0h1m1 0h1M0 18.5h1m3 0h5m1 0h1m2 0h3m7 0h2m1 0h1M0 19.5h1m1 0h1m1 0h1m2 0h1m4 0h2m1 0h2m1 0h1m1 0h1m6 0h1M0 20.5h1m1 0h1m2 0h2m1 0h5m1 0h1m2 0h1m1 0h6m1 0h3M8 21.5h1m2 0h2m3 0h3m1 0h1m3 0h5M0 22.5h7m8 0h1m2 0h3m1 0h1m1 0h3M0 23.5h1m5 0h1m1 0h1m3 0h1m1 0h2m3 0h2m3 0h1m2 0h2M0 24.5h1m1 0h3m1 0h1m1 0h1m6 0h3m2 0h5m1 0h2M0 25.5h1m1 0h3m1 0h1m1 0h1m2 0h1m1 0h2m1 0h1m1 0h1m1 0h1m4 0h4M0 26.5h1m1 0h3m1 0h1m1 0h4m3 0h3m1 0h2m1 0h6M0 27.5h1m5 0h1m6 0h1m1 0h1m4 0h2m2 0h2m1 0h1M0 28.5h7m1 0h2m1 0h2m1 0h1m2 0h1m4 0h3m1 0h1"/></svg>
+                    <span>Scannez pour écrire</span>
+                  </div>
+                  <span class="qr-base"></span>
+                </div>
+              </div>
+              <b>QR code au comptoir</b>
+              <span>Vos clients scannent et écrivent.</span>
+            </li>
+          </ul>
+        </article>
+
+        <article class="story-row flip">
+          <img class="story-media" src="/img/night.webp" width="1600" height="1067" alt="Un client écrit sur son téléphone, tard le soir chez lui" loading="lazy">
+          <div class="story-text">
+            <span class="story-n">02</span>
+            <h3>Vos clients écrivent, même à minuit</h3>
+            <p>L'assistant répond tout de suite, en derja ou en français, avec vos vrais prix.</p>
+            <div class="mini-chat" aria-hidden="true">
+              <time>23:47</time>
+              <div class="bubble client">9adech el entretien?</div>
+              <div class="bubble bot">Entretien complet b 45dt lel clim 😊</div>
+            </div>
+          </div>
+        </article>
+
+        <article class="story-row">
+          <div class="story-media inbox-panel">
+            <div class="inbox" aria-label="Exemple de boîte de réception du propriétaire">
+              <div class="inbox-title"><b>Messages</b><span>2 nouveaux</span></div>
+              <div class="inbox-row">
+                <span class="dot" aria-hidden="true"></span>
+                <span class="av" style="background: var(--clim-soft); color: #005776">KB</span>
+                <span class="main">
+                  <span class="top"><b>Karim Ben Salah</b><span>08:12</span></span>
+                  <span class="msg">Clim Samsung, ne refroidit plus · Sakiet Ezzit</span>
+                  <span class="tag">Coordonnées</span>
+                </span>
+              </div>
+              <div class="inbox-row">
+                <span class="dot" aria-hidden="true"></span>
+                <span class="av" style="background: var(--clim-soft); color: #005776">WG</span>
+                <span class="main">
+                  <span class="top"><b>Walid Gharbi</b><span>07:55</span></span>
+                  <span class="msg">Installation clim 12000 BTU · Route de Tunis</span>
+                  <span class="tag">Coordonnées</span>
+                </span>
+              </div>
+              <div class="inbox-row">
+                <span class="av" style="background: var(--clim-soft); color: #005776">ST</span>
+                <span class="main">
+                  <span class="top"><b>Sonia Trabelsi</b><span>Hier</span></span>
+                  <span class="msg">Entretien de 2 clims · El Ain</span>
+                  <span class="tag">Coordonnées</span>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="story-text">
+            <span class="story-n">03</span>
+            <h3>Vous recevez chaque demande</h3>
+            <p>Le nom, le téléphone, le rendez-vous demandé et toute la conversation arrivent dans vos messages. Vous rappelez le client quand vous voulez.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="tarifs">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Tarifs</h2>
+        <p>En dinars · paiement D17 ou virement</p>
+      </div>
+      <div class="plans">
+        <article class="plan">
+          <div class="plan-top"><h3>Starter</h3></div>
+          <p class="for">Pour démarrer</p>
+          <p class="price"><b>39</b><span>DT / mois</span></p>
+          <ul>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>1 assistant</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>2&nbsp;000 réponses / mois</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>10 pages d'infos</li>
+          </ul>
+          <a class="btn btn-outline" href="/chat/digiplus?plan=starter">Choisir Starter</a>
+        </article>
+
+        <article class="plan featured">
+          <div class="plan-top"><h3>Pro</h3><span class="badge">Recommandé</span></div>
+          <p class="for">Pour plusieurs branches</p>
+          <p class="price"><b>99</b><span>DT / mois</span></p>
+          <ul>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>3 assistants</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>5&nbsp;000 réponses / mois</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Sans mention DigiPlus AI</li>
+          </ul>
+          <a class="btn btn-orange" href="/chat/digiplus?plan=pro">Choisir Pro</a>
+        </article>
+
+        <article class="plan">
+          <div class="plan-top"><h3>Business</h3></div>
+          <p class="for">Chaînes et agences</p>
+          <p class="price"><b>199</b><span>DT / mois</span></p>
+          <ul>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>10 assistants</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>15&nbsp;000 réponses / mois</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Sans mention DigiPlus AI</li>
+          </ul>
+          <a class="btn btn-outline" href="/chat/digiplus?plan=business">Choisir Business</a>
+        </article>
+      </div>
+      <p class="pricing-note">Une réponse = un message envoyé par l'assistant. Les messages de vos clients ne comptent pas.<br>Paiement D17 ou virement · Assistant en plus 19 DT / mois · 1&nbsp;000 réponses en plus 15 DT</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="cta">
+        <div>
+          <h2>Ce chat pour votre activité ?</h2>
+          <p>Dites-nous ce que vous faites. Saif vous rappelle.</p>
         </div>
-      </div>
-      <div class="step" style="border-inline-end:0">
-        <span class="big-n">3</span>
-        <h3>Partagez et vendez</h3>
-        <p>Envoyez le lien, ou posez la bulle de chat sur votre site. Lisez les résumés, rappelez les clients chauds.</p>
-        <div class="box"><span class="k">Lien public</span><p class="v" style="font-family:var(--font-mono);font-size:13.5px;color:var(--flame)">digiplus.lol/c/dar-zina</p></div>
+        <a class="btn btn-white" href="/chat/digiplus">Parler à DigiPlus
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
+        </a>
       </div>
     </div>
   </section>
+</main>
 
-  <section id="tarifs" data-reveal>
-    <div class="sec-head">
-      <div>
-        <span class="mono">04 — Tarifs</span>
-        <h2 style="margin-top:18px">Simple. En dinars.</h2>
-      </div>
-      <div class="cur">
-        <button type="button" data-cur="TND" class="on">Dinars</button>
-        <button type="button" data-cur="USD">Carte USD</button>
-      </div>
-    </div>
-    <div class="plans" id="plans"></div>
-    <p class="addons" id="addons"></p>
-  </section>
-
-  <section id="questions" class="split" data-reveal>
-    <div style="padding:var(--pad-y) var(--pad-x);border-inline-end:1px solid var(--rule)">
-      <span class="mono">05 — Questions</span>
-      <h2 style="margin-top:18px;font-size:clamp(28px,4.2vw,58px)">Ce qu'on<br>nous demande.</h2>
-      <p style="margin-top:20px;max-width:34ch;font-size:15px;line-height:1.55;color:var(--ink-2)">S'il reste un doute, écrivez-nous sur WhatsApp — une vraie personne répond.</p>
-    </div>
-    <div class="faq">
-      <details open>
-        <summary><span class="n">01</span><span class="q">C'est quoi une « réponse » ?</span><span class="s"></span></summary>
-        <p>Chaque message envoyé par votre assistant compte pour une réponse. Les messages de vos clients, et les vôtres, ne sont jamais comptés. Une conversation de vente normale utilise 5 à 10 réponses.</p>
-      </details>
-      <details>
-        <summary><span class="n">02</span><span class="q">Est-ce qu'il peut inventer des prix ?</span><span class="s"></span></summary>
-        <p>Non. Il répond uniquement avec les services, les prix et les règles que vous avez écrits. Quand il ne sait pas, il le dit, donne votre contact et vous transmet la question.</p>
-      </details>
-      <details>
-        <summary><span class="n">03</span><span class="q">Je peux payer en dinars ?</span><span class="s"></span></summary>
-        <p>Oui : D17 ou virement bancaire. Votre offre est activée dès que nous confirmons le paiement. Les clients à l'étranger peuvent payer par carte en USD.</p>
-      </details>
-      <details>
-        <summary><span class="n">04</span><span class="q">Si j'atteins ma limite du mois ?</span><span class="s"></span></summary>
-        <p>Votre assistant arrête de répondre et affiche votre contact aux clients, donc personne ne reste sans réponse. Vous ajoutez un pack de 1 000 réponses pour 15 DT, ou vous passez à l'offre au-dessus, et il repart tout de suite.</p>
-      </details>
-      <details>
-        <summary><span class="n">05</span><span class="q">Je peux gérer plusieurs business ?</span><span class="s"></span></summary>
-        <p>Oui. Chaque assistant a ses propres informations, son lien et ses conversations. Pro en inclut 3, Business 10, et vous pouvez en ajouter sur chaque offre.</p>
-      </details>
-      <details>
-        <summary><span class="n">06</span><span class="q">Comment marchent les 7 jours ?</span><span class="s"></span></summary>
-        <p>Vous testez tout, sans carte bancaire. À la fin des 7 jours vous choisissez une offre — sinon le compte se met simplement en pause. Votre assistant et tout ce que vous avez écrit restent enregistrés.</p>
-      </details>
-    </div>
-  </section>
-
-  <section class="close" data-reveal>
-    <h2>Votre prochain client<br>écrit <span class="flame">maintenant.</span></h2>
-    <div class="row">
-      <a class="btn flame" href="/signup">Commencer mes 7 jours gratuits</a>
-      <p class="fine">Sans carte bancaire · Prêt en 5 minutes</p>
-    </div>
-  </section>
-
-  <footer>
-    <div>
-      <p class="word">Digiplus<span class="flame">.</span>AI</p>
-      <p class="mono" style="margin-top:16px;letter-spacing:.12em">© <span id="year"></span> · Sfax, Tunisie</p>
-    </div>
-    <div class="cols">
-      <div class="col">
-        <span class="h">Produit</span>
-        <a href="#produit">Fonctionnalités</a>
-        <a href="#tarifs">Tarifs</a>
-        <a href="#questions">Questions</a>
-      </div>
-      <div class="col">
-        <span class="h">Langues</span>
-        <a href="/">Français</a>
-        <a href="/ar" hreflang="ar" lang="ar">العربية</a>
-        <a href="/en" hreflang="en" lang="en">English</a>
-      </div>
-      <div class="col">
-        <span class="h">Compte</span>
-        <a href="/login">Se connecter</a>
-        <a href="/signup">S'inscrire</a>
-      </div>
-      <div class="col">
-        <span class="h">Légal</span>
-        <a href="/terms">Conditions</a>
-        <a href="/privacy">Confidentialité</a>
-      </div>
-    </div>
-  </footer>
-</div>
-
-<div class="mbar" id="mbar">
-  <span class="fine">7 jours gratuits</span>
-  <a class="btn" href="/signup">Commencer</a>
-</div>
+<footer class="wrap site-foot">
+  <span>© 2026 DigiPlus · Sfax</span>
+  <a href="/privacy">Confidentialité</a>
+</footer>
 
 <script>
-window.DP = {
-  locale: 'fr-FR',
-  signup: '/signup',
-  perMonth: 'par mois',
-  mostChosen: 'Le plus choisi',
-  choose: (n) => `Choisir ${n}`,
-  assistants: (n) => `${n} assistant${n > 1 ? 's' : ''}`,
-  replies: (r, c) => `${r} réponses par mois — environ ${c} conversations`,
-  data: (p) => `De quoi écrire tous vos services et prix (≈ ${p} pages)`,
-  channels: { web: 'Chat sur votre site', messenger: 'Messenger', instagram: 'Instagram', whatsapp: 'WhatsApp' },
-  withBadge: 'Lien de chat et bulle pour votre site',
-  noBadge: 'Sans mention DigiPlus AI',
-  addons: (bot, packN, packP) => `Assistant supplémentaire ${bot} / mois · Pack de ${packN} réponses ${packP}`,
-  for: {
-    starter: 'Pour un business qui reçoit des messages tous les jours.',
-    pro: 'Pour les business chargés ou à plusieurs branches.',
-    business: 'Pour les chaînes, les agences et les grandes boutiques en ligne.',
-  },
-};
-</script>
-<script src="/landing.js"></script>
+// Phones: small chat bubbles next to the headline, one demo after the other.
+(() => {
+  const title = document.querySelector('.hero-title');
+  const client = document.getElementById('side-client');
+  const bot = document.getElementById('side-bot');
+  const words = [document.getElementById('w-client'), document.getElementById('w-bot')];
+  // Short on purpose: they must fit beside the words on a 360px phone.
+  const examples = [
+    ['Famma place?', 'Ey, samedi 10:00 😊'],
+    ['9adech el gâteau?', 'Yebda men 45dt 😊'],
+    ['Tjiw lel dar?', 'Ey, najjmou njiw 😊'],
+  ];
+  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Organization",
-      "@id": "https://digiplus.lol/#organization",
-      "name": "DigiPlus",
-      "alternateName": "DigiPlus AI",
-      "url": "https://digiplus.lol/",
-      "logo": { "@type": "ImageObject", "url": "https://digiplus.lol/logo.png", "width": 256, "height": 256 },
-      "description": "DigiPlus crée des assistants IA qui répondent aux clients et vendent pour les entreprises, en derja tunisienne, français, arabe et anglais.",
-      "address": { "@type": "PostalAddress", "addressLocality": "Sfax", "addressCountry": "TN" },
-      "knowsLanguage": ["fr", "ar", "aeb", "en"]
-    },
-    {
-      "@type": "WebSite",
-      "@id": "https://digiplus.lol/#website",
-      "url": "https://digiplus.lol/",
-      "name": "DigiPlus AI",
-      "inLanguage": "fr",
-      "publisher": { "@id": "https://digiplus.lol/#organization" }
-    },
-    {
-      "@type": "SoftwareApplication",
-      "@id": "https://digiplus.lol/#software",
-      "name": "DigiPlus AI",
-      "url": "https://digiplus.lol/",
-      "applicationCategory": "BusinessApplication",
-      "operatingSystem": "Web, WhatsApp, Facebook Messenger, Instagram",
-      "inLanguage": ["fr", "ar", "aeb", "en"],
-      "publisher": { "@id": "https://digiplus.lol/#organization" },
-      "description": "Un assistant qui répond aux clients 24/7 en derja, français, arabe et anglais, n'invente jamais un prix, et renvoie le nom, le besoin et le téléphone de chaque personne intéressée.",
-      "offers": [
-        { "@type": "Offer", "name": "Essai gratuit", "price": "0", "priceCurrency": "TND", "description": "7 jours gratuits, sans carte bancaire." },
-        { "@type": "Offer", "name": "Starter", "price": "39", "priceCurrency": "TND", "category": "Abonnement mensuel" },
-        { "@type": "Offer", "name": "Pro", "price": "99", "priceCurrency": "TND", "category": "Abonnement mensuel" },
-        { "@type": "Offer", "name": "Business", "price": "199", "priceCurrency": "TND", "category": "Abonnement mensuel" }
-      ]
-    },
-    {
-      "@type": "FAQPage",
-      "@id": "https://digiplus.lol/#faq",
-      "inLanguage": "fr",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "C'est quoi une « réponse » ?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Chaque message envoyé par votre assistant compte pour une réponse. Les messages de vos clients, et les vôtres, ne sont jamais comptés. Une conversation de vente normale utilise 5 à 10 réponses." }
-        },
-        {
-          "@type": "Question",
-          "name": "Est-ce qu'il peut inventer des prix ?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Non. Il répond uniquement avec les services, les prix et les règles que vous avez écrits. Quand il ne sait pas, il le dit, donne votre contact et vous transmet la question." }
-        },
-        {
-          "@type": "Question",
-          "name": "Je peux payer en dinars ?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Oui : D17 ou virement bancaire. Votre offre est activée dès que nous confirmons le paiement. Les clients à l'étranger peuvent payer par carte en USD." }
-        },
-        {
-          "@type": "Question",
-          "name": "Si j'atteins ma limite du mois ?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Votre assistant arrête de répondre et affiche votre contact aux clients. Vous ajoutez un pack de 1 000 réponses pour 15 DT, ou vous passez à l'offre au-dessus, et il repart tout de suite." }
-        },
-        {
-          "@type": "Question",
-          "name": "Je peux gérer plusieurs business ?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Oui. Chaque assistant a ses propres informations, son lien et ses conversations. Pro en inclut 3, Business 10." }
-        },
-        {
-          "@type": "Question",
-          "name": "Comment marchent les 7 jours ?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Vous testez tout, sans carte bancaire. À la fin des 7 jours vous choisissez une offre, sinon le compte se met en pause. Votre assistant et tout ce que vous avez écrit restent enregistrés." }
-        }
-      ]
+  // The bubbles only show where the words leave enough room beside them.
+  function place() {
+    const box = title.getBoundingClientRect();
+    let fits = window.innerWidth < 720;
+    [client, bot].forEach((bubble, i) => {
+      const rects = words[i].getClientRects();
+      const word = rects[rects.length - 1];
+      const left = word.right - box.left + 12;
+      bubble.style.left = `${left}px`;
+      bubble.style.top = `${word.top - box.top + word.height / 2}px`;
+      const widest = Math.max(...examples.map((pair) => measure(pair[i])));
+      if (box.width - left < widest) fits = false;
+    });
+    title.classList.toggle('with-chat', fits);
+    return fits;
+  }
+
+  const ruler = document.createElement('span');
+  ruler.className = 'side-bubble';
+  ruler.style.visibility = 'hidden';
+  ruler.style.transform = 'none';
+  title.appendChild(ruler);
+  function measure(text) {
+    ruler.textContent = text;
+    return ruler.getBoundingClientRect().width;
+  }
+
+  const dots = () => {
+    const box = document.createElement('span');
+    box.className = 'side-dots';
+    box.append(document.createElement('i'), document.createElement('i'), document.createElement('i'));
+    return box;
+  };
+
+  async function play(i = 0) {
+    const [question, answer] = examples[i % examples.length];
+    client.textContent = question;
+    bot.replaceChildren(dots());
+    client.classList.add('show');
+    await sleep(900);
+    bot.classList.add('show');
+    await sleep(1200);
+    bot.textContent = answer;
+    await sleep(2600);
+    client.classList.remove('show');
+    bot.classList.remove('show');
+    await sleep(600);
+    play(i + 1);
+  }
+
+  const start = () => {
+    if (!place()) return;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      client.textContent = examples[0][0];
+      bot.textContent = examples[0][1];
+      client.classList.add('show');
+      bot.classList.add('show');
+      return;
     }
-  ]
-}
+    play();
+  };
+  (document.fonts ? document.fonts.ready : Promise.resolve()).then(start);
+  addEventListener('resize', place);
+})();
 </script>
 </body>
 </html>
