@@ -13,16 +13,15 @@
   const slug = decodeURIComponent(location.pathname.split('/').filter(Boolean)[1] || '') || new URLSearchParams(location.search).get('bot') || '';
 
   const ICONS = {
-    snowflake: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M4.2 7.5l15.6 9"/><path d="M4.2 16.5l15.6-9"/><path d="M9.5 4.8L12 6.3l2.5-1.5"/><path d="M9.5 19.2l2.5-1.5 2.5 1.5"/></svg>',
-    camera: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8.5h3.2L9 6h6l1.8 2.5H20v10.5H4z"/><circle cx="12" cy="13.5" r="3.3"/></svg>',
     check: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
     checkSmall: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
     clock: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>',
     clockSmall: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>',
     calendar: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5.5" width="16" height="14.5" rx="2.5"/><path d="M4 10h16"/><path d="M8.5 3.5v4"/><path d="M15.5 3.5v4"/></svg>',
-    cake: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="M5 20v-6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v6"/><path d="M5 16c1.5 1 3 1 4.5 0s3-1 4.5 0 3 1 4.5 0"/><path d="M12 12V8"/><path d="M12 5.5c.8-.8.8-1.7 0-2.5-.8.8-.8 1.7 0 2.5z"/></svg>',
     search: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>',
-    grid: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></svg>',
+    chevron: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 6l6 6-6 6"/></svg>',
+    plus: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5.5v13"/><path d="M5.5 12h13"/></svg>',
+    image: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4.5" width="17" height="15" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="M20.5 15.5l-4.8-4.8L6 19.5"/></svg>',
   };
 
   // ---------- small helpers ----------
@@ -114,28 +113,80 @@
     add(el('div', 'day', label), options);
   }
 
-  const bubble = (role, text, options) => add(el('div', `msg ${role}`, text), options);
+  const bubble = (role, text, options) => add((role === 'client' && orderBubble(text)) || el('div', `msg ${role}`, text), options);
 
-  function summaryCard(card) {
-    const box = el('div', 'card');
+  // An order sent from the catalogue ("N7eb: Fraisier · 6 personnes × 2") shows the product with its photo.
+  const ORDER = /^(?:🛒\s*)?N7eb:\s*(.+?)\s+·\s+(.+?)(?:\s+×\s+(\d+))?$/u;
+  function orderBubble(text) {
+    const match = bot?.catalog ? ORDER.exec(text) : null;
+    const product = match && bot.catalog.products.find((p) => p.name === match[1]);
+    if (!product) return null;
+    const node = el('div', 'msg client order');
+    const info = el('span', 'order-info');
+    info.append(el('b', null, product.name), el('span', null, match[3] ? `${match[2]} × ${match[3]}` : match[2]));
+    node.append(picture(product, 'pic order-pic'), info);
+    return node;
+  }
+
+  // The card shown when a request is saved. Tapping it opens everything that was sent.
+  const SHOWN_ROWS = 4;
+
+  function cardHead(card) {
     const head = el('div', 'card-head');
     const badge = el('div', 'card-icon');
     badge.append(icon(card.icon === 'clock' ? 'clock' : 'check'));
     const titles = el('div', 'card-titles');
     titles.append(el('div', 'card-title', card.title), el('div', 'card-sub', card.subtitle));
     head.append(badge, titles);
+    return head;
+  }
 
+  function cardRows(list) {
     const rows = el('div', 'card-rows');
-    for (const [label, value] of card.rows || []) {
+    for (const [label, value] of list) {
       const row = el('div', 'card-row');
       row.append(el('span', null, label), el('span', null, value));
       rows.append(row);
     }
+    return rows;
+  }
 
+  function cardFoot(card) {
     const foot = el('div', 'card-foot');
     foot.append(card.pending ? el('span', 'pending-dot') : icon('clockSmall'), el('span', null, card.footer));
-    box.append(head, rows, foot);
+    return foot;
+  }
+
+  function summaryCard(card) {
+    const box = el('button', 'card summary');
+    box.type = 'button';
+    box.setAttribute('aria-haspopup', 'dialog');
+    box.setAttribute('aria-label', `${card.title} — voir le détail`);
+    const all = card.rows || [];
+    box.append(cardHead(card), cardRows(all.slice(0, SHOWN_ROWS)));
+    const more = el('span', 'card-more');
+    more.append(el('span', null, all.length > SHOWN_ROWS ? `Voir le détail · ${all.length - SHOWN_ROWS} de plus` : 'Voir le détail'), icon('chevron'));
+    box.append(more, cardFoot(card));
+    box.addEventListener('click', () => openRequest(card));
     return box;
+  }
+
+  // Everything the client sent, as a receipt they can open again whenever they want.
+  function openRequest(card) {
+    const sheet = $('request-sheet');
+    const body = $('request-body');
+    const view = el('div', 'request-view');
+    view.append(cardHead(card));
+
+    const product = bot?.catalog?.products.find((p) => (card.rows || []).some(([label]) => label.startsWith(p.name)));
+    if (product) {
+      const media = el('div', 'request-photo');
+      media.append(picture(product, 'pic'));
+      view.append(media);
+    }
+    view.append(cardRows(card.rows || []), cardFoot(card));
+    body.replaceChildren(view);
+    sheet.showModal();
   }
 
   function slotsCard(card) {
@@ -191,10 +242,10 @@
 
   // The product photo, or a soft placeholder while there is none.
   function picture(product, className = 'pic') {
-    const box = el('div', className);
+    const box = el('span', className);
     const placeholder = () => {
-      const ph = el('div', 'ph');
-      ph.append(icon('cake'));
+      const ph = el('span', 'ph');
+      ph.append(icon('image'));
       box.replaceChildren(ph);
     };
     if (!product.image) {
@@ -213,9 +264,21 @@
   function productTile(product) {
     const tile = el('button', 'tile');
     tile.type = 'button';
-    tile.append(picture(product), el('b', null, product.name), el('span', null, `dès ${product.from}dt`));
+    tile.setAttribute('aria-label', `${product.name}, dès ${product.from} DT`);
+    const media = el('span', 'tile-media');
+    const plus = el('span', 'tile-add');
+    plus.append(icon('plus'));
+    media.append(picture(product), plus);
+    tile.append(media, el('b', null, product.name), el('span', 'tile-price', `dès ${product.from} DT`));
     tile.addEventListener('click', () => openProduct(product.id));
     return tile;
+  }
+
+  // The shop's logo, round; our own logo sits on white.
+  function logo(className) {
+    const box = el('span', `logo${bot.logo?.inset ? ' inset' : ''}${className ? ` ${className}` : ''}`);
+    if (bot.logo?.src) box.append(Object.assign(new Image(), { src: bot.logo.src, alt: '' }));
+    return box;
   }
 
   function productsCard(card) {
@@ -233,14 +296,16 @@
     const panel = el('div', 'catalog');
     if (withShop) {
       const shop = el('div', 'catalog-shop');
-      shop.append(el('h2', null, bot.name), el('span', null, `${bot.profile?.kind || ''} · ${catalog.hours.label}`));
+      const text = el('div', 'catalog-shop-text');
+      text.append(el('h2', null, bot.name), el('span', null, `${bot.profile?.kind || ''} · ${catalog.hours.label}`));
+      shop.append(logo('shop-logo'), text);
       panel.append(shop);
     }
 
     const searchBox = el('label', 'catalog-search');
     const query = el('input');
     query.type = 'search';
-    query.placeholder = 'Rechercher un gâteau, une pâtisserie…';
+    query.placeholder = 'Rechercher dans le catalogue';
     query.setAttribute('aria-label', 'Rechercher dans le catalogue');
     searchBox.append(icon('search'), query);
 
@@ -283,32 +348,34 @@
   function openCatalog() {
     if (!bot?.catalog) return;
     if (!catalogReady) {
+      $('catalog-logo').replaceChildren(logo());
+      $('catalog-meta').textContent = `${bot.name} · ${bot.catalog.products.length} produits`;
       $('catalog-sheet-body').replaceChildren(catalogPanel({ withShop: false }));
       catalogReady = true;
     }
     catalogSheet.showModal();
   }
 
-  // Phones: "Catalogue" and a small preview of each product, just above the message box.
-  function renderStrip() {
-    const strip = $('catalog-strip');
-    strip.hidden = !bot?.catalog;
+  // Phones: one clear way into the catalogue, just above the message box,
+  // with a photo from each category as a preview.
+  function renderCatalogBar() {
+    const bar = $('catalog-bar');
+    bar.hidden = !bot?.catalog;
     if (!bot?.catalog) return;
-    const all = el('button', 'strip-all');
-    all.type = 'button';
-    all.append(icon('grid'), el('span', null, 'Catalogue'));
-    all.addEventListener('click', openCatalog);
-    const items = bot.catalog.products.map((product) => {
-      const item = el('button', 'strip-item');
-      item.type = 'button';
-      item.setAttribute('aria-label', `${product.name}, dès ${product.from}dt`);
-      const text = el('span', 'strip-text');
-      text.append(el('b', null, product.name), el('span', null, `dès ${product.from}dt`));
-      item.append(picture(product), text);
-      item.addEventListener('click', () => openProduct(product.id));
-      return item;
-    });
-    strip.replaceChildren(all, ...items);
+    const { products, categories } = bot.catalog;
+    const button = el('button', 'shop-bar');
+    button.type = 'button';
+    const thumbs = el('span', 'shop-thumbs');
+    const firsts = categories.map((c) => products.find((p) => p.category === c.id)).filter(Boolean);
+    for (const product of firsts.slice(0, 3)) thumbs.append(picture(product, 'pic shop-thumb'));
+    const text = el('span', 'shop-text');
+    const from = Math.min(...products.map((p) => p.from));
+    text.append(el('b', null, 'Catalogue'), el('span', null, `${products.length} produits · dès ${from} DT`));
+    const cta = el('span', 'shop-cta');
+    cta.append(el('span', null, 'Voir'), icon('chevron'));
+    button.append(thumbs, text, cta);
+    button.addEventListener('click', openCatalog);
+    bar.replaceChildren(button);
   }
 
   let chosen = null; // {product, option, quantity}
@@ -329,7 +396,7 @@
       button.type = 'button';
       button.setAttribute('role', 'radio');
       button.setAttribute('aria-checked', String(option === chosen.option));
-      button.append(el('small', null, option.label), el('b', null, `${option.price}dt`));
+      button.append(el('small', null, option.label), el('b', null, `${option.price} DT`));
       button.addEventListener('click', () => {
         chosen.option = option;
         for (const other of buttons) other.setAttribute('aria-checked', String(other === button));
@@ -344,7 +411,7 @@
 
   function updateTotal() {
     $('qty-value').textContent = String(chosen.quantity);
-    $('product-total').textContent = `${chosen.option.price * chosen.quantity}dt`;
+    $('product-total').textContent = `${chosen.option.price * chosen.quantity} DT`;
   }
 
   $('qty-minus').addEventListener('click', () => {
@@ -361,12 +428,12 @@
     const { product, option, quantity } = chosen;
     productSheet.close();
     if (catalogSheet.open) catalogSheet.close();
-    // Written like a client would in Derja, so the assistant answers in Derja.
-    submit(`🛒 N7eb: ${product.name} · ${option.label}${quantity > 1 ? ` × ${quantity}` : ''}`);
+    // Written like a client would in Derja, so the assistant answers in Derja. Shown as a product card.
+    submit(`N7eb: ${product.name} · ${option.label}${quantity > 1 ? ` × ${quantity}` : ''}`);
   });
 
   // Close buttons, and a tap on the dimmed background.
-  for (const sheet of [catalogSheet, productSheet]) {
+  for (const sheet of [catalogSheet, productSheet, $('request-sheet')]) {
     sheet.querySelector('[data-close]').addEventListener('click', () => sheet.close());
     sheet.addEventListener('click', (event) => {
       if (event.target === sheet) sheet.close();
@@ -514,19 +581,13 @@
     root.setProperty('--accent-ink', info.colors.ink);
 
     $('name').textContent = info.name;
-    const avatar = $('avatar');
-    if (info.icon === 'logo') {
-      avatar.classList.add('logo');
-      avatar.replaceChildren(Object.assign(new Image(), { src: '/logo.png', alt: '' }));
-    } else {
-      avatar.innerHTML = ICONS[info.icon] || ICONS.check;
-    }
+    $('avatar').replaceChildren(logo());
     document.querySelector('.chat').classList.remove('is-loading');
     for (const node of document.querySelectorAll('[data-demo]')) node.hidden = !info.demo;
     for (const node of document.querySelectorAll('[data-not-demo]')) node.hidden = info.demo;
     restartButton.hidden = false;
     renderProfile(info);
-    renderStrip();
+    renderCatalogBar();
   }
 
   function mediaFor(profile, className) {
@@ -562,6 +623,8 @@
     }
 
     const body = el('div', 'profile-body');
+    // Like a social profile: the logo overlaps the bottom of the photo.
+    if (photo) body.append(logo('profile-logo'));
     body.append(el('span', 'profile-kind', p.kind), el('h2', null, info.name), el('p', null, p.about));
     const skills = el('ul', 'skills');
     for (const skill of p.skills || []) {
@@ -579,26 +642,18 @@
     $('profile').replaceChildren(card);
   }
 
-  // Phones don't have room for the card: a short intro sits at the top of the conversation instead.
+  // Phones don't have room for the card: the business introduces itself at the top of the conversation.
   function introCard() {
     const p = bot.profile;
     const box = el('div', 'intro');
-    const media = el('div', 'intro-media');
-    const photo = mediaFor(p);
-    if (photo) media.append(photo);
-    else if (bot.icon === 'logo') {
-      media.classList.add('brand-tile');
-      media.append(Object.assign(new Image(), { src: '/logo.png', alt: '' }));
-    } else {
-      media.classList.add('icon-tile');
-      media.append(icon(bot.icon));
+    box.append(logo('intro-logo'), el('b', 'intro-name', bot.name), el('span', 'intro-kind', p.kind), el('p', 'intro-about', p.about));
+    const skills = el('ul', 'intro-skills');
+    for (const skill of p.skills || []) {
+      const li = el('li');
+      li.append(icon('checkSmall'), el('span', null, skill));
+      skills.append(li);
     }
-    const text = el('div', 'intro-text');
-    text.append(el('b', null, bot.name), el('p', null, p.about));
-    const skills = el('div', 'intro-skills');
-    for (const skill of p.skills || []) skills.append(el('span', null, skill));
-    text.append(skills);
-    box.append(media, text);
+    box.append(skills);
     return box;
   }
 

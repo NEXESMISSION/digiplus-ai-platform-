@@ -61,8 +61,8 @@
       <main class="log" id="log" role="log" aria-live="polite" aria-label="Messages"></main>
 
       <footer class="composer">
-        <!-- A shop's products, always one tap away (phones and tablets) -->
-        <div class="catalog-strip" id="catalog-strip" hidden></div>
+        <!-- A shop's catalogue, always one tap away (phones and tablets) -->
+        <div class="catalog-bar" id="catalog-bar" hidden></div>
         <form id="form" autocomplete="off">
           <textarea id="input" rows="1" maxlength="600" placeholder="Écrivez votre message…" enterkeyhint="send" aria-label="Votre message" disabled></textarea>
           <button class="send" id="send" type="submit" aria-label="Envoyer" disabled>
@@ -86,10 +86,27 @@
   </form>
 </dialog>
 
+<!-- What the client sent: they can open it again from the card -->
+<dialog class="sheet" id="request-sheet" aria-label="Votre demande">
+  <div class="sheet-head">
+    <div class="sheet-title"><h2>Votre demande</h2></div>
+    <button class="round-btn" type="button" data-close aria-label="Fermer">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12"/><path d="M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="sheet-body" id="request-body"></div>
+</dialog>
+
 <!-- Catalogue on phones -->
 <dialog class="sheet full" id="catalog-sheet" aria-label="Catalogue">
   <div class="sheet-head">
-    <h2>Catalogue</h2>
+    <div class="sheet-title">
+      <span id="catalog-logo"></span>
+      <div>
+        <h2>Catalogue</h2>
+        <p id="catalog-meta"></p>
+      </div>
+    </div>
     <button class="round-btn" type="button" data-close aria-label="Fermer">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12"/><path d="M18 6L6 18"/></svg>
     </button>
@@ -110,13 +127,13 @@
       <p id="product-desc"></p>
       <p class="product-notice" id="product-notice"></p>
       <div class="options" id="product-options" role="radiogroup" aria-label="Taille"></div>
-      <div class="qty-row">
-        <span>Quantité</span>
-        <div class="qty">
-          <button type="button" id="qty-minus" aria-label="Moins">−</button>
-          <output id="qty-value">1</output>
-          <button type="button" id="qty-plus" aria-label="Plus">+</button>
-        </div>
+    </div>
+    <!-- Always visible, even when the description is long -->
+    <div class="product-bar">
+      <div class="qty" role="group" aria-label="Quantité">
+        <button type="button" id="qty-minus" aria-label="Moins">−</button>
+        <output id="qty-value">1</output>
+        <button type="button" id="qty-plus" aria-label="Plus">+</button>
       </div>
       <button class="order-btn" type="button" id="product-order">Commander · <span id="product-total"></span></button>
     </div>
