@@ -217,11 +217,11 @@
   .methods-block { display: flex; flex-direction: column; gap: 28px; }
   .methods { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; }
   @media (max-width: 1023px) {
-    .methods { display: flex; gap: 14px; margin: 0 -20px; padding: 4px 20px 14px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+    .methods { display: flex; gap: 14px; margin: 0 -20px; padding: 4px 20px 14px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 20px; scrollbar-width: none; }
     .methods::-webkit-scrollbar { display: none; }
     .method { flex: 0 0 224px; scroll-snap-align: start; }
   }
-  @media (min-width: 768px) and (max-width: 1023px) { .methods { margin: 0 -32px; padding: 4px 32px 14px; } }
+  @media (min-width: 768px) and (max-width: 1023px) { .methods { margin: 0 -32px; padding: 4px 32px 14px; scroll-padding: 0 32px; } }
   .method { display: flex; flex-direction: column; gap: 4px; }
   .method > b { margin-top: 10px; font-size: 16px; }
   .method > span { color: var(--muted); font-size: 14px; line-height: 1.4; }
@@ -388,7 +388,7 @@
             <span><span class="chat-name">Pâtisserie Nour</span><span class="chat-status">En ligne</span></span>
           </div>
           <div class="chat-body">
-            <div class="bubble client">Famma gâteau l 10 personnes el youm?</div>
+            <div class="bubble client">Famma gâteau l 10 personnes l ghodwa?</div>
             <div class="bubble bot">Ey famma 😊 Chocolat wala fraise?</div>
             <div class="bubble client">Chocolat, net3adda 3al 18h</div>
             <div class="saved">
@@ -650,7 +650,7 @@
       <div class="cta">
         <div>
           <h2>Ce chat pour votre activité ?</h2>
-          <p>Dites-nous ce que vous faites. Saif vous rappelle.</p>
+          <p>Dites-nous ce que vous faites. On vous rappelle.</p>
         </div>
         <a class="btn btn-white" href="/chat/digiplus">Parler à DigiPlus
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
@@ -676,7 +676,7 @@
   const examples = [
     ['Famma place?', 'Ey, samedi 10:00 😊'],
     ['9adech el gâteau?', 'Yebda men 45dt 😊'],
-    ['Tjiw lel dar?', 'Ey, najjmou njiw 😊'],
+    ['Tji lel dar?', 'Ey, najjmou njiw 😊'],
   ];
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
