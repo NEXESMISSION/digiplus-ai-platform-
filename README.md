@@ -28,8 +28,7 @@ Live: https://digiplus.lol
 ## Setup
 
 1. **Supabase**: run `supabase/schema.sql` (SQL editor, or `npm run sql -- supabase/schema.sql`).
-   In Authentication → URL Configuration, set the Site URL to the site and add `https://<site>/**`
-   (and `http://localhost:3000/**`) to the Redirect URLs, so the inbox sign-in link works.
+
 2. **Environment**: copy `.env.example` to `.env`. On Vercel, add the same variables except
    `SUPABASE_PROJECT_REF` and `SUPABASE_ACCESS_TOKEN`.
 3. `npm install`
@@ -38,7 +37,7 @@ Live: https://digiplus.lol
 |---|---|
 | `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` | Supabase → Project Settings → API |
 | `OPENAI_API_KEY` | OpenAI |
-| `SUPER_ADMIN_EMAILS` | emails allowed into `/admin`, comma-separated |
+| `ADMIN_PASSWORD` | the password that opens `/admin` (no e-mail, no Supabase Auth) |
 | `CHAT_MODEL`, `CHAT_REASONING` | optional — default `gpt-5.4`, reasoning `none` |
 | `SUPABASE_PROJECT_REF`, `SUPABASE_ACCESS_TOKEN` | this machine only, for `npm run sql` |
 
@@ -46,7 +45,7 @@ Live: https://digiplus.lol
 
 | Command | What |
 |---|---|
-| `npm run dev` | the site on http://localhost:3000 (the inbox skips the sign-in locally) |
+| `npm run dev` | the site on http://localhost:3100 (the inbox skips the sign-in locally) |
 | `npm run exam` | plays the conversations in `exams/` with the real AI and checks every answer. Run it after changing a brain file (uses OpenAI credits) |
 | `npm run sql -- <file.sql>` | runs SQL on the Supabase database |
 | `npm run catalog-images -- <assistant>` | prints the prompts for the missing product photos, to paste in ChatGPT |

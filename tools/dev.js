@@ -1,5 +1,7 @@
 // Local preview: serves public/ the way Vercel does and runs api/chat.js.
-//   npm run dev   →   http://localhost:3000
+//   npm run dev   →   http://localhost:3100
+// Port 3100, not 3000: AGRIZED owns localhost:3000 (its sign-in e-mails point there,
+// and it is installed as an app that swallows those links).
 require('../lib/no-image-api');
 const http = require('http');
 const fs = require('fs');
@@ -16,7 +18,7 @@ const admin = require('../api/admin');
 const track = require('../api/track');
 
 const PUBLIC = path.join(ROOT, 'public');
-const PORT = Number(process.env.PORT) || 3000;
+const PORT = Number(process.env.PORT) || 3100;
 const TYPES = {
   '.html': 'text/html; charset=utf-8',
   '.css': 'text/css; charset=utf-8',

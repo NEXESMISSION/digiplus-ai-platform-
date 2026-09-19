@@ -111,23 +111,11 @@
 
   // ---------- talking to the server ----------
 
-  async function api(method, { query = '', body } = {}, retried = false) {
+  async function api(method, { query = '', body } = {}) {
     const headers = {};
     if (body) headers['Content-Type'] = 'application/json';
-    if (state.session?.accessToken) headers.Authorization = `Bearer ${state.session.accessToken}`;
+    if (state.session?.token) headers.Authorization = `Bearer ${state.session.token}`;
     const res = await fetch(`/api/admin${query}`, { method, headers, body: body ? JSON.stringify(body) : undefined });
-    if (res.status === 401 && !retried && state.session?.refreshToken) {
-      const fresh = await fetch('/api/admin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'refresh', refreshToken: state.session.refreshToken }),
-      });
-      if (fresh.ok) {
-        state.session = await fresh.json();
-        storage.set(state.session);
-        return api(method, { query, body }, true);
-      }
-    }
     const data = await res.json().catch(() => ({}));
     if (res.status === 401) {
       signOut(state.session ? 'Session terminée. Reconnectez-vous.' : '');
@@ -154,30 +142,26 @@
     showLogin(message);
   }
 
-  // The email link comes back as /admin#access_token=…&refresh_token=… (or #error=…).
-  function readLinkFromUrl() {
-    if (!location.hash.includes('access_token') && !location.hash.includes('error')) return null;
-    const params = new URLSearchParams(location.hash.slice(1));
-    history.replaceState(null, '', location.pathname);
-    if (params.get('error')) return { error: params.get('error_description') || params.get('error') };
-    return { accessToken: params.get('access_token'), refreshToken: params.get('refresh_token') };
-  }
-
   $('login-form').addEventListener('submit', async (event) => {
     event.preventDefault();
-    const email = $('login-email').value.trim();
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showLogin('Entrez une adresse e-mail valide.', 'error');
+    const field = $('login-password');
+    const password = field.value;
+    if (!password) return showLogin('Entrez le mot de passe.', 'error');
     const button = $('login-button');
     button.disabled = true;
     try {
       const res = await fetch('/api/admin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'login', email }),
+        body: JSON.stringify({ action: 'login', password }),
       });
-      if (res.status === 429) showLogin("Trop de demandes. Réessayez dans une heure.", 'error');
-      else if (!res.ok) showLogin("L'e-mail n'a pas pu partir. Réessayez dans un moment.", 'error');
-      else showLogin('Si cette adresse a accès, un lien vient de partir. Ouvrez-le sur cet appareil.', 'ok');
+      if (res.status === 429) return showLogin('Trop d’essais. Attendez une minute.', 'error');
+      if (res.status === 401) return showLogin('Mot de passe faux.', 'error');
+      if (!res.ok) return showLogin('Le serveur ne répond pas. Réessayez.', 'error');
+      state.session = await res.json();
+      storage.set(state.session);
+      field.value = '';
+      await open();
     } catch {
       showLogin('Pas de connexion. Réessayez.', 'error');
     } finally {
@@ -481,12 +465,7 @@
 
   // ---------- start ----------
 
-  async function start() {
-    const link = readLinkFromUrl();
-    if (link?.error) return showLogin('Ce lien ne marche plus. Demandez-en un nouveau.', 'error');
-    state.session = link?.accessToken ? link : storage.get();
-    if (link?.accessToken) storage.set(link);
-
+  async function open() {
     try {
       await api('GET', { query: '?action=me' });
     } catch (error) {
@@ -600,12 +579,34 @@
     days.append(chart);
     body.append(days);
 
+    // A/B : une ligne par pub, pour voir laquelle amène de vraies conversations.
+    if (data.ads?.length) {
+      const test = el('div', 'panel');
+      test.append(el('h3', null, 'Les pubs'));
+      const table = el('table', 'pages');
+      const head = el('tr');
+      for (const label of ['Pub', 'Visites', 'Chats', 'Messages', 'Demandes']) head.append(el('th', null, label));
+      table.append(head);
+      for (const ad of data.ads) {
+        const row = el('tr');
+        row.append(el('td', null, ad.name));
+        row.append(el('td', null, String(ad.visits)));
+        row.append(el('td', null, String(ad.chat)));
+        row.append(el('td', null, String(ad.message)));
+        row.append(el('td', null, String(ad.request)));
+        table.append(row);
+      }
+      test.append(table);
+      body.append(test);
+    }
+
     const where = el('div', 'panel');
     where.append(el('h3', null, "D'où ils viennent"));
     const tags = el('div', 'tags');
     for (const source of data.sources) {
       const tag = el('span', 'tag');
-      tag.append(el('b', null, String(source.count)), el('span', null, source.name === 'direct' ? 'direct' : source.name));
+      const label = source.name.startsWith('ad:') ? `pub ${source.name.slice(3)}` : source.name;
+      tag.append(el('b', null, String(source.count)), el('span', null, label === 'direct' ? 'direct' : label));
       tags.append(tag);
     }
     for (const device of data.devices) {
@@ -641,5 +642,8 @@
     loadStats();
   });
 
-  start();
+  // On arrive : si le mot de passe est déjà entré sur cet appareil, on ouvre direct.
+  state.session = storage.get();
+  if (state.session?.token) open();
+  else showLogin();
 })();

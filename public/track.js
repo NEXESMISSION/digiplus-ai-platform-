@@ -27,8 +27,20 @@
   const session = keep(sessionStorage, 'digiplus-ai-session');
   const path = location.pathname.replace(/\/+$/, '') || '/';
   const bot = path.startsWith('/chat/') ? path.split('/')[2] || null : null;
+  // Which ad brought them: digiplus.lol/?ad=pub1 (or utm_content). Kept for the whole visit,
+  // so the pages they open after the landing still count for the same ad.
   const source = (() => {
+    const SAVED = 'digiplus-ai-source';
     try {
+      const params = new URLSearchParams(location.search);
+      const ad = (params.get('ad') || params.get('utm_content') || '').trim().slice(0, 20);
+      if (ad) {
+        const tag = `ad:${ad}`;
+        try { sessionStorage.setItem(SAVED, tag); } catch {}
+        return tag;
+      }
+      const saved = sessionStorage.getItem(SAVED);
+      if (saved) return saved;
       const host = document.referrer ? new URL(document.referrer).hostname.replace(/^www\./, '') : '';
       return !host || host === location.hostname ? 'direct' : host;
     } catch {

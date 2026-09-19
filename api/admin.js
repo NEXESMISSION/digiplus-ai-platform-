@@ -1,6 +1,5 @@
 // The owner inbox (/admin).
-//   POST {action: 'login', email}          → email a sign-in link (admins only)
-//   POST {action: 'refresh', refreshToken} → a new access token
+//   POST {action: 'login', password}       → a token to keep (the owner password)
 //   GET  ?action=me | inbox | conversation&id=<uuid> | analytics&days=7   (signed in)
 //   POST {action: 'seen' | 'delete', id}                (signed in)
 const auth = require('../lib/auth');
@@ -21,12 +20,6 @@ async function signedIn(req) {
   return auth.adminFromToken(token);
 }
 
-function origin(req) {
-  const host = String(req.headers['x-forwarded-host'] || req.headers.host || '').split(',')[0].trim();
-  const proto = String(req.headers['x-forwarded-proto'] || '').split(',')[0].trim() || (/^(localhost|127\.)/.test(host) ? 'http' : 'https');
-  return `${proto}://${host}`;
-}
-
 const idOrThrow = (id) => {
   if (!UUID.test(String(id || ''))) throw new HttpError(400, 'bad_id');
   return String(id);
@@ -38,17 +31,16 @@ module.exports = async (req, res) => {
     const body = req.method === 'POST' ? await readBody(req) : {};
 
     if (req.method === 'POST' && body.action === 'login') {
+      const address = String(req.headers['x-forwarded-for'] || req.socket?.remoteAddress || '').split(',')[0].trim();
+      let session;
       try {
-        await auth.sendLink(body.email, `${origin(req)}/admin`);
+        session = auth.signIn(String(body.password || ''), address);
       } catch (e) {
-        console.error(`[api/admin] login link failed: ${e.message}`);
-        return json(res, e.status === 429 ? 429 : 502, { error: e.status === 429 ? 'too_many' : 'email_failed' });
+        if (e.status === 429) return json(res, 429, { error: 'too_many' });
+        console.error(`[api/admin] sign-in failed: ${e.message}`);
+        return json(res, 500, { error: 'no_password_set' });
       }
-      return json(res, 200, { ok: true });
-    }
-    if (req.method === 'POST' && body.action === 'refresh') {
-      const session = await auth.refresh(String(body.refreshToken || ''));
-      return session ? json(res, 200, session) : json(res, 401, { error: 'signed_out' });
+      return session ? json(res, 200, session) : json(res, 401, { error: 'wrong_password' });
     }
 
     const admin = await signedIn(req);
