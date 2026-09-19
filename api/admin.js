@@ -1,5 +1,5 @@
 // The owner inbox (/admin).
-//   POST {action: 'login', password}       → a token to keep (the owner password)
+//   POST {action: 'login', email, password}   → a token to keep (ADMIN_EMAIL + ADMIN_PASSWORD)
 //   GET  ?action=me | inbox | conversation&id=<uuid> | analytics&days=7   (signed in)
 //   POST {action: 'seen' | 'delete', id}                (signed in)
 const auth = require('../lib/auth');
@@ -34,13 +34,13 @@ module.exports = async (req, res) => {
       const address = String(req.headers['x-forwarded-for'] || req.socket?.remoteAddress || '').split(',')[0].trim();
       let session;
       try {
-        session = auth.signIn(String(body.password || ''), address);
+        session = auth.signIn(String(body.email || ''), String(body.password || ''), address);
       } catch (e) {
         if (e.status === 429) return json(res, 429, { error: 'too_many' });
         console.error(`[api/admin] sign-in failed: ${e.message}`);
         return json(res, 500, { error: 'no_password_set' });
       }
-      return session ? json(res, 200, session) : json(res, 401, { error: 'wrong_password' });
+      return session ? json(res, 200, session) : json(res, 401, { error: 'wrong_sign_in' });
     }
 
     const admin = await signedIn(req);

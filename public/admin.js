@@ -144,8 +144,11 @@
 
   $('login-form').addEventListener('submit', async (event) => {
     event.preventDefault();
+    const emailField = $('login-email');
     const field = $('login-password');
+    const email = emailField.value.trim();
     const password = field.value;
+    if (!email) return showLogin('Entrez votre e-mail.', 'error');
     if (!password) return showLogin('Entrez le mot de passe.', 'error');
     const button = $('login-button');
     button.disabled = true;
@@ -153,10 +156,10 @@
       const res = await fetch('/api/admin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'login', password }),
+        body: JSON.stringify({ action: 'login', email, password }),
       });
       if (res.status === 429) return showLogin('Trop d’essais. Attendez une minute.', 'error');
-      if (res.status === 401) return showLogin('Mot de passe faux.', 'error');
+      if (res.status === 401) return showLogin('E-mail ou mot de passe faux.', 'error');
       if (!res.ok) return showLogin('Le serveur ne répond pas. Réessayez.', 'error');
       state.session = await res.json();
       storage.set(state.session);

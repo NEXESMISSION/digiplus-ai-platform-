@@ -37,7 +37,7 @@ Live: https://digiplus.lol
 |---|---|
 | `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` | Supabase → Project Settings → API |
 | `OPENAI_API_KEY` | OpenAI |
-| `ADMIN_PASSWORD` | the password that opens `/admin` (no e-mail, no Supabase Auth) |
+| `ADMIN_EMAIL`, `ADMIN_PASSWORD` | the e-mail and password that open `/admin` (several addresses: separate them with commas; nothing is sent by e-mail) |
 | `CHAT_MODEL`, `CHAT_REASONING` | optional — default `gpt-5.4`, reasoning `none` |
 | `SUPABASE_PROJECT_REF`, `SUPABASE_ACCESS_TOKEN` | this machine only, for `npm run sql` |
 

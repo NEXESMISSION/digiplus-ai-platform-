@@ -18,7 +18,11 @@
   <form class="login-card" id="login-form" novalidate>
     <img src="/logo.png" alt="" width="52" height="52">
     <h1>Espace propriétaire</h1>
-    <p>Entrez le mot de passe pour voir les conversations.</p>
+    <p>Entrez votre e-mail et votre mot de passe pour voir les conversations.</p>
+    <label class="field">
+      <span>E-mail</span>
+      <input id="login-email" type="email" autocomplete="username" inputmode="email" autocapitalize="off" spellcheck="false" required>
+    </label>
     <label class="field">
       <span>Mot de passe</span>
       <input id="login-password" type="password" autocomplete="current-password" required>
