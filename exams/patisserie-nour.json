@@ -18,5 +18,41 @@
     "name": "Says kindly when a product doesn't exist",
     "say": ["Famma croissants?"],
     "expect": { "language": "derja", "avoid": ["croissant b"] }
+  },
+  {
+    "name": "Asked for advice, asks what it needs to advise instead of showing the list",
+    "say": ["behi bech tinsa7ni"],
+    "expect": {
+      "language": "derja",
+      "mentionsAny": ["personne", "9adech", "anahi", "monasba", "occasion"],
+      "avoid": ["Famma gâteaux, pâtisserie tunisienne w plateaux", "Hedhom el photos w les prix"]
+    }
+  },
+  {
+    "name": "Asked the same vague question twice, doesn't send the catalogue again",
+    "say": ["chni aban 7aja", "ayh chni aban 7aja"],
+    "expect": {
+      "language": "derja",
+      "mentionsAny": ["personne", "9adech", "anahi", "monasba", "occasion", "chocolat", "fraisier", "tiramisu", "baklawa", "plateau mixte"],
+      "avoid": ["Famma gâteaux, pâtisserie tunisienne w plateaux", "Hedhom el photos w les prix"]
+    }
+  },
+  {
+    "name": "Refused what was suggested, asks why or names another cake",
+    "say": ["n7eb gâteau l 10 personnes", "m3ijbtnich"],
+    "expect": {
+      "language": "derja",
+      "mentionsAny": ["3lech", "fraisier", "tiramisu", "red velvet"],
+      "avoid": ["Famma gâteaux, pâtisserie tunisienne w plateaux", "Hedhom el photos w les prix"]
+    }
+  },
+  {
+    "name": "Told it is too expensive, names a cheaper product of the catalogue",
+    "say": ["n7eb plateau lel invités", "ghali"],
+    "expect": {
+      "language": "derja",
+      "mentionsAny": ["makroud", "samsa", "14dt", "22dt", "26dt", "42dt"],
+      "avoid": ["Famma gâteaux, pâtisserie tunisienne w plateaux", "Hedhom el photos w les prix"]
+    }
   }
 ]

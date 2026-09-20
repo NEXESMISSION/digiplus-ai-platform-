@@ -11,7 +11,7 @@
 //    identity exemption and the two choice filters live in validate() alone and the rule knows
 //    nothing about them, so a case that only reads the rule cannot see them at all.
 // 2. THE REGRESSION. Every «Derja:» and «French:» line in brain/*.md and every welcome and starter in
-//    lib/bots.js — 152 message blocks the owner wrote and a Tunisian approved — must come back with
+//    lib/bots.js — every message block the owner wrote and a Tunisian approved — must come back with
 //    issues == [] and changed == []. If a rule flags one of them the rule is wrong, not the line.
 //    That corpus is where every false-positive number in design-validator.md came from.
 //

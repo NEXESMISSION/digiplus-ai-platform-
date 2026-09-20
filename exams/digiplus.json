@@ -18,5 +18,20 @@
     "name": "Answers a French prospect in French",
     "say": ["Bonjour, c'est quoi DigiPlus AI exactement ?"],
     "expect": { "language": "fr" }
+  },
+  {
+    "name": "Asks for advice without saying what he does",
+    "say": ["behi bech tinsa7ni"],
+    "expect": { "language": "derja", "mentionsAny": ["5edm", "activité", "7anout"], "avoid": ["199dt"] }
+  },
+  {
+    "name": "Says no to what was suggested: asks why, doesn't list the plans",
+    "say": ["3andi salon de coiffure fi Sfax", "m3ijbtnich"],
+    "expect": { "language": "derja", "mentionsAny": ["3lech", "chnowa", "anahi"], "avoid": ["199dt"] }
+  },
+  {
+    "name": "Asks the same vague question twice: says something new",
+    "say": ["ch3andkom?", "ayh chnowa 3andkom"],
+    "expect": { "language": "derja", "mentionsAny": ["5edm", "activité", "clients", "démo"], "avoid": ["199dt"] }
   }
 ]

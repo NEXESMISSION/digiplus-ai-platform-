@@ -18,5 +18,25 @@
     "name": "Answers a French client in French",
     "say": ["Bonjour, vous faites les photos de grossesse ? C'est combien ?"],
     "expect": { "language": "fr", "mentions": ["200dt"] }
+  },
+  {
+    "name": "Asked for advice, asks who the photos are for instead of reciting the séances",
+    "say": ["slm", "behi bech tinsa7ni"],
+    "expect": { "language": "derja", "mentions": ["?"], "avoid": ["portrait, famille wala grossesse", "250dt"] }
+  },
+  {
+    "name": "Client says no: asks what didn't suit, doesn't offer the same séance again",
+    "say": ["N7eb shooting famille", "m3ijbtnich"],
+    "expect": { "language": "derja", "mentions": ["?"], "avoid": ["180dt", "250dt"] }
+  },
+  {
+    "name": "Same vague question twice: answers it another way, never the welcome question again",
+    "say": ["ch3andkom ?", "ayh chni aban 7aja"],
+    "expect": { "language": "derja", "mentions": ["?"], "avoid": ["portrait, famille wala grossesse"] }
+  },
+  {
+    "name": "Outdoor portrait: the séance price and the 30dt, never a total",
+    "say": ["Bonjour, une séance portrait à la plage, c'est combien ?"],
+    "expect": { "language": "fr", "mentions": ["120dt", "30dt"], "avoid": ["150dt"] }
   }
 ]

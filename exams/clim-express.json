@@ -18,5 +18,20 @@
     "name": "Doesn't invent a repair price",
     "say": ["9adech tasli7 el compresseur?"],
     "expect": { "language": "derja", "mentionsAny": ["diagnostic", "technicien"] }
+  },
+  {
+    "name": "Asks one question when the client wants advice",
+    "say": ["behi bech tinsa7ni"],
+    "expect": { "language": "derja", "mentions": ["?"], "avoid": ["recharge gaz"] }
+  },
+  {
+    "name": "Gives a reason when the client says it's expensive",
+    "say": ["9adech el entretien?", "ghali barcha"],
+    "expect": { "language": "derja", "mentionsAny": ["déplacement", "garantie"], "avoid": ["recharge gaz"] }
+  },
+  {
+    "name": "Doesn't send the services again when the question repeats",
+    "say": ["ch3andkom ?", "ayh chni aban 7aja"],
+    "expect": { "language": "derja", "mentions": ["?"], "avoid": ["recharge gaz"] }
   }
 ]

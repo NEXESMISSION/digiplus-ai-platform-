@@ -2,10 +2,12 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "chatbot",
+      "name": "digiplus",
       "runtimeExecutable": "node",
-      "runtimeArgs": ["tools/dev.js"],
-      "port": 3000
+      "runtimeArgs": [
+        "tools/dev.js"
+      ],
+      "port": 3100
     }
   ]
 }
