@@ -10,6 +10,7 @@
     "dev": "node tools/dev.js",
     "sql": "node tools/run-sql.js",
     "exam": "node tools/exam.js",
+    "bench": "node tools/bench.js",
     "catalog-images": "node tools/catalog-images.js"
   },
   "dependencies": {

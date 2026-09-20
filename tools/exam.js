@@ -37,8 +37,14 @@ function check(bot, test, answers) {
     history.push({ role: 'client', text: test.say[i] });
     const texts = answer.items.filter((it) => it.text).map((it) => it.text);
     if (texts.length > 3) failures.push(`answer ${i + 1} has ${texts.length} messages (max 3)`);
-    const language = ai.clientLanguage(history);
-    for (const problem of guard.problems(bot, { texts, language })) failures.push(`answer ${i + 1}: ${problem}`);
+    // answerLanguage is what the pipeline itself answered in; clientLanguage returns null on a
+    // history that shows neither language, and the two verdicts then disagree on the same answer.
+    const language = ai.answerLanguage(history);
+    // Without the tool results a total the server computed — «Total 235dt» — is read as an invented
+    // price, because it is nowhere in the catalogue.
+    for (const problem of guard.problems(bot, { texts, language, toolResults: answer.toolResults })) {
+      failures.push(`answer ${i + 1}: ${problem}`);
+    }
     for (const text of texts) history.push({ role: 'bot', text });
   }
 
@@ -48,7 +54,9 @@ function check(bot, test, answers) {
   const expect = test.expect || {};
 
   if (expect.language) {
-    const said = ai.clientLanguage(last.items.filter((it) => it.text).map((it) => ({ role: 'client', text: it.text })));
+    // Which language the answer is written in, read from its own shape: clientLanguage reads a
+    // client's history to choose the language to answer in, it never judges the bot's own words.
+    const said = ai.looksDerja(lastText) ? 'derja' : ai.looksFrench(lastText) ? 'fr' : null;
     if (said && said !== expect.language) failures.push(`answered in ${said}, expected ${expect.language}`);
   }
   for (const text of expect.mentions || []) if (!lastText.includes(lower(text))) failures.push(`doesn't mention «${text}»`);

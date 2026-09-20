@@ -1,0 +1,167 @@
+{
+  "version": 1,
+  "note": "B2, the ceiling (design-benchmark §6). Fifteen conversations answered ONLY with lines the owner already approved — brain/*.md, brain/voice.md, the catalogue — written here exactly as the client receives them (after lib/derja.js fix, so @area reads «anahi» and not «anhi»). No agent wrote a Tunisian sentence into this file: `node tools/bench-checks.js self-test` prints, for every line below, whether it matches an approved line word for word. Four lines do not, and each is accounted for: «Behi 👌» twice (the opening of @name-phone, standing in for a turn that has no approved line — see gaps), the «Write like this» line of brain/patisserie-nour.md (it is in the brain file but outside an @id block, so lib/lines.js does not see it), and one catalogue price row from data/patisserie-nour.json. These answers must score at or near 9 on every deterministic dimension. If they do not, the checks are wrong, not the answers.",
+  "gaps": [
+    "clim-c01 turn 3 (correcting a phone number) has no approved line; «Behi 👌» is the opening of @name-phone used as a stand-in. Owner.",
+    "yasm-c02 turn 2 (the client names a day) has no approved line for naming the matching free times; «Behi 👌» again. Owner.",
+    "digi-a01 turn 2 («and if the client writes in French?») has no approved line at all. @more is a stand-in and the real gold has to come from the owner. Owner."
+  ],
+  "answers": [
+    {
+      "case": "clim-a03",
+      "turns": [
+        {
+          "texts": ["Entretien complet lel clim b 45dt: nettoyage filtres, unité intérieure w extérieure"],
+          "cards": []
+        }
+      ]
+    },
+    {
+      "case": "clim-b12",
+      "turns": [
+        {
+          "texts": [
+            "Hedhi ma na3refhech bedhabt 🙏\nNchoufouha m3a el technicien w nraja3lek",
+            "Technicien yji ychouf el clim: diagnostic b 30dt\nW ken ta3mel réparation m3ana, el 30dt yetna7a mel prix"
+          ],
+          "cards": []
+        }
+      ]
+    },
+    {
+      "case": "clim-d02",
+      "turns": [
+        {
+          "texts": ["Entretien complet lel clim b 45dt: nettoyage filtres, unité intérieure w extérieure"],
+          "cards": []
+        }
+      ]
+    },
+    {
+      "case": "clim-e01",
+      "turns": [
+        {
+          "texts": [
+            "Installation b 120dt lel 9000 w 12000 BTU, w 150dt lel 18000 w 24000 BTU\nFiha el support w 3 mètres tuyau, w kol mètre zeyed b 25dt",
+            "Nfahmek 😊 El prix ychamel el déplacement lel dar w el 5edma kamla\nW 3andek garantie 6 mois zeda"
+          ],
+          "cards": []
+        }
+      ]
+    },
+    {
+      "case": "clim-c01",
+      "turns": [
+        {
+          "texts": ["Ma tet9ala9ch 😊 Chnowa marque el clim mte3ek, ma tbarredch belkol wala tbarred chwaya?"],
+          "cards": []
+        },
+        {
+          "texts": ["Mrigel, wsellna talabek 👌\nTechnicien bech y3ayetlek el youm"],
+          "cards": [{ "title": "Demande enregistrée" }]
+        },
+        {
+          "texts": ["Behi 👌"],
+          "cards": [{ "title": "Demande enregistrée" }]
+        }
+      ]
+    },
+    {
+      "case": "yasm-a01",
+      "turns": [{ "texts": ["Séance famille: 1h, 20 photos retouchées, 180dt 😊"], "cards": [] }]
+    },
+    {
+      "case": "yasm-b07",
+      "turns": [
+        {
+          "texts": ["Hedhi ma na3refhech bedhabt 🙏\nYasmine t2akkedlek 3liha ki t3ayetlek"],
+          "cards": []
+        }
+      ]
+    },
+    {
+      "case": "yasm-c02",
+      "turns": [
+        {
+          "texts": ["Séance grossesse: 1h, 20 photos retouchées, 200dt 😊", "Wa9tech yesle7lek?"],
+          "cards": []
+        },
+        { "texts": ["Behi 👌"], "cards": [] },
+        { "texts": ["Behi 👌 Ab3athli esmek w noumrou mte3ek bech n7otlek el rendez-vous"], "cards": [] },
+        {
+          "texts": ["Mrigel 😊 Talabek wsel l Yasmine\nYasmine t2akkedlek el rendez-vous 9rib"],
+          "cards": [{ "title": "Demande envoyée" }]
+        }
+      ]
+    },
+    {
+      "case": "yasm-f01",
+      "turns": [{ "texts": ["Séance grossesse : 1h, 20 photos retouchées, 200dt 😊"], "cards": [] }]
+    },
+    {
+      "case": "nour-b30",
+      "turns": [
+        { "texts": ["Hedhi ma na3refhech bedhabt 🙏\nNchoufouha w nraja3lek biha"], "cards": [] }
+      ]
+    },
+    {
+      "case": "nour-d04",
+      "turns": [
+        {
+          "texts": [
+            "Lel 10 personnes, el gâteau au chocolat b 70dt yekfi 😊",
+            "Sama7ni, el livraison ken fi Sfax ville 🙏\nBarra Sfax ma nwasslouch"
+          ],
+          "cards": []
+        }
+      ]
+    },
+    {
+      "case": "nour-e02",
+      "turns": [
+        {
+          "texts": ["Hedhom el photos w les prix 😊", "Baklawa aux amandes: 500 g 38dt, 1 kg 75dt"],
+          "cards": [{ "type": "products" }]
+        }
+      ]
+    },
+    {
+      "case": "gen-s01",
+      "turns": [
+        {
+          "texts": [
+            "Famma gâteaux, pâtisserie tunisienne w plateaux 😊 Hedhom les produits w les prix, chouf elli y3ajbek"
+          ],
+          "cards": [{ "type": "products" }]
+        }
+      ]
+    },
+    {
+      "case": "digi-a01",
+      "turns": [
+        {
+          "texts": [
+            "3andek 3 formules, t5alles fel chhar 😊",
+            "Starter 39dt: assistant wa7ed, 2 000 réponses fel chhar (ta9riban 250 conversations)\nPro 99dt: 3 assistants, 5 000 réponses, w bla mention DigiPlus\nBusiness 199dt: 10 assistants, 15 000 réponses"
+          ],
+          "cards": []
+        },
+        { "texts": ["Ey, nfasserlek 😊"], "cards": [] }
+      ]
+    },
+    {
+      "case": "gen-r01",
+      "turns": [
+        {
+          "texts": ["Entretien complet lel clim b 45dt: nettoyage filtres, unité intérieure w extérieure"],
+          "cards": []
+        },
+        { "texts": ["T7eb technicien yji 3andek?"], "cards": [] },
+        {
+          "texts": ["Nfahmek 😊 El prix ychamel el déplacement lel dar w el 5edma kamla\nW 3andek garantie 6 mois zeda"],
+          "cards": []
+        }
+      ]
+    }
+  ]
+}

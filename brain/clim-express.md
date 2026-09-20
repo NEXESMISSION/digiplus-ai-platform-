@@ -83,7 +83,7 @@ Derja: Behi 👌 Ab3athli esmek w noumrou mte3ek
 French: Très bien 👌 Envoyez-moi votre nom et votre numéro.
 
 @area · after the name and the number
-Derja: W enti fi anhi quartier?
+Derja: W enti fi anahi quartier?
 French: Et dans quel quartier ?
 
 @saved-today · after save_details, before 14:00

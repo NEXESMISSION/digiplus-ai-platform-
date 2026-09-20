@@ -85,7 +85,7 @@ Derja: T7eb te5ouha mel pâtisserie, wala nwassloulek? El livraison fi Sfax vill
 French: Vous passez la récupérer, ou on vous la livre ? La livraison à Sfax ville coûte 7dt.
 
 @when · the day and the time
-Derja: Anhi nhar w wa9tech t7ebha?
+Derja: Anahi nhar w wa9tech t7ebha?
 French: Pour quel jour et quelle heure ?
 
 @name-phone · the last thing before saving the order

@@ -1,0 +1,116 @@
+{
+  "_": "The language lists that had no home. The two word tables that already work stay in lib/derja.js (SWAP and FLAG): lib/validate.js imports them from there, so there is never a second copy to keep in step. Everything here is read by lib/validate.js. It sits under data/ because vercel.json only bundles {brain,data}/** for api/chat.js.",
+
+  "_deny": "Words a Tunisian looked at and called «not a word». «use» is the right word when there is one (then it is replaced silently), null when only the assistant can choose (then it costs the rewrite). This list is the only deterministic invented-word check there is: nothing else can tell «feragh» from a Derja word the shop has never had to write. It grows one line at a time, from the watch log.",
+  "deny": [
+    { "word": "nfazzellek", "use": "nfasserlek", "seen": "2026-09-19 audit" },
+    { "word": "feragh", "use": null, "seen": "2026-09-19 audit" }
+  ],
+
+  "_variants": "One word, two spellings that are both right. Whichever one the chat already used wins; the other is rewritten to it. No word is invented and nothing is guessed, so it costs no rewrite. {le, la} is deliberately absent: «la» is also the French article, and «la commande» would become «le commande». «9ouli» is absent from {9olli, 9oulli} on purpose: it is the feminine imperative, not a misspelling. anahou / anahi / anahom are three different words (masculine / feminine / plural), never a set.",
+  "variants": [
+    ["chnowa", "chnoua", "chnwa"],
+    ["9adech", "9adeh"],
+    ["mte3ek", "mta3ek"],
+    ["tawa", "taw"],
+    ["behi", "bahi"],
+    ["barcha", "barsha"],
+    ["kifech", "kifeh"],
+    ["3lech", "3leh"],
+    ["wa9tech", "waqtech"],
+    ["marhbe", "mar7be", "marhba"],
+    ["bech", "bach"],
+    ["9olli", "9oulli"],
+    ["ab3athli", "eb3athli"],
+    ["5ater", "khater"],
+    ["ey", "eyh"],
+    ["najjem", "najem"]
+  ],
+
+  "_kh5": "خ is written 5 or kh, both are fine, but never both in the same message (01 §1). Only words whose 5 form is written somewhere in the library or in an approved line are here: a blind kh → 5 would break checkout, Khaled and WhatsApp. A kh word that is not in this map is left exactly as it is — it is not worth a rewrite. Add a line when the owner confirms one.",
+  "kh5": {
+    "khater": "5ater",
+    "khouya": "5ouya",
+    "khedma": "5edma",
+    "khdma": "5edma",
+    "khlas": "5las"
+  },
+
+  "_openers": "Openings that make an answer read like a machine. «Ma3lich» means «no problem», not «sorry». «bien sûr,» carries its comma on purpose: «Bien sûr 😊» on its own is an approved line and must pass.",
+  "openers": {
+    "derja": ["ma3lich"],
+    "fr": [
+      "voici",
+      "bien sûr,",
+      "en conclusion",
+      "concernant votre",
+      "n'hésitez",
+      "cordialement",
+      "veuillez",
+      "nous vous informons",
+      "sachez que",
+      "il est important de"
+    ]
+  },
+
+  "_corporateFrench": "spec-language §4.3: French that sounds like a company writing to a file number. The library's 09 §6 is titled «French / English that sounds corporate in a simple chat», so a French answer is read too, not only a Derja one. What each one is told differs: every replacement below is Tunisian, and the library never says what to write instead inside a French sentence, so there the word is only named and the sentence is the model's to write. Nothing French is invented here — making a replacement up is the guessing this layer refuses to do everywhere else, and «which French words instead?» is an owner question. «beaucoup» is the one row 09 §6 does not have: it is here so a Derja sentence says «barcha» (§7 lists barcha as a Tunisian word), and lib/validate.js leaves it out of the French list because in French «beaucoup» is just French.",
+  "corporateFrench": [
+    ["veuillez", "3aychek"],
+    ["merci de", "3aychek"],
+    ["veuillez patienter", "stanna chwaya"],
+    ["nous vous informons", "n7eb n9olek"],
+    ["cordialement", "merci, nharek zin"],
+    ["néanmoins", "ama"],
+    ["toutefois", "ama"],
+    ["concernant", "3la"],
+    ["conformément", "7asb"],
+    ["absolument", "akid / mrigel"],
+    ["parfaitement", "akid / mrigel"],
+    ["procédure", "les étapes"],
+    ["démarche", "les étapes"],
+    ["prestation", "el 5edma"],
+    ["réalisation", "el 5edma"],
+    ["solution digitale", "site / application"],
+    ["expérience utilisateur", "kifech el client yesta3mel el site"],
+    ["interface utilisateur", "kifech el client yesta3mel el site"],
+    ["onboarding", "nfasserlek kifech ya5dem"],
+    ["workflow", "nfasserlek kifech ya5dem"],
+    ["dashboard", "espace admin"],
+    ["checkout", "page paiement"],
+    ["conversion", "yzidlek les clients"],
+    ["engagement", "yzidlek les clients"],
+    ["lead", "client jdid"],
+    ["prospect", "client jdid"],
+    ["feedback", "ra2yek"],
+    ["beaucoup", "barcha"]
+  ],
+
+  "_emoji": "The library says one 😊 or one 👌 per message and never mentions 🙏. The owner's own approved lines use 🙏 eighteen times, in @outside-area, @not-understood and the fallback. His files win on a product question, so 🙏 ships — flagged to him, not guessed.",
+  "emoji": ["😊", "👌", "🙏"],
+
+  "_lengths": "The owner's own approved text, measured: 101 characters is his longest line and 231 his longest message. These are his maxima, not a library rule — the library only says «short lines». Nothing here may cost a rewrite until he sets a number: TOO-LONG is watch-only.",
+  "lengths": { "lineChars": 110, "messageChars": 240, "messageCharsSoft": 160, "messages": 3 },
+
+  "_keepLatinInArabic": "11 §3: the words that stay in Latin letters inside an Arabic-script line. Read only by the posts/ads rules, which are inert — chats are Arabizi. It is here so the rule is written and ready the day the owner answers which script rule wins for posts.",
+  "keepLatinInArabic": [
+    "site vitrine",
+    "site",
+    "domaine",
+    "hébergement",
+    "base de données",
+    "maintenance",
+    "e-commerce",
+    "web app",
+    "chatbot",
+    "ai",
+    "whatsapp",
+    "messenger",
+    "facebook",
+    "instagram",
+    "google",
+    "google maps",
+    "email",
+    "seo",
+    "url"
+  ]
+}

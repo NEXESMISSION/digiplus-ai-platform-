@@ -1,0 +1,289 @@
+[
+  {
+    "rule": "SCRIPT-ARABIC",
+    "why": "A chat answer is Arabizi, Latin letters only. This is the whole of the owner's «one script per line» rule for the product that ships. The fourth case is the choice path: a message is worth the one rewrite and keeps the letters the model wrote, while a tappable choice cannot be asked for again, so the letter table mends it here and the fix is logged. «٤٥dt» → «45dt» is the digits surviving the vowel-mark strip (ai.js:167) — an answer losing the 45 hides a price instead of showing a wrong one. The last case is the other half of that path, and the only one that reads report.choices: «ـ» is a tatweel, the letter table has no Arabizi spelling for it and returns nothing, so fixChoice keeps the button exactly as the model wrote it rather than log «transliterated: ـ → ـ». That leaves an Arabic button in front of a client who writes Arabizi, and the filter at the end of validate() takes it away — no button beats one they cannot read, while «نعم» next to it still goes out as «n3m». Nothing downstream sees choices again: reply.js's salvage transliterates, but only after a rewrite has already failed, and this answer never gets there. The run prints ai.js's own «toLatin emptied «ـ»» warning on stderr; that warning is the letter table saying out loud what this case asserts.",
+    "pass": ["Ey bien sûr, najem n3awnek", "Hedhom el photos w les prix 😊", "l'hébergement 50dt fel 3am"],
+    "fail": [
+      { "text": "Ey أكيد najem" },
+      { "text": "إي بالطبيعة، نجم نعاونك" },
+      { "text": "nبداو ghodwa" },
+      {
+        "text": "السوم يبدا من 120 دينار",
+        "choices": ["إي بالطبيعة", "السوم ٤٥dt"],
+        "out": "السوم يبدا من 120 دينار",
+        "log": ["إي بالطبيعة→iy baltby3a", "السوم ٤٥dt→alswm 45dt"]
+      },
+      {
+        "text": "السوم يبدا من 120 دينار",
+        "choices": ["نعم", "ـ"],
+        "buttons": ["n3m"]
+      }
+    ]
+  },
+  {
+    "rule": "SCRIPT-MIX-LINE",
+    "why": "Posts and ads only, and inert until the owner rules on it (O8): 11 §7 deliberately writes «الـsite vitrine يبدا من 120 دينار».",
+    "script": "arabic",
+    "pass": ["الـsite vitrine يبدا من 120 دينار", "ابعثلنا على WhatsApp"],
+    "fail": [{ "text": "الـsite yebda men 120 دينار" }],
+    "inert": ["السوم يبدا من 120 dinars"]
+  },
+  {
+    "rule": "SCRIPT-MIX-WORD",
+    "why": "«الـsite» is two scripts in one token on purpose: it is the library's own spelling (11 §3) and it is what SCRIPT-ARTICLE writes, so the article never counts as a mixed word.",
+    "script": "arabic",
+    "pass": ["nebdew ghodwa", "شنوّة فمّا", "الـsite vitrine يبدا من 120 دينار", "الـWhatsApp mte3na"],
+    "fail": [{ "text": "nبداو ghodwa" }, { "text": "tekملch" }]
+  },
+  {
+    "rule": "SCRIPT-ARTICLE",
+    "script": "arabic",
+    "pass": ["الـsite vitrine يبدا من 120 دينار"],
+    "fail": [
+      { "text": "شنوّة فيه ال site؟", "out": "شنوّة فيه الـsite؟" },
+      { "text": "شنوّة فيه الsite؟", "out": "شنوّة فيه الـsite؟" }
+    ]
+  },
+
+  {
+    "rule": "SWAP",
+    "why": "0 foreign-word leaks across 47 answers: this list works, and it is imported from lib/derja.js, never copied.",
+    "pass": ["Famma barcha choix", "Hedha el site mte3ek", "Anahi nhar famma place?"],
+    "fail": [
+      { "text": "Bzaf w hada behi", "out": "Barcha w hedha behi" },
+      { "text": "Anhi nhar?", "out": "Anahi nhar?" }
+    ]
+  },
+  {
+    "rule": "FLAG",
+    "why": "«ghir» and «mumkin» were removed from the table: the library writes «men ghir ma…» and «Ey mumkin» is an approved line. Both used to fire on correct Derja and burn the rewrite.",
+    "pass": [
+      "Tnajjem tab3athli les photos",
+      "Ey mumkin",
+      "men ghir ma tab3athlou taswira",
+      "El séance mte3ek 3al arb3a ghir rob3"
+    ],
+    "fail": [{ "text": "Nsa3dek fel commande" }, { "text": "El gâteau hedha ta3 Nour" }]
+  },
+  {
+    "rule": "DENY",
+    "why": "The only deterministic invented-word check there can be, and it only knows what a Tunisian already labelled.",
+    "pass": ["Ey, nfasserlek 😊", "Famma place nhar el 5mis"],
+    "fail": [
+      { "text": "Ey, nfazzellek 😊", "out": "Ey, nfasserlek 😊" },
+      { "text": "Famma feragh nhar el 5mis", "severity": "repair" }
+    ]
+  },
+  {
+    "rule": "VARIANT-DRIFT",
+    "why": "The audit's four-spellings run. anahou / anahi / anahom are three different words and are never a set.",
+    "pass": [
+      { "history": [{ "role": "bot", "text": "Chnowa t7eb?" }], "text": "Chnowa el taille?" },
+      { "history": [{ "role": "bot", "text": "Anahi nhar?" }], "text": "Anahou gâteau t7eb?" },
+      { "history": [{ "role": "client", "text": "Chnoua famma?" }], "text": "Chnowa t7eb?" },
+      { "history": [{ "role": "bot", "text": "Behi, le gâteau au chocolat" }], "text": "W la commande el o5ra?" },
+      { "history": [{ "role": "bot", "text": "9olli chnowa t7eb" }], "text": "9ouli chnowa t7eb w n7adhroulek" },
+      { "history": [{ "role": "bot", "text": "Chnoua famma?" }], "text": "Chnowa t7eb?" }
+    ],
+    "fail": [
+      { "history": [{ "role": "bot", "text": "Chnowa t7eb?" }], "text": "Chnoua el taille?", "out": "Chnowa el taille?" },
+      { "history": [{ "role": "bot", "text": "9adech men personne?" }], "text": "9adeh el prix?", "out": "9adech el prix?" }
+    ]
+  },
+  {
+    "rule": "KH-5-MIX",
+    "why": "01 §1: khater and khouya are fine, but never mixed with 5 in the same message. Only mapped words move — a blind kh → 5 would break checkout and Khaled.",
+    "pass": ["5ater el 5edma", "khater el khedma", "Ne5dmou 3al checkout mte3ek"],
+    "fail": [{ "text": "5ater el khedma", "out": "5ater el 5edma" }]
+  },
+
+  {
+    "rule": "PRICE-SPACE",
+    "why": "The log says what the text became: «3,500 dt → 3500dt», never «500 dt → 500dt» while the message reads 3500dt (D25).",
+    "pass": ["Installation b 120dt", "2 000 réponses fel chhar"],
+    "fail": [
+      { "text": "Installation b 120 dt", "out": "Installation b 120dt", "log": ["120 dt→120dt"] },
+      { "text": "El web app b 3,500 dt", "out": "El web app b 3500dt", "log": ["3,500 dt→3500dt"] },
+      { "text": "3,500 réponses fel chhar", "out": "3500 réponses fel chhar", "log": ["3,500→3500"] }
+    ]
+  },
+  {
+    "rule": "TILDE",
+    "pass": ["ta9riban 45dt", "environ 250 conversations"],
+    "fail": [
+      { "text": "El entretien ~45dt", "out": "El entretien ta9riban 45dt" },
+      { "text": "Environ ~250 conversations", "language": "fr", "out": "Environ environ 250 conversations" }
+    ]
+  },
+  {
+    "rule": "PRICE-PERIOD",
+    "why": "spec-language §3.5 gives this under «French typography inside Arabizi», so it is only wrong in a Derja message: «39dt / mois» is ordinary French and the home page writes it.",
+    "pass": ["30dt fel chhar: fiha l'hébergement, base de données w maintenance", { "text": "Starter 39dt / mois", "language": "fr" }],
+    "fail": [{ "text": "Starter 30dt/mois" }, { "text": "El formule 30dt chahriya" }]
+  },
+  {
+    "rule": "FEE-UNEXPLAINED",
+    "why": "Scoped to a business that really charges every month. Run everywhere it fires on any assistant that says «fel chhar».",
+    "recurring": true,
+    "pass": [
+      "w ba3d 30dt fel chhar: fiha l'hébergement, base de données w maintenance",
+      "Starter 39dt: 2 000 réponses fel chhar",
+      { "text": "El entretien b 45dt", "recurring": false }
+    ],
+    "fail": [{ "text": "+ 30dt fel chhar bech ykammel yekhdem" }],
+    "inert": ["+ 30dt fel chhar bech ykammel yekhdem"]
+  },
+  {
+    "rule": "FEE-MIXED",
+    "pass": [{ "texts": ["500dt mara wa7da", "W ba3d 30dt fel chhar: fiha l'hébergement w maintenance"] }],
+    "fail": [{ "text": "500dt mara wa7da + 30dt fel chhar" }]
+  },
+
+  {
+    "rule": "OPENER",
+    "why": "«Bien sûr 😊» and «Voici les photos et les prix 😊» are approved lines: skipping approved messages is the whole reason lines.expand carries the flag. reply.js:96 says the model sometimes writes one of those lines out instead of citing its id, and then the flag is off on the owner's own sentence — so validate() also exempts a text that IS one of his lines (validate.js:892). The fifth case is that copy, with the flag off, going through the whole layer: his sentence comes back character for character while the model's own opener next to it gets its price typography fixed, which is the proof the layer really ran. The count is measured on the bare rule, which knows nothing about the exemption: it fires on both, and the exemption lives in validate() alone. But «out» and the count together still cannot see the exemption itself — OPENER is a repair, it rewrites nothing here, so an exempted sentence and a flagged one come back as the same characters, and the bare rule fires either way. Its one effect is on report.issues, which is what costs the single rewrite, so the last two cases read that: his own line, with the flag off, raises nothing at all, and «Voici nos tarifs :» — the model's own opener, on the same bot, in the same language — raises the OPENER issue. The pair has to be two different sentences and not two copies of one: issues comes back de-duplicated. Both name patisserie-nour, because the exemption is per bot — that line is in brain/patisserie-nour.md:71 and nowhere else, and on any other assistant it is not his voice.",
+    "pass": [
+      { "text": "Bien sûr 😊", "language": "fr", "approved": true },
+      { "text": "Voici les photos et les prix 😊", "language": "fr", "approved": true },
+      "Sama7ni, el livraison ken fi Sfax ville 🙏",
+      { "text": "Bonjour 😊", "language": "fr" }
+    ],
+    "fail": [
+      { "text": "Bien sûr, je vous explique.", "language": "fr" },
+      { "text": "Voici nos tarifs :", "language": "fr", "says": "«Voici»" },
+      { "text": "Ma3lich, el livraison ken fi Sfax ville" },
+      {
+        "texts": ["Voici les photos et les prix 😊", "Voici nos tarifs :"],
+        "language": "fr",
+        "approved": [true, false],
+        "count": 1
+      },
+      {
+        "texts": ["Voici les photos et les prix 😊", "Voici nos tarifs : 120 dt"],
+        "language": "fr",
+        "bot": "patisserie-nour",
+        "approved": [false, false],
+        "count": 2,
+        "out": "Voici les photos et les prix 😊\nVoici nos tarifs : 120dt"
+      },
+      {
+        "text": "Voici les photos et les prix 😊",
+        "language": "fr",
+        "bot": "patisserie-nour",
+        "approved": [false],
+        "issues": []
+      },
+      {
+        "text": "Voici nos tarifs :",
+        "language": "fr",
+        "bot": "patisserie-nour",
+        "issues": ["starts with «Voici»: answer what the client asked, without an opening formula"]
+      }
+    ]
+  },
+  {
+    "rule": "FRENCH-SENTENCE",
+    "why": "French nouns are required in Derja and are never touched. This is about clauses, which is why the word list is closed.",
+    "pass": ["Ynasbek ghodwa 3al 16:00?", "Hedhom les produits w les prix", { "text": "Vous pouvez me dire ce que vous cherchez ?", "language": "fr" }],
+    "fail": [{ "text": "Est-ce que ghodwa ynasbek?" }, { "text": "Vous pouvez tab3athli noumrou mte3ek?" }]
+  },
+  {
+    "rule": "FRENCH-VERB",
+    "pass": ["t2akked el rendez-vous", "n7otou les produits", "El nettoyage filtres fih 45dt"],
+    "fail": [{ "text": "tconfirmi el rendez-vous" }, { "text": "ncustomiziw el site mte3ek" }]
+  },
+  {
+    "rule": "CORPORATE",
+    "why": "Inside a Derja answer, where every replacement spec-language §4.3 gives is a Tunisian word: the right word is named and the model puts it in. «beaucoup» is on the table for this direction only — a Derja sentence says «barcha».",
+    "pass": ["Nchouflek el 5edma w nraja3lek"],
+    "fail": [
+      { "text": "El dashboard mte3ek fih kol chay", "says": "say «espace admin»" },
+      { "text": "Veuillez tsanna chwaya" },
+      { "text": "Famma beaucoup choix", "says": "say «barcha»" }
+    ]
+  },
+  {
+    "rule": "CORPORATE",
+    "why": "The same table inside a French answer, which is the branch nothing used to reach. 09 §6 is titled «French / English that sounds corporate in a simple chat», so a French sentence is read too — but the library gives no French wording to put in its place, so the word is only named and the sentence is the model's. «beaucoup» is dropped from the list here: in French it is just French, and neverAnIssue asserts that through the whole layer, not only through this rule. «solution» on its own is not «solution digitale», and a pass case has to contain a word the table nearly has, or it proves nothing.",
+    "language": "fr",
+    "pass": [
+      "Vous retrouvez chaque commande dans vos messages 😊",
+      "Merci beaucoup, je vous envoie les photos 😊",
+      "On a une solution simple pour votre boutique 😊"
+    ],
+    "fail": [
+      {
+        "text": "Concernant votre demande, voici la procédure 😊",
+        "count": 2,
+        "says": "«concernant» sounds like a company writing to a file number: say it in the words the client uses"
+      }
+    ],
+    "neverAnIssue": ["beaucoup"]
+  },
+
+  {
+    "rule": "EMOJI-COUNT",
+    "pass": ["Ey, bnina barcha 😊", "Mrigel, wsellna talabek 👌"],
+    "fail": [{ "text": "Ey 😊 bnina barcha 👌", "out": "Ey 😊 bnina barcha" }]
+  },
+  {
+    "rule": "EMOJI-SET",
+    "why": "The rule deletes a mark, and on a short message or a two-word button there may be nothing left once it has. The second case is a client tapping nothing: the whole button was «🔥», the fix emptied it, and «» is still a tappable button in public/chat.js with no word on it — worse than a wrong one, because the client cannot tell it is there. The third is the same thing as a message: an emptied item is a grey bubble, store.addBotItems saves it and every later page load replays it, forever. validate() takes both out itself — that is what report.texts and report.choices promise the caller — and «out» here is the whole answer joined, so the emptied message must leave no blank line behind either.",
+    "pass": ["Ey, bnina barcha 😊", "Hedhi ma na3refhech bedhabt 🙏"],
+    "fail": [
+      { "text": "Ey 😊 bnina barcha 😍🔥", "out": "Ey 😊 bnina barcha" },
+      { "text": "Mrigel 🔥", "choices": ["🔥", "Ey barcha"], "out": "Mrigel", "buttons": ["Ey barcha"] },
+      { "texts": ["Ey, bnina barcha 😊", "🚀"], "out": "Ey, bnina barcha 😊" }
+    ]
+  },
+
+  {
+    "rule": "TOO-MANY-MESSAGES",
+    "pass": [{ "texts": ["Ahla bik 😊", "Chnowa t7eb?", "Famma barcha choix"] }],
+    "fail": [{ "texts": ["Ahla bik 😊", "Chnowa t7eb?", "Famma barcha choix", "W chnowa el taille?"], "severity": "drop" }]
+  },
+  {
+    "rule": "TOO-LONG",
+    "why": "Watch, never a repair: 110 / 240 / 160 are the owner's own measured maxima, not a library rule (spec-language §7.2 records [LIBRARY SILENT]).",
+    "pass": [
+      {
+        "text": "ChatGPT yjawb 3la ay 7aja, ama ma ya3refch el 7anout mte3ek\nEl chat mte3na ya3ref les prix, les horaires w les services mte3ek, w yjawb les clients mte3ek bark\nW ya5ou noumrou el client wala el rendez-vous, w el demande tjik direct",
+        "clientText": "fassarli akther"
+      },
+      { "text": "Famma gâteaux, pâtisserie tunisienne w plateaux 😊 Hedhom les produits w les prix, chouf elli y3ajbek", "clientText": "9adech?" }
+    ],
+    "fail": [
+      {
+        "text": "ChatGPT yjawb 3la ay 7aja, ama ma ya3refch el 7anout mte3ek\nEl chat mte3na ya3ref les prix, les horaires w les services mte3ek, w yjawb les clients mte3ek bark\nW ya5ou noumrou el client wala el rendez-vous, w el demande tjik direct",
+        "clientText": "9adech?",
+        "severity": "watch"
+      }
+    ]
+  },
+  {
+    "rule": "TOO-MANY-QUESTIONS",
+    "pass": ["Anahi nhar w wa9tech t7ebha?", { "texts": ["Ahla bik 😊", "Chnowa t7eb?"] }],
+    "fail": [{ "texts": ["Anahi nhar?", "W wa9tech?"], "severity": "watch" }]
+  },
+  {
+    "rule": "REPEAT",
+    "why": "lib/repeat.js owns it and reply.js composes it into the same issues array. Running it here too would report every repetition twice and spend the one rewrite on a duplicate.",
+    "pass": [{ "history": [{ "role": "bot", "text": "Ab3athli esmek w noumrou mte3ek" }], "text": "Ab3athli esmek w noumrou mte3ek" }],
+    "fail": [],
+    "inert": [{ "history": [{ "role": "bot", "text": "Ab3athli esmek w noumrou mte3ek" }], "text": "Ab3athli esmek w noumrou mte3ek" }],
+    "detects": [{ "history": [{ "role": "bot", "text": "Ab3athli esmek w noumrou mte3ek" }], "text": "Ab3athli esmek w noumrou mte3ek" }]
+  },
+  {
+    "rule": "UNKNOWN-WORD",
+    "why": "Watch, forever. A whitelist flags 11.2 % of the owner's own correct Derja: about 1.4 false repairs per answer, which is the exact thing he said must not happen.",
+    "bot": "patisserie-nour",
+    "pass": ["Famma baklawa w makroud 😊", "Ey, bnina barcha 😊"],
+    "fail": [{ "text": "El entretien mte3ha b 45dt", "severity": "watch" }],
+    "neverAnIssue": [
+      "y3ayetlek", "n3ayetlek", "y2akkedlek", "n2akkedlek", "t2akkedlek", "na5dmou", "nwasslouch",
+      "nwassloulek", "yesle7lek", "ta3melch", "tet9ala9ch", "yet7asbouch", "yes2louk", "ma3andouch",
+      "yekhtere3ch", "y9ollou", "tbarred", "tbarredch", "yetna7a", "kamla", "jiha", "testahel",
+      "yekfi", "wslet", "te5ouha", "mrigel", "bnina"
+    ]
+  }
+]
